@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tb_roles', function (Blueprint $table){
-            $table->id();
-            $table->string('role', 255);
+        Schema::create('tb_admins', function (Blueprint $table) {
+            $table->integer('id', true);
+            $table->string('username', 100)->unique('username');
+            $table->string('password');
+            $table->integer('id_roles')->index('id_roles');
         });
     }
 
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_roles');
+        Schema::dropIfExists('tb_admins');
     }
 };
