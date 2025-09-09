@@ -19,8 +19,8 @@
     <form method="POST" action="{{ route('login') }}">
         @csrf
         <div>
-            <label for="email">Email</label>
-            <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
+            <label for="username">Username</label>
+            <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus>
         </div>
         <div>
             <label for="password">Password</label>

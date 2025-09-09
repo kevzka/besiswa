@@ -18,10 +18,15 @@
     @endif
     <form method="POST" action="{{ route('register') }}">
         @csrf
-        <label>Nama:</label><br>
-        <input type="text" name="name" value="{{ old('name') }}" required><br><br>
-        <label>Email:</label><br>
-        <input type="email" name="email" value="{{ old('email') }}" required><br><br>
+        <label>Role</label><br>
+        <select name="id_roles" required>
+            <option value="1">Kegiatan</option>
+            <option value="2">Prestasi</option>
+            <option value="3">Ekskul</option>
+            <option value="4">Utama</option>
+        </select><br>
+        <label>Username:</label><br>
+        <input type="text" name="username" value="{{ old('username') }}" required><br><br>
         <label>Password:</label><br>
         <input type="password" name="password" required><br><br>
         <label>Konfirmasi Password:</label><br>

@@ -19,23 +19,25 @@ class AuthController extends Controller
     {
         // Validasi input
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'id_roles' => ['required', 'int'],
+            'username' => ['required', 'string', 'max:255', 'unique:admins,username'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
+            // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
         ]);
 
         // Simpan user baru
         $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
+            'username' => $validated['username'],
+            'id_roles' => $validated['id_roles'], // Set role sebagai user biasa
             'password' => Hash::make($validated['password']),
+            // 'email' => $validated['email'],
         ]);
 
         // Login otomatis setelah register
         Auth::login($user);
 
         // Redirect ke dashboard
-        return redirect('/dashboard');
+        return redirect('/admin/dashboard');
     }
 
     public function showLoginForm()
@@ -46,19 +48,24 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'username' => ['required'],
             'password' => ['required'],
         ]);
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+            $user = Auth::user();
+            dd($user->role->nama);
+            $roleName = $user->role ? $user->role->nama : '';
 
-            return redirect()->intended('/dashboard');
+            return view('admin.dashboard', ['role' => $roleName]);
+
+            return redirect()->intended('/admin/dashboard');
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+            'username' => 'The provided credentials do not match our records.',
+        ])->onlyInput('username');
     }
 
     public function logout(Request $request)

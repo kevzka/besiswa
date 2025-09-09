@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>halo admin</h1>
+    <h1>halo admin {{ $role }}</h1>
     <form action="{{route('logout')}}" method="POST">
         @csrf
         <button type="submit">logout</button>
