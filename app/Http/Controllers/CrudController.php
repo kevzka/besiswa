@@ -14,7 +14,9 @@ class CrudController extends Controller
      */
     public function index(Request $request)
     {
-        $kegiatan = Tb_kegiatan::with('admin')/* ->where('id_admin', $request->id_role) */->get();
+        //sejenis dengan role nya
+        $user = Auth::user();
+        $kegiatan = Tb_kegiatan::with('admin')->where('id_admin', $user->id)->get();
         return view('admin.bimbingan', compact('kegiatan'));
     }
 
