@@ -36,8 +36,11 @@ class AuthController extends Controller
         // Login otomatis setelah register
         Auth::login($user);
 
+        $roleName = $user->role ? $user->role->nama : '';
+
+            return view('admin.dashboard', ['role' => $roleName]);
+
         // Redirect ke dashboard
-        return redirect('/admin/dashboard');
     }
 
     public function showLoginForm()
@@ -51,12 +54,12 @@ class AuthController extends Controller
             'username' => ['required'],
             'password' => ['required'],
         ]);
-
+        
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             $user = Auth::user();
-            dd($user->role->nama);
-            $roleName = $user->role ? $user->role->nama : '';
+            // dd();
+            $roleName = $user->id_roles ? $user->id_roles : '';
 
             return view('admin.dashboard', ['role' => $roleName]);
 
@@ -65,6 +68,7 @@ class AuthController extends Controller
 
         return back()->withErrors([
             'username' => 'The provided credentials do not match our records.',
+            // 'password' => 'Username atau password salah.'
         ])->onlyInput('username');
     }
 
