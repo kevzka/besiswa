@@ -36,7 +36,7 @@ class AuthController extends Controller
         // Login otomatis setelah register
         Auth::login($user);
 
-        $roleName = $user->role ? $user->role->nama : '';
+            $roleName = $user->getRole ? $user->getRole->role : '';
 
             return view('admin.dashboard', ['role' => $roleName]);
 
@@ -58,10 +58,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             $user = Auth::user();
-            // dd();
-            $roleName = $user->id_roles ? $user->id_roles : '';
-
-            return view('admin.dashboard', ['role' => $roleName]);
+            $roleName = $user->getRole ? $user->getRole->role : '';
 
             return redirect()->intended('/admin/dashboard');
         }

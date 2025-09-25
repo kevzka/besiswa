@@ -20,7 +20,7 @@
         @csrf
         <label>Role</label><br>
         <select name="id_roles" required>
-            <option value="1">Kegiatan</option>
+            <option value="1">bimbingan & karakter</option>
             <option value="2">Prestasi</option>
             <option value="3">Ekskul</option>
             <option value="4">Utama</option>
