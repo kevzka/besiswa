@@ -229,17 +229,17 @@
                 </div>
                 @if ($id_role == 1 || $id_role == 4)
                     <div class="nav-item">
-                        <a href="{{ route('admin.bimbingan.index'/* , ['id_role' => 4] */) }}"><i class="fas fa-hands-helping" style="margin-right: 10px;"></i> Bimbingan</a>
+                        <a href="{{ route('admin.bimbingan.index')}}"><i class="fas fa-hands-helping" style="margin-right: 10px;"></i> Bimbingan</a>
                     </div>
                 @endif
                 @if ($id_role == 2 || $id_role == 4)
                     <div class="nav-item">
-                        <a href="#"><i class="fas fa-trophy" style="margin-right: 10px;"></i> Prestasi</a>
+                        <a href="{{ route('admin.prestasi.index') }}"><i class="fas fa-trophy" style="margin-right: 10px;"></i> Prestasi</a>
                     </div>
                 @endif
                 @if ($id_role == 3 || $id_role == 4)
                     <div class="nav-item">
-                        <a href="#"><i class="fas fa-calendar-alt" style="margin-right: 10px;"></i> Ekskul</a>
+                        <a href="{{ route('admin.ekskul.index') }}"><i class="fas fa-calendar-alt" style="margin-right: 10px;"></i> Ekskul</a>
                     </div>
                 @endif
                 <div class="nav-item">

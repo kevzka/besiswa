@@ -12,12 +12,32 @@ class CrudController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    protected $adminTypes = [
+        'admin.bimbingan.index' => [1, 'bimbingan'], // Tipe untuk bimbingan
+        'admin.prestasi.index' => [2, 'prestasi'], // Tipe untuk prestasi
+        'admin.ekskul.index' => [3, 'ekskul'], // Tipe untuk ekstrakurikuler
+        'admin.bimbingan.store' => [1, 'bimbingan'], // Tipe untuk bimbingan
+        'admin.prestasi.store' => [2, 'prestasi'], // Tipe untuk prestasi
+        'admin.ekskul.store' => [3, 'ekskul'], // Tipe untuk ekstrakurikuler
+        'admin.bimbingan.update' => [1, 'bimbingan'], // Tipe untuk bimbingan
+        'admin.prestasi.update' => [2, 'prestasi'], // Tipe untuk prestasi
+        'admin.ekskul.update' => [3, 'ekskul'], // Tipe untuk ekstrakurikuler
+        'admin.bimbingan.destroy' => [1, 'bimbingan'], // Tipe untuk bimbingan
+        'admin.prestasi.destroy' => [2, 'prestasi'], // Tipe untuk prestasi
+        'admin.ekskul.destroy' => [3, 'ekskul'], // Tipe untuk ekstrak
+        'admin.bimbingan.edit' => [1, 'bimbingan'], // Tipe untuk bimbingan
+        'admin.prestasi.edit' => [2, 'prestasi'], // Tipe
+        'admin.ekskul.edit' => [3, 'ekskul'], // Tipe untuk ekstrakurikuler
+    ];
+
     public function index(Request $request)
     {
         //sejenis dengan role nya
-        $user = Auth::user();
-        $kegiatan = Tb_kegiatan::with('admin')->where('id_admin', $user->id)->get();
-        return view('admin.bimbingan', compact('kegiatan'));
+        $routeName = $request->route()->getName();
+        $type = $this->adminTypes[$routeName][0];
+        $kegiatan = Tb_kegiatan::where('type', $type)->get();
+        return view("admin.{$this->adminTypes[$routeName][1]}.create", compact('kegiatan'));
     }
 
     /**
@@ -25,7 +45,6 @@ class CrudController extends Controller
      */
     public function create()
     {
-        return view('admin.create');
     }
 
     /**
@@ -33,6 +52,8 @@ class CrudController extends Controller
      */
    public function store(Request $request)
     {
+        $routeName = $request->route()->getName();
+        $type = $this->adminTypes[$routeName][0];
         // Validasi input
         $request->validate([
             'title' => 'required|string|max:255',
@@ -55,17 +76,18 @@ class CrudController extends Controller
             // Store file dalam folder storage/app/public/kegiatan
             $filePath = $file->storeAs('kegiatan', $fileName, 'public');
         }
-
+        
         // Simpan ke database
         tb_kegiatan::create([
             'id_admin' => $user->id, // Ambil ID user yang login
+            'type' => $type, // Set type ke 'bimbingan'
             'title' => $request->title,
             'description' => $request->description,
             'file' => $filePath, // simpan path relatif
             'date' => $request->date,
         ]);
 
-        return redirect()->route('admin.bimbingan.index')->with('success', 'Kegiatan berhasil ditambahkan!');
+        return redirect()->route('admin.' . $this->adminTypes[$routeName][1] . '.index')->with('success', 'Kegiatan berhasil ditambahkan!');
     }
 
     /**
@@ -79,10 +101,11 @@ class CrudController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($bimbingan)
+    public function edit($bimbingan, Request $request)
     {
+        $routeName = $request->route()->getName();
         $tb_kegiatan = tb_kegiatan::findOrFail($bimbingan); // Gunakan findOrFail untuk konsistensi
-        return view('admin.edit', ['item' => $tb_kegiatan]);
+        return view("admin.{$this->adminTypes[$routeName][1]}.edit", ['item' => $tb_kegiatan]);
     }
 
     /**
@@ -92,6 +115,7 @@ class CrudController extends Controller
     {
         // Hapus dd() ini untuk production
         // dd($request->all());
+        $routeName = $request->route()->getName();
         
         $request->validate([
             'title' => 'required|string|max:255',
@@ -129,14 +153,15 @@ class CrudController extends Controller
             'date' => $request->date,
         ]);
         
-        return redirect()->route('admin.bimbingan.index')->with('success', 'Data berhasil diupdate!');
+        return redirect()->route("admin.{$this->adminTypes[$routeName][1]}.index")->with('success', 'Data berhasil diupdate!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($bimbingan)
+    public function destroy($bimbingan, Request $request)
     {
+        $routeName = $request->route()->getName();
         $tb_kegiatan = tb_kegiatan::findOrFail($bimbingan);
 
         // Hapus file dari storage jika ada
@@ -147,6 +172,6 @@ class CrudController extends Controller
         // Hapus data dari database
         $tb_kegiatan->delete();
 
-        return redirect()->route('admin.bimbingan.index')->with('success', 'Data berhasil dihapus!');
+        return redirect()->route("admin.{$this->adminTypes[$routeName][1]}.index")->with('success', 'Data berhasil dihapus!');
     }
 }

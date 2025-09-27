@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         /* ...existing styles... */
-        
+
         .file-preview {
             margin-top: 15px;
             padding: 15px;
@@ -325,6 +326,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Header -->
@@ -343,14 +345,16 @@
                     <label for="title">
                         <i class="fas fa-heading"></i> Judul Bimbingan
                     </label>
-                    <input type="text" id="title" name="title" class="form-control" placeholder="Masukkan judul bimbingan..." required>
+                    <input type="text" id="title" name="title" class="form-control"
+                        placeholder="Masukkan judul bimbingan..." required>
                 </div>
 
                 <div class="form-group">
                     <label for="description">
                         <i class="fas fa-align-left"></i> Deskripsi
                     </label>
-                    <textarea id="description" name="description" class="form-control" placeholder="Masukkan deskripsi bimbingan..." required></textarea>
+                    <textarea id="description" name="description" class="form-control" placeholder="Masukkan deskripsi bimbingan..."
+                        required></textarea>
                 </div>
 
                 <div class="form-group">
@@ -365,13 +369,15 @@
                         <i class="fas fa-file-upload"></i> Upload File
                     </label>
                     <div class="file-upload">
-                        <input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.mp4,.mov,.avi">
+                        <input type="file" id="file" name="file"
+                            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.mp4,.mov,.avi">
                         <label for="file" class="file-upload-btn">
                             <i class="fas fa-cloud-upload-alt"></i> Pilih File
                         </label>
                     </div>
-                    <div class="file-info">Format yang didukung: PDF, DOC, DOCX, JPG, PNG, MP4, MOV, AVI (Max: 10MB)</div>
-                    
+                    <div class="file-info">Format yang didukung: PDF, DOC, DOCX, JPG, PNG, MP4, MOV, AVI (Max: 10MB)
+                    </div>
+
                     <!-- File Preview -->
                     <div id="filePreview" class="file-preview">
                         <div class="preview-item">
@@ -406,7 +412,7 @@
             <div class="table-header">
                 <i class="fas fa-list"></i> Data Bimbingan
             </div>
-            
+
             <table class="table">
                 <thead>
                     <tr>
@@ -419,58 +425,42 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Sample Data dengan Thumbnail -->
-                    <tr>
-                        <td>1</td>
-                        <td>Bimbingan Karir Siswa</td>
-                        <td>Panduan memilih jurusan yang tepat untuk siswa kelas 12</td>
-                        <td>2025-09-20</td>
-                        <td>
-                            <div class="preview-item" style="margin: 0; padding: 5px;">
-                                <div class="thumbnail" style="width: 40px; height: 40px;">
-                                    <i class="fas fa-file-pdf file-icon" style="font-size: 20px; color: #dc3545;"></i>
+                    @foreach ($kegiatan as $item)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $item->title }}</td>
+                            <td>{{ $item->description }}</td>
+                            <td>{{ $item->date }}</td>
+                            <td>
+                                <div class="preview-item" style="margin: 0; padding: 5px;">
+                                    <div class="thumbnail" style="width: 40px; height: 40px;">
+                                        <img src="{{ $item->file ? asset('storage/' . $item->file) : '' }}"
+                                            alt="">
+                                    </div>
+                                    <a href="#" class="btn btn-sm btn-success">
+                                        <i class="fas fa-download"></i> Download
+                                    </a>
                                 </div>
-                                <a href="#" class="btn btn-sm btn-success">
-                                    <i class="fas fa-download"></i> Download
-                                </a>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn btn-sm btn-warning">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button class="btn btn-sm btn-danger">
-                                    <i class="fas fa-trash"></i> Hapus
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Video Tutorial</td>
-                        <td>Video panduan belajar efektif</td>
-                        <td>2025-09-18</td>
-                        <td>
-                            <div class="preview-item" style="margin: 0; padding: 5px;">
-                                <div class="thumbnail video-thumbnail" style="width: 40px; height: 40px;">
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="{{ route('admin.bimbingan.edit', ['kegiatan' => $item->id]) }}" 
+                                       class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <form action="{{ route('admin.bimbingan.destroy', ['kegiatan' => $item->id]) }}" 
+                                          method="POST" style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" 
+                                                onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                            <i class="fas fa-trash"></i> Hapus
+                                        </button>
+                                    </form>
                                 </div>
-                                <a href="#" class="btn btn-sm btn-success">
-                                    <i class="fas fa-play"></i> Play
-                                </a>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn btn-sm btn-warning">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button class="btn btn-sm btn-danger">
-                                    <i class="fas fa-trash"></i> Hapus
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -485,22 +475,22 @@
             const fileName = document.getElementById('fileName');
             const fileInfo = document.getElementById('fileInfo');
             const label = document.querySelector('.file-upload-btn');
-            
+
             if (file) {
                 // Show preview container
                 filePreview.classList.add('show');
-                
+
                 // Set file details
                 fileName.textContent = file.name;
                 fileInfo.textContent = `${(file.size / 1024 / 1024).toFixed(2)} MB - ${file.type}`;
-                
+
                 // Update upload button
                 label.innerHTML = `<i class="fas fa-check"></i> File dipilih: ${file.name}`;
-                
+
                 // Clear previous thumbnail
                 thumbnail.innerHTML = '';
                 thumbnail.className = 'thumbnail';
-                
+
                 // Generate thumbnail based on file type
                 if (file.type.startsWith('image/')) {
                     // Image thumbnail
@@ -508,7 +498,7 @@
                     img.src = URL.createObjectURL(file);
                     img.onload = () => URL.revokeObjectURL(img.src);
                     thumbnail.appendChild(img);
-                    
+
                 } else if (file.type.startsWith('video/')) {
                     // Video thumbnail
                     thumbnail.classList.add('video-thumbnail');
@@ -529,28 +519,29 @@
                         thumbnail.appendChild(img);
                         URL.revokeObjectURL(video.src);
                     });
-                    
+
                 } else if (file.type === 'application/pdf') {
                     // PDF icon
                     thumbnail.innerHTML = '<i class="fas fa-file-pdf file-icon" style="color: #dc3545;"></i>';
-                    
+
                 } else if (file.type.includes('word') || file.type.includes('document')) {
                     // Word document icon
                     thumbnail.innerHTML = '<i class="fas fa-file-word file-icon" style="color: #2b579a;"></i>';
-                    
+
                 } else if (file.type.includes('excel') || file.type.includes('sheet')) {
                     // Excel icon
                     thumbnail.innerHTML = '<i class="fas fa-file-excel file-icon" style="color: #217346;"></i>';
-                    
+
                 } else if (file.type.includes('powerpoint') || file.type.includes('presentation')) {
                     // PowerPoint icon
-                    thumbnail.innerHTML = '<i class="fas fa-file-powerpoint file-icon" style="color: #d24726;"></i>';
-                    
+                    thumbnail.innerHTML =
+                    '<i class="fas fa-file-powerpoint file-icon" style="color: #d24726;"></i>';
+
                 } else {
                     // Generic file icon
                     thumbnail.innerHTML = '<i class="fas fa-file file-icon"></i>';
                 }
-                
+
             } else {
                 // Hide preview if no file
                 filePreview.classList.remove('show');
@@ -562,11 +553,13 @@
         document.getElementById('removeFile').addEventListener('click', function() {
             document.getElementById('file').value = '';
             document.getElementById('filePreview').classList.remove('show');
-            document.querySelector('.file-upload-btn').innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Pilih File';
+            document.querySelector('.file-upload-btn').innerHTML =
+                '<i class="fas fa-cloud-upload-alt"></i> Pilih File';
         });
 
         // Set today's date as default
         document.getElementById('date').valueAsDate = new Date();
     </script>
 </body>
+
 </html>

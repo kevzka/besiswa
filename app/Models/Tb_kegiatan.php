@@ -10,6 +10,7 @@ class Tb_kegiatan extends Model
 
     protected $fillable = [
         'id_admin',
+        'type',
         'title',
         'file',
         'description',
