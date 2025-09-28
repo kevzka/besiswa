@@ -7,6 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Profil CRUD</h1>
+    <h1>dashboard user</h1>
+    <a href="{{route('login')}}">login admin</a>
 </body>
 </html>
