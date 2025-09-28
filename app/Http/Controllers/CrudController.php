@@ -13,31 +13,31 @@ class CrudController extends Controller
      * Display a listing of the resource.
      */
 
-    protected $adminTypes = [
-        'admin.bimbingan.index' => [1, 'bimbingan'], // Tipe untuk bimbingan
-        'admin.prestasi.index' => [2, 'prestasi'], // Tipe untuk prestasi
-        'admin.ekskul.index' => [3, 'ekskul'], // Tipe untuk ekstrakurikuler
-        'admin.bimbingan.store' => [1, 'bimbingan'], // Tipe untuk bimbingan
-        'admin.prestasi.store' => [2, 'prestasi'], // Tipe untuk prestasi
-        'admin.ekskul.store' => [3, 'ekskul'], // Tipe untuk ekstrakurikuler
-        'admin.bimbingan.update' => [1, 'bimbingan'], // Tipe untuk bimbingan
-        'admin.prestasi.update' => [2, 'prestasi'], // Tipe untuk prestasi
-        'admin.ekskul.update' => [3, 'ekskul'], // Tipe untuk ekstrakurikuler
-        'admin.bimbingan.destroy' => [1, 'bimbingan'], // Tipe untuk bimbingan
-        'admin.prestasi.destroy' => [2, 'prestasi'], // Tipe untuk prestasi
-        'admin.ekskul.destroy' => [3, 'ekskul'], // Tipe untuk ekstrak
-        'admin.bimbingan.edit' => [1, 'bimbingan'], // Tipe untuk bimbingan
-        'admin.prestasi.edit' => [2, 'prestasi'], // Tipe
-        'admin.ekskul.edit' => [3, 'ekskul'], // Tipe untuk ekstrakurikuler
+    protected $moduleTypeMapping = [
+        'admin.bimbingan.index' => [1, 'bimbingan'], // Type for guidance activities
+        'admin.prestasi.index' => [2, 'prestasi'], // Type for achievement activities
+        'admin.ekskul.index' => [3, 'ekskul'], // Type for extracurricular activities
+        'admin.bimbingan.store' => [1, 'bimbingan'], // Type for guidance activities
+        'admin.prestasi.store' => [2, 'prestasi'], // Type for achievement activities
+        'admin.ekskul.store' => [3, 'ekskul'], // Type for extracurricular activities
+        'admin.bimbingan.update' => [1, 'bimbingan'], // Type for guidance activities
+        'admin.prestasi.update' => [2, 'prestasi'], // Type for achievement activities
+        'admin.ekskul.update' => [3, 'ekskul'], // Type for extracurricular activities
+        'admin.bimbingan.destroy' => [1, 'bimbingan'], // Type for guidance activities
+        'admin.prestasi.destroy' => [2, 'prestasi'], // Type for achievement activities
+        'admin.ekskul.destroy' => [3, 'ekskul'], // Type for extracurricular activities
+        'admin.bimbingan.edit' => [1, 'bimbingan'], // Type for guidance activities
+        'admin.prestasi.edit' => [2, 'prestasi'], // Type for achievement activities
+        'admin.ekskul.edit' => [3, 'ekskul'], // Type for extracurricular activities
     ];
 
     public function index(Request $request)
     {
-        //sejenis dengan role nya
-        $routeName = $request->route()->getName();
-        $type = $this->adminTypes[$routeName][0];
-        $kegiatan = Tb_kegiatan::where('type', $type)->get();
-        return view("admin.{$this->adminTypes[$routeName][1]}.create", compact('kegiatan'));
+        // Get activities based on their type/role
+        $currentRouteName = $request->route()->getName();
+        $activityType = $this->moduleTypeMapping[$currentRouteName][0];
+        $activityList = Tb_kegiatan::where('type', $activityType)->get();
+        return view("admin.{$this->moduleTypeMapping[$currentRouteName][1]}.create", compact('activityList'));
     }
 
     /**
@@ -52,42 +52,44 @@ class CrudController extends Controller
      */
    public function store(Request $request)
     {
-        $routeName = $request->route()->getName();
-        $type = $this->adminTypes[$routeName][0];
-        // Validasi input
+        $currentRouteName = $request->route()->getName();
+        $activityType = $this->moduleTypeMapping[$currentRouteName][0];
+        
+        // Input validation
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'file' => 'required|file|mimes:jpg,jpeg,png,pdf,mp4,avi,mov|max:10240', // max 10MB
             'date' => 'required|date'
         ]);
-        $user = Auth::user();
-        $filePath = null;
-        $fileName = null;
+        
+        $authenticatedUser = Auth::user();
+        $uploadedFilePath = null;
+        $generatedFileName = null;
 
         // Handle file upload
         if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $cleanTitle = str_replace(' ', '_', $request->title);
+            $uploadedFile = $request->file('file');
+            $sanitizedTitle = str_replace(' ', '_', $request->title);
             
             // Generate unique filename
-            $fileName = time() . '_' . $cleanTitle . '.' . $file->getClientOriginalExtension();
+            $generatedFileName = time() . '_' . $sanitizedTitle . '.' . $uploadedFile->getClientOriginalExtension();
 
-            // Store file dalam folder storage/app/public/kegiatan
-            $filePath = $file->storeAs('kegiatan', $fileName, 'public');
+            // Store file in storage/app/public/kegiatan directory
+            $uploadedFilePath = $uploadedFile->storeAs('kegiatan', $generatedFileName, 'public');
         }
         
-        // Simpan ke database
+        // Save to database
         tb_kegiatan::create([
-            'id_admin' => $user->id, // Ambil ID user yang login
-            'type' => $type, // Set type ke 'bimbingan'
+            'id_admin' => $authenticatedUser->id, // Get the logged-in user ID
+            'type' => $activityType, // Set the activity type
             'title' => $request->title,
             'description' => $request->description,
-            'file' => $filePath, // simpan path relatif
+            'file' => $uploadedFilePath, // Save relative path
             'date' => $request->date,
         ]);
 
-        return redirect()->route('admin.' . $this->adminTypes[$routeName][1] . '.index')->with('success', 'Kegiatan berhasil ditambahkan!');
+        return redirect()->route('admin.' . $this->moduleTypeMapping[$currentRouteName][1] . '.index')->with('success', 'Activity successfully added!');
     }
 
     /**
@@ -101,77 +103,77 @@ class CrudController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($bimbingan, Request $request)
+    public function edit($activityId, Request $request)
     {
-        $routeName = $request->route()->getName();
-        $tb_kegiatan = tb_kegiatan::findOrFail($bimbingan); // Gunakan findOrFail untuk konsistensi
-        return view("admin.{$this->adminTypes[$routeName][1]}.edit", ['item' => $tb_kegiatan]);
+        $currentRouteName = $request->route()->getName();
+        $activityRecord = tb_kegiatan::findOrFail($activityId); // Use findOrFail for consistency
+        return view("admin.{$this->moduleTypeMapping[$currentRouteName][1]}.edit", ['item' => $activityRecord]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $bimbingan)
+    public function update(Request $request, $activityId)
     {
-        // Hapus dd() ini untuk production
+        // Remove this dd() for production
         // dd($request->all());
-        $routeName = $request->route()->getName();
+        $currentRouteName = $request->route()->getName();
         
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'file' => 'nullable|file|mimes:jpg,jpeg,png,pdf,mp4,avi,mov|max:10240', // ubah ke nullable
+            'file' => 'nullable|file|mimes:jpg,jpeg,png,pdf,mp4,avi,mov|max:10240', // Change to nullable
             'date' => 'required|date'
         ]);
         
-        $item = tb_kegiatan::findOrFail($bimbingan);
-        $filePath = $item->file; // Default ke file lama
+        $activityRecord = tb_kegiatan::findOrFail($activityId);
+        $updatedFilePath = $activityRecord->file; // Default to old file
         
-        // Handle file upload jika ada file baru
+        // Handle file upload if new file exists
         if ($request->hasFile('file')) {
-            // 1. Hapus file lama jika ada
-            if ($item->file && Storage::disk('public')->exists($item->file)) {
-                Storage::disk('public')->delete($item->file);
+            // 1. Delete old file if exists
+            if ($activityRecord->file && Storage::disk('public')->exists($activityRecord->file)) {
+                Storage::disk('public')->delete($activityRecord->file);
             }
             
-            // 2. Upload file baru
-            $file = $request->file('file');
-            $cleanTitle = str_replace(' ', '_', $request->title);
+            // 2. Upload new file
+            $uploadedFile = $request->file('file');
+            $sanitizedTitle = str_replace(' ', '_', $request->title);
             
             // Generate unique filename
-            $fileName = time() . '_' . $cleanTitle . '.' . $file->getClientOriginalExtension();
+            $generatedFileName = time() . '_' . $sanitizedTitle . '.' . $uploadedFile->getClientOriginalExtension();
             
-            // Store file dalam folder storage/app/public/kegiatan
-            $filePath = $file->storeAs('kegiatan', $fileName, 'public');
+            // Store file in storage/app/public/kegiatan directory
+            $updatedFilePath = $uploadedFile->storeAs('kegiatan', $generatedFileName, 'public');
         }
         
-        // 3. Update data di database
-        $item->update([
+        // 3. Update database record
+        $activityRecord->update([
             'title' => $request->title,
             'description' => $request->description,
-            'file' => $filePath, // file path baru atau tetap yang lama
+            'file' => $updatedFilePath, // New file path or keep the old one
             'date' => $request->date,
         ]);
         
-        return redirect()->route("admin.{$this->adminTypes[$routeName][1]}.index")->with('success', 'Data berhasil diupdate!');
+        return redirect()->route("admin.{$this->moduleTypeMapping[$currentRouteName][1]}.index")->with('success', 'Data successfully updated!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($bimbingan, Request $request)
+    public function destroy($activityId, Request $request)
     {
-        $routeName = $request->route()->getName();
-        $tb_kegiatan = tb_kegiatan::findOrFail($bimbingan);
+        $currentRouteName = $request->route()->getName();
+        $activityRecord = tb_kegiatan::findOrFail($activityId);
 
-        // Hapus file dari storage jika ada
-        if ($tb_kegiatan->file && Storage::disk('public')->exists($tb_kegiatan->file)) {
-            Storage::disk('public')->delete($tb_kegiatan->file);
+        // Delete file from storage if exists
+        if ($activityRecord->file && Storage::disk('public')->exists($activityRecord->file)) {
+            Storage::disk('public')->delete($activityRecord->file);
         }
 
-        // Hapus data dari database
-        $tb_kegiatan->delete();
+        // Delete record from database
+        $activityRecord->delete();
 
-        return redirect()->route("admin.{$this->adminTypes[$routeName][1]}.index")->with('success', 'Data berhasil dihapus!');
+        return redirect()->route("admin.{$this->moduleTypeMapping[$currentRouteName][1]}.index")->with('success', 'Data successfully deleted!');
     }
 }
