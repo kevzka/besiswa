@@ -15,7 +15,7 @@
                     <h3 class="card-title">Edit Item</h3>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.prestasi.update', $item->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.prestasi.update', $activityData['id']) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         
@@ -27,7 +27,7 @@
                                            class="form-control @error('title') is-invalid @enderror" 
                                            id="title" 
                                            name="title" 
-                                           value="{{ old('title', $item->title) }}" 
+                                           value="{{ old('title', $activityData['title']) }}" 
                                            required>
                                     @error('title')
                                         <div class="invalid-feedback">
@@ -44,7 +44,7 @@
                                            class="form-control @error('date') is-invalid @enderror" 
                                            id="date" 
                                            name="date" 
-                                           value="{{ old('date', $item->date) }}" 
+                                           value="{{ old('date', $activityData['date']) }}" 
                                            required>
                                     @error('date')
                                         <div class="invalid-feedback">
@@ -61,7 +61,7 @@
                                       id="description" 
                                       name="description" 
                                       rows="5" 
-                                      placeholder="Enter description...">{{ old('description', $item->description) }}</textarea>
+                                      placeholder="Enter description...">{{ old('description', $activityData['description']) }}</textarea>
                             @error('description')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -77,13 +77,13 @@
                                    name="file" 
                                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif">
                             
-                            @if($item->file)
+                            @if($activityData['file'])
                                 <div class="mt-2">
                                     <small class="text-muted">Current file: </small>
-                                    <a href="{{ asset('storage/' . $item->file) }}" 
+                                    <a href="{{ asset('storage/' . $activityData['file']) }}" 
                                        target="_blank" 
                                        class="text-primary">
-                                        {{ basename($item->file) }}
+                                        {{ basename($activityData['file']) }}
                                     </a>
                                 </div>
                             @endif

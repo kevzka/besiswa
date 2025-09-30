@@ -27,6 +27,14 @@
         </select><br>
         <label>Username:</label><br>
         <input type="text" name="username" value="{{ old('username') }}" required><br><br>
+        <label>Email:</label><br>
+        <input type="email" name="email" value="{{ old('email') }}" required><br><br>
+        <label for="instagram">instagram</label>
+        <input type="text" name="instagram" value="{{ old('instagram') }}"><br><br>
+        <label for="facebook">facebook</label>
+        <input type="text" name="facebook" value="{{ old('facebook') }}"><br><br>
+        <label>No. Telp:</label><br>
+        <input type="text" name="no_telp" value="{{ old('no_telp') }}" required><br><br>
         <label>Password:</label><br>
         <input type="password" name="password" required><br><br>
         <label>Konfirmasi Password:</label><br>

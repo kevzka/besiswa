@@ -405,7 +405,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($activityList as $index => $item)
+                                    @forelse($activities as $index => $item)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
                                             <td class="text-center">
@@ -519,9 +519,9 @@
                         </div>
 
                         <!-- Pagination -->
-                        {{-- @if ($activityList->hasPages())
+                        {{-- @if ($activities->hasPages())
                         <div class="d-flex justify-content-center mt-3">
-                            {{ $activityList->links() }}
+                            {{ $activities->links() }}
                         </div>
                     @endif --}}
                     </div>

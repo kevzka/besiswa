@@ -22,7 +22,10 @@ class AuthController extends Controller
             'id_roles' => ['required', 'int'],
             'username' => ['required', 'string', 'max:255', 'unique:admins,username'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:admins,email'],
+            'instagram' => [],
+            'facebook' => [],
+            'no_telp' => ['required', 'string', 'max:15', 'unique:admins,no_telp'],
         ]);
 
         // Simpan user baru
@@ -30,15 +33,18 @@ class AuthController extends Controller
             'username' => $validated['username'],
             'id_roles' => $validated['id_roles'], // Set role sebagai user biasa
             'password' => Hash::make($validated['password']),
-            // 'email' => $validated['email'],
+            'no_telp' => $validated['no_telp'],
+            'email' => $validated['email'],
+            'instagram' => $validated['instagram'],
+            'facebook' => $validated['facebook']
         ]);
 
         // Login otomatis setelah register
         Auth::login($user);
 
-            $roleName = $user->getRole ? $user->getRole->role : '';
-
-            return view('admin.dashboard', ['role' => $roleName]);
+        $roleName = $user->getRole ? $user->getRole->role : '';
+        
+        return view('admin.dashboard', ['role' => $roleName, 'id_role' => $user->id_roles]);
 
         // Redirect ke dashboard
     }

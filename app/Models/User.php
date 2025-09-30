@@ -3,7 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\roles;
+use App\Models\Roles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -22,6 +22,10 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'password',
+        'email',
+        'instagram',
+        'facebook',
+        'no_telp',
         'id_roles'
     ];
 
