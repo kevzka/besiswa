@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+
 <div class="sidebar">
             <div class="sidebar-header">
                 <div class="profile">
@@ -6,7 +8,7 @@
                     </div>
                     <div class="profile-info">
                         <h3>M. AUFA RAHMAN</h3>
-                        <p><i class="fas fa-circle" style="font-size: 8px;"></i> {{ ucfirst($role) }}</p>
+                        <p><img src="{{ asset('icons/location-dot-solid-full (1).svg') }}" alt="" class="location-icon" style="width:12px;height:12px;filter:invert(1);"></i> {{ ucfirst($role) }}</p>
                     </div>
                 </div>
             </div>

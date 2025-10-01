@@ -1,0 +1,88 @@
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 313px;
+    height: 100vh;
+    background: #7A2E2E;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+}
+
+.sidebar-header {
+    padding: 24px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 1);
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+}
+
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fff2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    font-size: 1.5em;
+    color: #7A2E2E;
+}
+
+.profile-info h3 {
+    font-weight: 600;
+    font-size: 1.1em;
+    margin: 0;
+    color: #fff;
+}
+
+.profile-info p {
+    font-size: 0.9em;
+    color: #e0e0e0;
+    margin: 2px 0 0 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sidebar-nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 1);
+}
+
+.nav-item a {
+    color: #fff;
+    text-decoration: none;
+    padding: 20px 20px;
+    display: block;
+    font-size: 1.1em;
+    transition: background 0.2s;
+}
+
+.nav-item.active a,
+.nav-item a:active {
+    background: #581B1B;
+    font-weight: 600;
+}
+
+.nav-item a:hover {
+    background: #a04a4a;
+}
+
+@media (max-width: 900px) {
+    .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+    }
+}
