@@ -153,28 +153,7 @@
 	</style>
 </head>
 <body style="margin:0;">
-	<div class="sidebar">
-		<div class="sidebar-header">
-			<span class="profile-pic">
-				<div class="avatar" style="width:100%;height:100%;border-radius:50%;background:#eee;display:flex;align-items:center;justify-content:center;overflow:hidden;">
-				   <!-- <img src="../img/user.png" alt="User" style="width:100px;height:100px;object-fit:cover;"> -->
-			   </div>
-			</span>
-			<span class="profile-info">
-				<div class="name">M. AUFA RAHMAN</div>
-				<div style="display:flex;align-items:center;gap:6px;margin-top:2px;">
-					<img src="{{ asset('icons/location-dot-solid-full (1).svg') }}" alt="" class="location-icon" style="width:12px;height:12px;filter:invert(1);">
-					<span class="role">Admin Ekskul</span>
-				</div>
-			</span>
-		</div>
-		<div class="sidebar-menu">
-			<a href="#">Home</a>
-			<a href="#">Ekskul</a>
-			<a href="#" class="active">Profil</a>
-			<a href="#" id="logoutBtn">Logout</a>
-		</div>
-	</div>
+	<x-admin.sidebar :role="$role" :id-role="$id_role" active-menu='profil'/>
 		<div class="main-content" style="flex:1;min-width:0;">
 		<div class="profile-header">
 			   <div class="avatar" style="width:110px;height:110px;border-radius:50%;background:#eee;display:flex;align-items:center;justify-content:center;overflow:hidden;">
@@ -201,84 +180,6 @@
 		</div>
 	</div>
 </div>
-
-<div id="logoutModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.25);justify-content:center;align-items:center;">
-	<div style="background:#fff;padding:48px 32px 36px 32px;border-radius:6px;box-shadow:0 2px 16px #0002;min-width:400px;max-width:90vw;text-align:center;">
-		<div style="font-size:2em;font-weight:500;margin-bottom:36px;color:black;">YAKIN INGIN LOGOUT?</div>
-		<div style="display:flex;justify-content:center;gap:32px;">
-			<button id="logoutYes" style="background:#7cf34a;color:#111;font-size:2em;font-weight:600;padding:8px 38px;border:none;border-radius:6px;box-shadow:0 2px 4px #0001;cursor:pointer;">YA</button>
-			<button id="logoutNo" style="background:#d81c1c;color:#111;font-size:2em;font-weight:600;padding:8px 28px;border:none;border-radius:6px;box-shadow:0 2px 4px #0001;cursor:pointer;">TIDAK</button>
-		</div>
-	</div>
-</div>
-<script>
-// Show modal on logout click
-document.getElementById('logoutBtn').onclick = function(e) {
-	e.preventDefault();
-	document.getElementById('logoutModal').style.display = 'flex';
-	document.body.style.overflow = 'hidden';
-}
-// Hide modal on TIDAK
-document.getElementById('logoutNo').onclick = function() {
-	document.getElementById('logoutModal').style.display = 'none';
-	document.body.style.overflow = '';
-}
-// Redirect or handle logout on YA
-document.getElementById('logoutYes').onclick = function() {
-	window.location.href = '../login.html'; // Ganti ke proses logout jika ada
-}
-</script>
-<script>
-// Show modal on logout click
-document.getElementById('logoutBtn').onclick = function(e) {
-	e.preventDefault();
-	document.getElementById('logoutModal').style.display = 'flex';
-	document.body.style.overflow = 'hidden';
-}
-// Hide modal on TIDAK
-document.getElementById('logoutNo').onclick = function() {
-	document.getElementById('logoutModal').style.display = 'none';
-	document.body.style.overflow = '';
-}
-// Redirect or handle logout on YA
-document.getElementById('logoutYes').onclick = function() {
-	window.location.href = '../login.html'; // Ganti ke proses logout jika ada
-}
-</script>
-<script>
-// Show modal on logout click
-document.getElementById('logoutBtn').onclick = function(e) {
-	e.preventDefault();
-	document.getElementById('logoutModal').style.display = 'flex';
-	document.body.style.overflow = 'hidden';
-}
-// Hide modal on TIDAK
-document.getElementById('logoutNo').onclick = function() {
-	document.getElementById('logoutModal').style.display = 'none';
-	document.body.style.overflow = '';
-}
-// Redirect or handle logout on YA
-document.getElementById('logoutYes').onclick = function() {
-	window.location.href = '../login.html'; // Ganti ke proses logout jika ada
-}
-</script>
-<script>
-// Show modal on logout click
-document.getElementById('logoutBtn').onclick = function(e) {
-	e.preventDefault();
-	document.getElementById('logoutModal').style.display = 'flex';
-	document.body.style.overflow = 'hidden';
-}
-// Hide modal on TIDAK
-document.getElementById('logoutNo').onclick = function() {
-	document.getElementById('logoutModal').style.display = 'none';
-	document.body.style.overflow = '';
-}
-// Redirect or handle logout on YA
-document.getElementById('logoutYes').onclick = function() {
-	window.location.href = '../login.html'; // Ganti ke proses logout jika ada
-}
-</script>
 
 </body>
 </html>

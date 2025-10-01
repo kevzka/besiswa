@@ -19,7 +19,7 @@ class Sidebar extends Component
     {
         $this->role = $role;
         $this->id_role = $idRole;
-        $this->activeMenu = $activeMenu;
+        $this->activeMenu = $activeMenu == 'profil' ? 'profil' : $activeMenu;
     }
 
     /**

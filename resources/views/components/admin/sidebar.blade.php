@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+{{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"> --}}
 
 <div class="sidebar">
             <div class="sidebar-header">
@@ -15,7 +16,7 @@
 
             <nav class="sidebar-nav">
                 <div class="nav-item {{ $activeMenu == 'home' ? 'active' : '' }}">
-                    <a href="#"><i class="fas fa-home" style="margin-right: 10px;"></i> Home</a>
+                    <a href="{{route('admin.dashboard')}}"><i class="fas fa-home" style="margin-right: 10px;"></i> Home</a>
                 </div>
                 @if ($id_role == 1 || $id_role == 4)
                     <div class="nav-item {{ $activeMenu == 'bimbingan' ? 'active' : '' }}">
@@ -35,13 +36,41 @@
                 <div class="nav-item {{ $activeMenu == 'profil' ? 'active' : '' }}">
                     <a href="{{ route('admin.profile') }}"><i class="fas fa-user-circle" style="margin-right: 10px;"></i> Profil</a>
                 </div>
-                <div class="nav-item">
-                    <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                <div class="nav-item " style="cursor: pointer;">
+                    <form action="{{ route('logout') }}" method="POST" style="display: inline;" >
                         @csrf
-                        <a href="#" onclick="this.parentElement.submit(); return false;">
+                        <a href="#" onclick="" id="logoutBtn">
                             <i class="fas fa-sign-out-alt" style="margin-right: 10px;"></i> Logout
                         </a>
                     </form>
                 </div>
             </nav>
         </div>
+
+    <div id="logoutModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.25);justify-content:center;align-items:center;">
+        <div style="background:#fff;padding:48px 32px 36px 32px;border-radius:6px;box-shadow:0 2px 16px #0002;min-width:400px;max-width:90vw;text-align:center;">
+            <div style="font-size:2em;font-weight:500;margin-bottom:36px;color:black;">YAKIN INGIN LOGOUT?</div>
+            <div style="display:flex;justify-content:center;gap:32px;">
+                <button id="logoutYes" style="background:#7cf34a;color:#111;font-size:2em;font-weight:600;padding:8px 38px;border:none;border-radius:6px;box-shadow:0 2px 4px #0001;cursor:pointer;">YA</button>
+                <button id="logoutNo" style="background:#d81c1c;color:#111;font-size:2em;font-weight:600;padding:8px 28px;border:none;border-radius:6px;box-shadow:0 2px 4px #0001;cursor:pointer;">TIDAK</button>
+            </div>
+        </div>
+    </div>
+<script>
+// Show modal on logout click
+document.getElementById('logoutBtn').onclick = function(e) {
+	e.preventDefault();
+	document.getElementById('logoutModal').style.display = 'flex';
+	document.body.style.overflow = 'hidden';
+}
+// Hide modal on TIDAK
+document.getElementById('logoutNo').onclick = function() {
+	document.getElementById('logoutModal').style.display = 'none';
+	document.body.style.overflow = '';
+}
+// Redirect or handle logout on YA
+document.getElementById('logoutYes').onclick = function() {
+    console.log('Logging out...');
+    document.querySelector('form[action="{{ route('logout') }}"]').submit();
+}
+</script>
