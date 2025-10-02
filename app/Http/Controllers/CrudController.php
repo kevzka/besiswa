@@ -154,9 +154,25 @@ class CrudController extends Controller
      */
     public function destroy($id, Request $request)
     {
-        $response = Http::delete("http://besiswa.test/api/crud/{$id}");
-        $currentRouteName = $request->route()->getName();
-        // return $response->json();
-        return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create");
+        try {
+            $response = Http::delete("http://besiswa.test/api/crud/{$id}");
+            
+            if ($response->successful()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Data berhasil dihapus'
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal menghapus data'
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

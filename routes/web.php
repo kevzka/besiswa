@@ -31,4 +31,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('profile', [DashboardController::class, 'profileDashboard'])->name('profile');
 });
 
+Route::get('/tes', function () {
+    return view('tes');
+});
+
 Route::get('/search', [ProductController::class, 'search'])->name('products.search');
