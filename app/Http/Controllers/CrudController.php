@@ -156,6 +156,7 @@ class CrudController extends Controller
     {
         $response = Http::delete("http://besiswa.test/api/crud/{$id}");
         $currentRouteName = $request->route()->getName();
+        // return $response->json();
         return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create");
     }
 }

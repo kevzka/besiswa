@@ -10,4 +10,6 @@ Route::post('/crud/create', [CrudApiController::class, 'create']);
 Route::apiResource('profile', ProfileCrudController::class);
 Route::post('/getProfile', [ProfileCrudController::class, 'getProfile']);
 
+Route::get('/test', [CrudApiController::class, 'test']);
+
 ?>

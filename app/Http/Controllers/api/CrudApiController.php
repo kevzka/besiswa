@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Models\tb_kegiatan;
+use App\Models\Tb_kegiatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,9 +12,10 @@ class CrudApiController extends Controller
     /**
      * Display a listing of the resource.
      */
+    
     public function index(Request $request)
     {
-        $activities = tb_kegiatan::where('type', $request->query('type'))->get();
+        $activities = Tb_kegiatan::where('type', $request->query('type'))->get();
         return response()->json(['message' => 'Activities retrieved successfully', 'data' => $activities]);
     }
 
@@ -23,7 +24,7 @@ class CrudApiController extends Controller
      */
     public function create(Request $request)
     {
-        $activities = tb_kegiatan::where('type', $request->type)->get();
+        $activities = Tb_kegiatan::where('type', $request->type)->get();
         return response()->json(['message' => 'Activities retrieved successfully', 'data' => $activities]);
     }
 
@@ -32,46 +33,80 @@ class CrudApiController extends Controller
      */
    public function store(Request $request)
     {
-        // Validate input data
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'file' => 'required|file|mimes:jpg,jpeg,png,pdf,mp4,avi,mov|max:10240',
-            'date' => 'required|date'
-        ]);
-        
-        $storedFilePath = null;
-        $finalFileName = null;
-
-        // Process file upload
-        if ($request->hasFile('file')) {
-            $uploadedFile = $request->file('file');
-            $sanitizedTitle = str_replace(' ', '_', $request->title);
+        try {
+            // Validate input data
+            $validatedData = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string',
+                'file' => 'required|file|mimes:jpg,jpeg,png,pdf,mp4,avi,mov|max:10240',
+                'date' => 'required|date',
+                'id_admin' => 'required',
+                'type' => 'required'
+            ]);
             
-            // Create unique filename with timestamp
-            $finalFileName = time() . '_' . $sanitizedTitle . '.' . $uploadedFile->getClientOriginalExtension();
+            $storedFilePath = null;
+            $finalFileName = null;
 
-            // Store file in public storage
-            $storedFilePath = $uploadedFile->storeAs('kegiatan', $finalFileName, 'public');
+            // Process file upload
+            if ($request->hasFile('file')) {
+                $uploadedFile = $request->file('file');
+                $sanitizedTitle = str_replace(' ', '_', $request->title);
+                
+                // Create unique filename with timestamp
+                $finalFileName = time() . '_' . $sanitizedTitle . '.' . $uploadedFile->getClientOriginalExtension();
+
+                // Store file in public storage
+                $storedFilePath = $uploadedFile->storeAs('kegiatan', $finalFileName, 'public');
+                
+                // Check if file was actually stored
+                if (!$storedFilePath) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Failed to upload file'
+                    ], 500);
+                }
+            }
+            
+            // Create new activity record
+            $activity = Tb_kegiatan::create([
+                'id_admin' => $validatedData['id_admin'],
+                'type' => $validatedData['type'],
+                'title' => $validatedData['title'],
+                'description' => $validatedData['description'],
+                'file' => $storedFilePath,
+                'date' => $validatedData['date'],
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Activity created successfully',
+                'data' => [
+                    'id' => $activity->id,
+                    'file_name' => $finalFileName
+                ]
+            ], 201);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Validation errors
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (\Exception $e) {
+            // Any other errors
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong: ' . $e->getMessage()
+            ], 500);
         }
-        
-        // Create new activity record
-        tb_kegiatan::create([
-            'id_admin' => $request->id_admin,
-            'type' => $request->type,
-            'title' => $request->title,
-            'description' => $request->description,
-            'file' => $storedFilePath,
-            'date' => $request->date,
-        ]);
-
-        return response()->json(['message' => 'Activity created successfully', 'file_name' => $finalFileName], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(tb_kegiatan $tb_kegiatan)
+    public function show(Tb_kegiatan $Tb_kegiatan)
     {
         //
     }
@@ -81,7 +116,7 @@ class CrudApiController extends Controller
      */
     public function edit($activityId, Request $request)
     {
-        $activity = tb_kegiatan::findOrFail($activityId);
+        $activity = Tb_kegiatan::findOrFail($activityId);
         return response()->json(['message' => 'Activity retrieved for editing', 'data' => $activity]);
     }
 
@@ -97,7 +132,7 @@ class CrudApiController extends Controller
             'date' => 'required|date'
         ]);
         
-        $activity = tb_kegiatan::findOrFail($id);
+        $activity = Tb_kegiatan::findOrFail($id);
         $updatedFilePath = $activity->file;
         
         // Handle new file upload if provided
@@ -134,7 +169,7 @@ class CrudApiController extends Controller
      */
     public function destroy($activityId, Request $request)
     {
-        $activity = tb_kegiatan::findOrFail($activityId);
+        $activity = Tb_kegiatan::findOrFail($activityId);
 
         // Remove associated file if it exists
         if ($activity->file && Storage::disk('public')->exists($activity->file)) {

@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
-{{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"> --}}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
 <div class="sidebar">
             <div class="sidebar-header">
