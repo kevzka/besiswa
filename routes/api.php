@@ -11,5 +11,6 @@ Route::apiResource('profile', ProfileCrudController::class);
 Route::post('/getProfile', [ProfileCrudController::class, 'getProfile']);
 
 Route::get('/test', [CrudApiController::class, 'test']);
+Route::get('/home', [CrudApiController::class, 'home']);
 
 ?>

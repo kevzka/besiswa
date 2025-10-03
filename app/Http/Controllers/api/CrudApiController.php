@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Storage;
 
 class CrudApiController extends Controller
 {
+    public function home(Request $request){
+        $activities = Tb_kegiatan::where('id_admin', $request->id_admin)->get();
+        $countBimbingan = $activities->where('type', 1)->count();    
+        $countPrestasi = $activities->where('type', 2)->count();
+        $countEkskul = $activities->where('type', 3)->count();
+        return response()->json(['message' => 'API is working', 'countBimbingan' => $countBimbingan, 'countPrestasi' => $countPrestasi, 'countEkskul' => $countEkskul, 'activities' => $activities]);
+    }
     /**
      * Display a listing of the resource.
      */

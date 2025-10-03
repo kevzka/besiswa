@@ -29,6 +29,13 @@ class CrudController extends Controller
         'admin.prestasi.create' => [2, 'prestasi'],
         'admin.ekskul.create' => [3, 'ekskul'],
     ];
+    public function home(Request $request){
+        $currentRouteName = $request->route()->getName();
+        $user = Auth::user();
+        $roleName = $user->getRole ? $user->getRole->role : '';
+        $response = Http::get('http://besiswa.test/api/home', ['id_admin' => $user->id])->json();
+        return view("admin.dashboard", ['data' => $response, 'role' => $roleName, 'id_role' => $user->id_roles]);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -62,40 +69,55 @@ class CrudController extends Controller
      */
     public function store(Request $request)
     {
-        // Interact with API through HTTP request
-        $user = Auth::user();
-        $currentRouteName = $request->route()->getName();
-        $activityType = $this->routeModuleMapping[$currentRouteName][0];
+        try{
 
-        $requestData = array_merge(
-            $request->except(['_token', 'files']),
-            [
-                'id_admin' => $user->id, 
-                'type' => $activityType
-            ]
-        );
-
-        $httpRequest = Http::asMultipart();
-
-        // Add form data to multipart request
-        foreach ($requestData as $key => $value) {
-            $httpRequest = $httpRequest->attach($key, $value);
-        }
-
-        // Handle file attachment if present
-        if ($request->hasFile('file')) {
-            $uploadedFile = $request->file('file');
-            $httpRequest = $httpRequest->attach(
-                'file',
-                file_get_contents($uploadedFile->getRealPath()),
-                $uploadedFile->getClientOriginalName()
+            // Interact with API through HTTP request
+            $user = Auth::user();
+            $currentRouteName = $request->route()->getName();
+            $activityType = $this->routeModuleMapping[$currentRouteName][0];
+    
+            $requestData = array_merge(
+                $request->except(['_token', 'files']),
+                [
+                    'id_admin' => $user->id, 
+                    'type' => $activityType
+                ]
             );
+    
+            $httpRequest = Http::asMultipart();
+    
+            // Add form data to multipart request
+            foreach ($requestData as $key => $value) {
+                $httpRequest = $httpRequest->attach($key, $value);
+            }
+    
+            // Handle file attachment if present
+            if ($request->hasFile('file')) {
+                $uploadedFile = $request->file('file');
+                $httpRequest = $httpRequest->attach(
+                    'file',
+                    file_get_contents($uploadedFile->getRealPath()),
+                    $uploadedFile->getClientOriginalName()
+                );
+            }
+    
+            $response = $httpRequest->post('http://besiswa.test/api/crud');
+            
+            $currentRouteName = $request->route()->getName();
+            if ($response->successful()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Data berhasil dihapus'
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Pastikan diisi Semua Input nya'
+                ], 500);
+            }
+            return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create");
+        } catch (\Exception $e) {
         }
-
-        $response = $httpRequest->post('http://besiswa.test/api/crud');
-        
-        $currentRouteName = $request->route()->getName();
-        return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create");
     }
 
     /**
@@ -114,7 +136,9 @@ class CrudController extends Controller
         $currentRouteName = $request->route()->getName();
         $activityType = $this->routeModuleMapping[$currentRouteName][0];
         $activityData = Http::get("http://besiswa.test/api/crud/{$id}/edit")->json()['data'];
-        return view("admin.{$this->routeModuleMapping[$currentRouteName][1]}.edit", compact('activityData'));
+        $user = Auth::user();
+        $roleName = $user->getRole ? $user->getRole->role : '';
+        return view("admin.{$this->routeModuleMapping[$currentRouteName][1]}.edit", compact('activityData'), ['role' => $roleName, 'id_role' => $user->id_roles]);
     }
 
     /**

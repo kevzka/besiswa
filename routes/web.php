@@ -24,7 +24,7 @@ Route::get('/dashboard', [DashboardController::class, 'publicDashboard']);
 
 // Admin Routes
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'adminDashboard'])->name('dashboard');
+    Route::get('dashboard', [CrudController::class, 'home'])->name('dashboard');
     Route::resource('bimbingan', CrudController::class)->parameters(['bimbingan' => 'kegiatan'])->names('bimbingan');
     Route::resource('prestasi', CrudController::class)->parameters(['prestasi' => 'kegiatan'])->names('prestasi');
     Route::resource('ekskul', CrudController::class)->parameters(['ekskul' => 'kegiatan'])->names('ekskul');
