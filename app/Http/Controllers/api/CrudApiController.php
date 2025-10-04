@@ -9,7 +9,12 @@ use Illuminate\Support\Facades\Storage;
 
 class CrudApiController extends Controller
 {
-    public function home(Request $request){
+    public function test(Request $request)
+    {
+        return response()->json(['message' => $request->query()]);
+    }
+    public function home(Request $request)
+    {
         $activities = Tb_kegiatan::where('id_admin', $request->id_admin)->get();
         $countBimbingan = $activities->where('type', 1)->count();    
         $countPrestasi = $activities->where('type', 2)->count();

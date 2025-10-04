@@ -50,7 +50,8 @@ function alertDelete(el, event) {
                         });
 
                         // Hapus baris tabel
-                        el.closest("tr").remove();
+                        console.log('selseia')
+                        location.reload();
                     } else {
                         // Gagal
                         Swal.fire({
@@ -126,12 +127,8 @@ function alertSuccessForm(el, event) {
                     timer: 2000,
                     showConfirmButton: false,
                 }).then(() => {
-                    // // Reset form
-                    // form.reset();
-                    // resetFilePreview();
-
-                    // Reload table data
-                    reloadTableData();
+                    console.log('selseia')
+                    location.reload();
                 });
             } else {
                 // Gagal
@@ -150,78 +147,4 @@ function alertSuccessForm(el, event) {
                 icon: "error",
             });
         });
-}
-
-function reloadTableData() {
-    // Show loading di tabel
-    console.log("Reloading table data...");
-    const tableBody = document.querySelector(".table-card table tbody");
-    if (tableBody) {
-        tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Loading...</td></tr>';
-    }
-
-    // Determine activity type based on current URL
-    const currentPath = window.location.pathname;
-    let activityType = 1; // default bimbingan
-    
-    if (currentPath.includes('bimbingan')) {
-        activityType = 1;
-    } else if (currentPath.includes('prestasi')) {
-        activityType = 2;
-    } else if (currentPath.includes('ekskul')) {
-        activityType = 3;
-    }
-
-    // Fetch data terbaru dengan POST request dan type parameter
-    fetch('/api/crud/create', {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-            "X-CSRF-TOKEN": document
-                .querySelector('meta[name="csrf-token"]')
-                .getAttribute("content"),
-        },
-        body: JSON.stringify({
-            type: activityType
-        })
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log("API Response:", data);
-            if (data.success !== false && data.data) {
-                updateTableContent(data.data);
-            } else {
-                console.error("API returned error:", data.message || 'Unknown error');
-                tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Error loading data</td></tr>';
-            }
-        })
-        .catch((error) => {
-            console.error("Error reloading table:", error);
-            const tableBody = document.querySelector(".table-card table tbody");
-            if (tableBody) {
-                tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Failed to load data</td></tr>';
-            }
-        });
-}
-
-function updateTableContent(activities) {
-    const tableBody = document.querySelector(".table-card table tbody");
-    if (!tableBody) return;
-
-    tableBody.innerHTML = "";
-
-    activities.forEach((item, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${item.title}</td>
-            <td>${formatDate(item.date)}</td>
-            <td></td>
-            <td class="table-actions">
-                <!-- Action buttons sama seperti di blade -->
-            </td>
-        `;
-        tableBody.appendChild(row);
-    });
 }
