@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Data Kegiatan Bimbingan</title>
+    <title>Data Kegiatan ekskul</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome -->
@@ -372,11 +372,11 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Data Kegiatan Bimbingan</h4>
+                        <h4 class="card-title">Data Kegiatan ekskul</h4>
                         <div class="card-header">
-                            <h4 class="card-title">Data Kegiatan Bimbingan</h4>
+                            <h4 class="card-title">Data Kegiatan ekskul</h4>
                             <button type="button" class="btn btn-primary btn-sm float-right"
-                                onclick="window.location.href='{{ route('admin.bimbingan.create') }}'">
+                                onclick="window.location.href='{{ route('admin.ekskul.create') }}'">
                                 <i class="fas fa-plus"></i> Tambah Kegiatan
                             </button>
                         </div>
@@ -491,7 +491,7 @@
                                                         onclick="editKegiatan({{ $item->id }})" title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
-                                                    <form action="{{ route('admin.bimbingan.destroy', $item->id) }}" method="POST"
+                                                    <form action="{{ route('admin.ekskul.destroy', $item->id) }}" method="POST"
                                                         class="d-inline"
                                                         onsubmit="return confirm('Yakin ingin menghapus kegiatan ini?')">
                                                         @csrf
@@ -631,7 +631,7 @@
                 // Implementasi edit kegiatan
                 console.log('Edit kegiatan ID:', id);
                 // Redirect ke halaman edit atau tampilkan modal edit
-                window.location.href = `/admin/bimbingan/${id}/edit`;
+                window.location.href = `/admin/ekskul/${id}/edit`;
             }
         </script>
     {{-- @endpush --}}

@@ -20,7 +20,7 @@ class DashboardController extends Controller
         $user = Auth::user();
         $roleName = $user->getRole ? $user->getRole->role : '';
         $response = Http::post('http://besiswa.test/api/getProfile', ['id_admin' => Auth::user()->id]);
-        return view('admin.profile', ['user' => $response->json(), 'role' => $roleName, 'id_role' => $user->id_roles]);
+        return view('admin.profile', ['user' => $response->json(), 'role' => $roleName, 'id_role' => $user->id_roles, 'adminName' => $user->username]);
     }
     public function publicDashboard()
     {

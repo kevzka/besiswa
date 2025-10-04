@@ -6,9 +6,16 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
+    protected $roles = [
+        1 => 'bimbingan',
+        2 => 'ekskul',
+        3 => 'prestasi',
+        4 => 'utama'
+    ];
     public function showRegistrationForm()
     {
         return view('auth.register');
@@ -43,8 +50,11 @@ class AuthController extends Controller
         Auth::login($user);
 
         $roleName = $user->getRole ? $user->getRole->role : '';
-        
-        return view('admin.dashboard', ['role' => $roleName, 'id_role' => $user->id_roles]);
+        $role = $this->roles[$user->id_roles] ?? 'guest';
+        $response = Http::get('http://besiswa.test/api/home', ['id_admin' => $user->id])->json();
+
+        return view("admin.$role.dashboard", ['data' => $response, 'role' => $roleName, 'id_role' => $user->id_roles, 'adminName' => $user->username]);
+        // return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create");
 
         // Redirect ke dashboard
     }

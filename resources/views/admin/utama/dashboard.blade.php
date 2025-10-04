@@ -276,10 +276,10 @@
 	</style>
 </head>
 <body>
-    <x-admin.sidebar :role="$role" :id-role="$id_role" active-menu='home' />
+    <x-admin.sidebar :role="$role" :id-role="$id_role" :adminName="$adminName" active-menu='home' :adminName="$adminName"/>
     <div class="main-content">
 		<div class="topbar">
-			<div class="menu-icon"><img src="/img/bars-solid-full.svg" alt="" style="width: 100%;"></div>
+			<div class="menu-icon"><img src="{{asset('icons/bars-solid-full.svg')}}" alt="" style="width: 100%;"></div>
 			<div class="search-bar">
 				<input type="text" placeholder="Search">
 			</div>

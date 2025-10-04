@@ -153,15 +153,15 @@
 	</style>
 </head>
 <body style="margin:0;">
-	<x-admin.sidebar :role="$role" :id-role="$id_role" active-menu='profil'/>
+	<x-admin.sidebar :role="$role" :id-role="$id_role" :adminName="$adminName" active-menu='profil'/>
 		<div class="main-content" style="flex:1;min-width:0;">
 		<div class="profile-header">
 			   <div class="avatar" style="width:110px;height:110px;border-radius:50%;background:#eee;display:flex;align-items:center;justify-content:center;overflow:hidden;">
-				   <!-- <img src="../img/user.png" alt="User" style="width:100px;height:100px;object-fit:cover;"> -->
+				   <img src="{{asset('img/profile_dummy.jpg')}}" alt="User" style="width:100%;height:100%;object-fit:cover;">
 			   </div>
 			<div class="profile-details">
-				<div class="name">M. AUFA RAHMAN</div>
-				<div class="role"><i class="fa fa-map-marker"></i> Admin Ekskul</div>
+				<div class="name">{{ $adminName }}</div>
+				<div class="role"><i class="fa fa-map-marker"></i>admin {{ $role }}</div>
 			</div>
 		</div>
 		<div class="card">

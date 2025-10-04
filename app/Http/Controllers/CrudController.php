@@ -28,13 +28,24 @@ class CrudController extends Controller
         'admin.bimbingan.create' => [1, 'bimbingan'],
         'admin.prestasi.create' => [2, 'prestasi'],
         'admin.ekskul.create' => [3, 'ekskul'],
+        'admin.bimbingan.dashboard' => [1, 'bimbingan'],
+        'admin.prestasi.dashboard' => [2, 'prestasi'],
+        'admin.ekskul.dashboard' => [3, 'ekskul'],
+    ];
+    protected $roles = [
+        1 => 'bimbingan',
+        2 => 'prestasi',
+        3 => 'ekskul',
+        4 => 'utama'
     ];
     public function home(Request $request){
         $currentRouteName = $request->route()->getName();
         $user = Auth::user();
         $roleName = $user->getRole ? $user->getRole->role : '';
+        $role = $this->roles[$user->id_roles] ?? 'guest';
         $response = Http::get('http://besiswa.test/api/home', ['id_admin' => $user->id])->json();
-        return view("admin.dashboard", ['data' => $response, 'role' => $roleName, 'id_role' => $user->id_roles]);
+
+        return view("admin.$role.dashboard", ['data' => $response, 'role' => $roleName, 'id_role' => $user->id_roles, 'adminName' => $user->username]);
     }
     /**
      * Display a listing of the resource.
@@ -48,7 +59,7 @@ class CrudController extends Controller
         $user = Auth::user();
         $roleName = $user->getRole ? $user->getRole->role : '';
         
-        return view("admin.{$this->routeModuleMapping[$currentRouteName][1]}.index", compact('activities'), ['role' => $roleName, 'id_role' => $user->id_roles]);
+        return view("admin.{$this->routeModuleMapping[$currentRouteName][1]}.index", compact('activities'), ['role' => $roleName, 'id_role' => $user->id_roles, 'adminName' => $user->username]);
     }
 
     /**
@@ -61,7 +72,7 @@ class CrudController extends Controller
         $activities = Http::post('http://besiswa.test/api/crud/create', ['type' => $activityType])->json()['data'];
         $user = Auth::user();
         $roleName = $user->getRole ? $user->getRole->role : '';
-        return view("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create", compact('activities'), ['role' => $roleName, 'id_role' => $user->id_roles]);
+        return view("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create", compact('activities'), ['role' => $roleName, 'id_role' => $user->id_roles, 'adminName' => $user->username]);
     }
 
     /**
@@ -107,7 +118,7 @@ class CrudController extends Controller
             if ($response->successful()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Data berhasil dihapus'
+                    'message' => 'Data berhasil ditambahkan'
                 ]);
             } else {
                 return response()->json([
@@ -138,7 +149,7 @@ class CrudController extends Controller
         $activityData = Http::get("http://besiswa.test/api/crud/{$id}/edit")->json()['data'];
         $user = Auth::user();
         $roleName = $user->getRole ? $user->getRole->role : '';
-        return view("admin.{$this->routeModuleMapping[$currentRouteName][1]}.edit", compact('activityData'), ['role' => $roleName, 'id_role' => $user->id_roles]);
+        return view("admin.{$this->routeModuleMapping[$currentRouteName][1]}.edit", compact('activityData'), ['role' => $roleName, 'id_role' => $user->id_roles, 'adminName' => $user->username]);
     }
 
     /**

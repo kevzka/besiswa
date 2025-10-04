@@ -11,15 +11,17 @@ class Sidebar extends Component
     public $role;
     public $id_role;
     public $activeMenu;
+    public $adminName;
 
     /**
      * Create a new component instance.
      */
-    public function __construct($role = 'admin', $idRole = 1, $activeMenu = 'home')
+    public function __construct($role = 'admin', $idRole = 1, $activeMenu = 'home', $adminName = 'Admin')
     {
         $this->role = $role;
         $this->id_role = $idRole;
         $this->activeMenu = $activeMenu == 'profil' ? 'profil' : $activeMenu;
+        $this->adminName = $adminName;
     }
 
     /**

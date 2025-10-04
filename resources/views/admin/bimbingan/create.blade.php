@@ -294,7 +294,7 @@
 </head>
 
 <body>
-    <x-admin.sidebar :role="$role" :id-role="$id_role" active-menu='bimbingan' />
+    <x-admin.sidebar :role="$role" :id-role="$id_role" :adminName="$adminName" active-menu='bimbingan' />
     <div class="main-content">
         <div class="topbar">
             <div class="menu-icon"><img src=" {{ asset('icons/bars-solid-full.svg') }}" alt="ini gambar"

@@ -4,11 +4,11 @@
 <div class="sidebar">
             <div class="sidebar-header">
                 <div class="profile">
-                    <div class="profile-img">
-                        <i class="fas fa-user"></i>
-                    </div>
+                    <div class="profile-image" style="width:40px;height:40px;border-radius:50%;background:#eee;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-right:12px;">
+				   <img src="{{asset('img/profile_dummy.jpg')}}" alt="User" style="width:100%;height:100%;object-fit:cover;">
+			   </div>
                     <div class="profile-info">
-                        <h3>M. AUFA RAHMAN</h3>
+                        <h3>{{ $adminName }}</h3>
                         <p><img src="{{ asset('icons/location-dot-solid-full (1).svg') }}" alt="" class="location-icon" style="width:12px;height:12px;filter:invert(1);"></i> {{ ucfirst($role) }}</p>
                     </div>
                 </div>
