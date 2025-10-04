@@ -9,7 +9,7 @@
 			   </div>
                     <div class="profile-info">
                         <h3>{{ $adminName }}</h3>
-                        <p><img src="{{ asset('icons/location-dot-solid-full (1).svg') }}" alt="" class="location-icon" style="width:12px;height:12px;filter:invert(1);"></i> {{ ucfirst($role) }}</p>
+                        <p><img src="{{ asset('icons/location-dot-solid-full (1).svg') }}" alt="" class="location-icon" style="width:12px;height:12px;filter:invert(1);"></i> Admin {{ ucfirst($role) }}</p>
                     </div>
                 </div>
             </div>
