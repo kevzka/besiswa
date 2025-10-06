@@ -11,6 +11,9 @@
 	<link rel="stylesheet" href="{{asset('css/admin.css')}}">
 </head>
 <body>
+    <div class="splash-screen">
+        <h1 style="text-align: center">loading splash</h1>
+    </div>
     <x-admin.sidebar :role="$role" :id-role="$id_role" :adminName="$adminName" active-menu='home' :adminName="$adminName"/>
     <div class="main-content">
 		<div class="topbar">
@@ -54,6 +57,13 @@
             <div class="table-card">
 				<table>
 					<tbody>
+                        @if (empty($data['activities']))
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 20px 0;">
+                                    Kamu belum menambahkan kegiatan apapun.
+                                </td>
+                            </tr>
+                        @else
                         @foreach ($data['activities'] as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
@@ -81,6 +91,7 @@
                                 </td>
                             </tr>
                         @endforeach
+                        @endif
 					</tbody>
 				</table>
 			</div>

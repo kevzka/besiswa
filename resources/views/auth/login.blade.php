@@ -1,21 +1,4 @@
-<?php
-// contoh sederhana login handler
-session_start();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-
-    // cek login dummy (ganti sesuai database kamu)
-    if ($email === "admin@sekolah.com" && $password === "123456") {
-        $_SESSION["login"] = true;
-        header("Location: dashboard.php");
-        exit;
-    } else {
-        $error = "Email atau password salah!";
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -35,9 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <p>Selamat datang di website kesiswaan</p>
       </div>
 
-      <?php if (!empty($error)): ?>
-        <p class="error"><?= $error; ?></p>
-      <?php endif; ?>
+      @if($errors->any())
+        <p style="text-align: center; color: red;">{{ $errors->first() }}</p>
+      @endif
 
       <!-- Form login -->
       <form method="POST" action="{{ route('login') }}">

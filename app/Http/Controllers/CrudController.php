@@ -86,6 +86,21 @@ class CrudController extends Controller
             $user = Auth::user();
             $currentRouteName = $request->route()->getName();
             $activityType = $this->routeModuleMapping[$currentRouteName][0];
+
+            try{
+                $request->validate([
+                    'title' => 'required|string|max:255',
+                    'description' => 'required|string',
+                    'file' => 'required|file|mimes:jpg,jpeg,png,pdf,mp4,avi,mov|max:10240',
+                    'date' => 'required|date',
+                ]);
+            } catch (\Illuminate\Validation\ValidationException $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'pastikan diisi semua inputnya ya',
+                    'errors' => $e->errors()
+                ], 422);
+            }
     
             $requestData = array_merge(
                 $request->except(['_token', 'files']),
@@ -120,14 +135,13 @@ class CrudController extends Controller
                     'success' => true,
                     'message' => 'Data berhasil ditambahkan'
                 ]);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Pastikan diisi Semua Input nya'
-                ], 500);
             }
             return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create");
         } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
         }
     }
 

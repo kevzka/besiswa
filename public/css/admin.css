@@ -173,6 +173,10 @@ td {
     font-size: 1.1em;
 }
 
+th, td:nth-child(2){
+    min-width: 10rem;
+}
+
 th,
 td:first-child {
     text-align: center;

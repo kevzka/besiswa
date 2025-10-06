@@ -51,6 +51,13 @@
             <div class="table-card">
                 <table>
                     <tbody>
+                        @if (empty($activities))
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 20px 0;">
+                                    Tidak ada data kegiatan prestasi.
+                                </td>
+                            </tr>
+                        @else
                         @foreach ($activities as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
@@ -78,6 +85,7 @@
                                 </td>
                             </tr>
                         @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>
