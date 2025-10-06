@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 </head>
 <body>
+    <x-deleteButton1 title="YAKIN INGIN HAPUS?"></x-deleteButton1>
     <x-admin.sidebar :role="$role" :id-role="$id_role" :adminName="$adminName" active-menu='home' :adminName="$adminName"/>
     <div class="main-content">
 		<div class="topbar">
@@ -65,7 +66,7 @@
                                         @csrf
                                         @method('DELETE')
 
-                                        <a href="javascript:void(0)" onclick="alertDelete(this, event)">
+                                        <a href="javascript:void(0)" onclick="showButtonModal(this)">
                                             <i title="Delete" class="fa-solid fa-trash"></i>
                                         </a>
                                     </form>

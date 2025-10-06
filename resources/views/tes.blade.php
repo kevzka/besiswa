@@ -7,10 +7,7 @@
   <title>Document</title>
 </head>
 <body>
-  <h1>halaman tes ajax</h1>  
-  <table id="table-body" border="">
-
-  </table>
-  <script src="{{asset('js/tes.js')}}"></script>
+  <div id="logoutBtn" onclick="showButtonModal()">Logout</div>
+  <x-button1 title="yakin ingin hapus?"></x-button1>
 </body>
 </html>

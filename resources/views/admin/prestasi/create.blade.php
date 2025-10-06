@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-    <title>Ekskul Admin</title>
+    <title>Prestasi Admin</title>
 </head>
 
 <body>
+    <x-deleteButton1 title="YAKIN INGIN HAPUS?"></x-deleteButton1>
     <x-admin.sidebar :role="$role" :id-role="$id_role" :adminName="$adminName" active-menu='prestasi' />
     <div class="main-content">
         <div class="topbar">
@@ -78,7 +79,7 @@
                                         @csrf
                                         @method('DELETE')
 
-                                        <a href="javascript:void(0)" onclick="alertDelete(this, event)">
+                                        <a href="javascript:void(0)" onclick="showButtonModal(this)">
                                             <i title="Delete" class="fa-solid fa-trash"></i>
                                         </a>
                                     </form>

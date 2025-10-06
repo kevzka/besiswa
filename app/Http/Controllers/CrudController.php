@@ -135,6 +135,7 @@ class CrudController extends Controller
                     'success' => true,
                     'message' => 'Data berhasil ditambahkan'
                 ]);
+                // return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create");
             }
             return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create");
         } catch (\Exception $e) {
@@ -204,18 +205,23 @@ class CrudController extends Controller
     public function destroy($id, Request $request)
     {
         try {
+            $currentRouteName = $request->route()->getName();
             $response = Http::delete("http://besiswa.test/api/crud/{$id}");
             
             if ($response->successful()) {
-                return response()->json([
+                /* return response()->json([
                     'success' => true,
                     'message' => 'Data berhasil dihapus'
-                ]);
+                ]); */
+                // return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create");
+                return redirect()->back()->with('success', 'Data berhasil dihapus');
+
             } else {
-                return response()->json([
+                /* return response()->json([
                     'success' => false,
                     'message' => 'Gagal menghapus data'
-                ], 500);
+                ], 500); */
+                return redirect()->back()->with('error', 'Data Tidak berhasil dihapus');
             }
         } catch (\Exception $e) {
             return response()->json([
