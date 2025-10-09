@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tb_kegiatan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
@@ -38,28 +39,61 @@ class CrudController extends Controller
         3 => 'ekskul',
         4 => 'utama'
     ];
-    public function home(Request $request){
-        $currentRouteName = $request->route()->getName();
-        $user = Auth::user();
-        $roleName = $user->getRole ? $user->getRole->role : '';
-        $role = $this->roles[$user->id_roles] ?? 'guest';
-        $response = Http::get('http://besiswa.test/api/home', ['id_admin' => $user->id])->json();
+    
+    public function home(Request $request)
+    {
+        Log::info('Accessing home dashboard');
 
-        return view("admin.$role.dashboard", ['data' => $response, 'role' => $roleName, 'id_role' => $user->id_roles, 'adminName' => $user->username]);
+        try {
+            $user = Auth::user();
+            Log::info('User authenticated', ['user_id' => $user->id, 'username' => $user->username]);
+
+            $roleName = $user->getRole ? $user->getRole->role : '';
+            $role = $this->roles[$user->id_roles] ?? 'guest';
+            Log::info('User role determined', ['role_name' => $roleName, 'role' => $role, 'id_roles' => $user->id_roles]);
+
+            Log::info('Making API request to home endpoint', ['id_admin' => $user->id]);
+            $response = Http::get('http://besiswa.test/api/home', ['id_admin' => $user->id]);
+
+            if (!$response->successful()) {
+                Log::error('Failed to retrieve home dashboard data', [
+                    'status_code' => $response->status(),
+                    'response_body' => $response->body(),
+                    'id_admin' => $user->id
+                ]);
+                throw new \Exception('Failed to retrieve home dashboard data');
+            }
+
+            Log::info('Home dashboard data retrieved successfully', [
+                'data_keys' => array_keys($response->json()),
+                'user_id' => $user->id
+            ]);
+
+            Log::info('Rendering dashboard view', ['view' => "admin.$role.dashboard"]);
+            return view("admin.$role.dashboard", [
+                'data' => $response->json()['data'],
+                'role' => $roleName,
+                'id_role' => $user->id_roles,
+                'adminName' => $user->username
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error accessing home dashboard', [
+                'exception' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
     }
-    /**
-     * Display a listing of the resource.
-     */
+    
     public function index(Request $request)
     {
-        $currentRouteName = $request->route()->getName();
-        $activityType = $this->routeModuleMapping[$currentRouteName][0];
-        // $activities = Http::get('http://besiswa.test/api/crud')->json()['data'];
-        // $activities = [];
-        $user = Auth::user();
-        $roleName = $user->getRole ? $user->getRole->role : '';
-        
-        return view("admin.{$this->routeModuleMapping[$currentRouteName][1]}.index", compact('activities'), ['role' => $roleName, 'id_role' => $user->id_roles, 'adminName' => $user->username]);
+        Log::info('Accessing index method', ['route' => $request->route()->getName()]);
     }
 
     /**
@@ -67,12 +101,54 @@ class CrudController extends Controller
      */
     public function create(Request $request)
     {
-        $currentRouteName = $request->route()->getName();
-        $activityType = $this->routeModuleMapping[$currentRouteName][0];
-        $activities = Http::post('http://besiswa.test/api/crud/create', ['type' => $activityType])->json()['data'];
-        $user = Auth::user();
-        $roleName = $user->getRole ? $user->getRole->role : '';
-        return view("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create", compact('activities'), ['role' => $roleName, 'id_role' => $user->id_roles, 'adminName' => $user->username]);
+        Log::info('Accessing create method');
+        try {
+            $currentRouteName = $request->route()->getName();
+            Log::info('Current route determined', ['route_name' => $currentRouteName]);
+            
+            $activityType = $this->routeModuleMapping[$currentRouteName][0];
+            Log::info('Activity type mapped', ['activity_type' => $activityType]);
+            
+            $user = Auth::user();
+            Log::info('User authenticated for create', ['user_id' => $user->id, 'username' => $user->username]);
+            
+            $roleName = $user->getRole ? $user->getRole->role : '';
+            Log::info('User role for create', ['role_name' => $roleName]);
+
+            Log::info('Making API request to create endpoint', ['type' => $activityType]);
+            $activities = Http::post('http://besiswa.test/api/crud/create', ['type' => $activityType]);
+
+            if (!$activities->successful()) {
+                Log::error('Failed to retrieve activities data', [
+                    'status_code' => $activities->status(),
+                    'response_body' => $activities->body(),
+                    'activity_type' => $activityType
+                ]);
+                throw new \Exception('Failed to retrieve activities data');
+            }
+
+            Log::info('Activities data retrieved successfully', [
+                'activity_type' => $activityType,
+                'data_count' => count($activities->json()['data'] ?? [])
+            ]);
+            
+            $activities = $activities->json()['data'];
+            $viewName = "admin.{$this->routeModuleMapping[$currentRouteName][1]}.create";
+            Log::info('Rendering create view', ['view' => $viewName]);
+
+            return view($viewName, compact('activities'), [
+                'role' => $roleName,
+                'id_role' => $user->id_roles,
+                'adminName' => $user->username
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in create method', [
+                'exception' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'route' => $request->route()->getName()
+            ]);
+        }
     }
 
     /**
@@ -80,68 +156,92 @@ class CrudController extends Controller
      */
     public function store(Request $request)
     {
-        try{
-
-            // Interact with API through HTTP request
+        Log::info('Starting store method');
+        try {
             $user = Auth::user();
+            Log::info('User authenticated for store', ['user_id' => $user->id]);
+            
             $currentRouteName = $request->route()->getName();
             $activityType = $this->routeModuleMapping[$currentRouteName][0];
+            Log::info('Store operation details', [
+                'route_name' => $currentRouteName,
+                'activity_type' => $activityType
+            ]);
 
-            try{
-                $request->validate([
-                    'title' => 'required|string|max:255',
-                    'description' => 'required|string',
-                    'file' => 'required|file|mimes:jpg,jpeg,png,pdf,mp4,avi,mov|max:10240',
-                    'date' => 'required|date',
-                ]);
-            } catch (\Illuminate\Validation\ValidationException $e) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'pastikan diisi semua inputnya ya',
-                    'errors' => $e->errors()
-                ], 422);
-            }
-    
+            Log::info('Validating request data');
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string',
+                'file' => 'required|file|mimes:jpg,jpeg,png,pdf,mp4,avi,mov|max:10240',
+                'date' => 'required|date',
+            ]);
+
+            Log::info('Request validation passed');
+
             $requestData = array_merge(
                 $request->except(['_token', 'files']),
                 [
-                    'id_admin' => $user->id, 
+                    'id_admin' => $user->id,
                     'type' => $activityType
                 ]
             );
-    
+            Log::info('Request data prepared', ['data_keys' => array_keys($requestData)]);
+
             $httpRequest = Http::asMultipart();
-    
+
             // Add form data to multipart request
             foreach ($requestData as $key => $value) {
                 $httpRequest = $httpRequest->attach($key, $value);
             }
-    
+            Log::info('Form data attached to multipart request');
+
             // Handle file attachment if present
             if ($request->hasFile('file')) {
                 $uploadedFile = $request->file('file');
+                Log::info('File upload detected', [
+                    'original_name' => $uploadedFile->getClientOriginalName(),
+                    'size' => $uploadedFile->getSize(),
+                    'mime_type' => $uploadedFile->getMimeType()
+                ]);
+                
                 $httpRequest = $httpRequest->attach(
                     'file',
                     file_get_contents($uploadedFile->getRealPath()),
                     $uploadedFile->getClientOriginalName()
                 );
+                Log::info('File attached to multipart request');
             }
-    
+
+            Log::info('Making API request to store endpoint');
             $response = $httpRequest->post('http://besiswa.test/api/crud');
-            
-            $currentRouteName = $request->route()->getName();
+
             if ($response->successful()) {
+                Log::info('Store operation successful', [
+                    'status_code' => $response->status(),
+                    'activity_type' => $activityType
+                ]);
                 return response()->json([
                     'success' => true,
                     'message' => 'Data berhasil ditambahkan'
                 ]);
-                // return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create");
+            } else {
+                Log::error('Store operation failed', [
+                    'status_code' => $response->status(),
+                    'response_body' => $response->body()
+                ]);
             }
+            
+            Log::info('Redirecting to create page');
             return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create");
         } catch (\Exception $e) {
+            Log::error('Error in store method', [
+                'exception' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+                'message' => 'Pastikan di isi semua ya field nya!!!'
             ], 500);
         }
     }
@@ -151,6 +251,7 @@ class CrudController extends Controller
      */
     public function show(Tb_kegiatan $tb_kegiatan)
     {
+        Log::info('Accessing show method', ['kegiatan_id' => $tb_kegiatan->id ?? 'null']);
         //
     }
 
@@ -159,12 +260,42 @@ class CrudController extends Controller
      */
     public function edit($id, Request $request)
     {
-        $currentRouteName = $request->route()->getName();
-        $activityType = $this->routeModuleMapping[$currentRouteName][0];
-        $activityData = Http::get("http://besiswa.test/api/crud/{$id}/edit")->json()['data'];
-        $user = Auth::user();
-        $roleName = $user->getRole ? $user->getRole->role : '';
-        return view("admin.{$this->routeModuleMapping[$currentRouteName][1]}.edit", compact('activityData'), ['role' => $roleName, 'id_role' => $user->id_roles, 'adminName' => $user->username]);
+        Log::info('Accessing edit method', ['id' => $id]);
+        try {
+            $currentRouteName = $request->route()->getName();
+            $activityType = $this->routeModuleMapping[$currentRouteName][0];
+            Log::info('Edit operation details', [
+                'route_name' => $currentRouteName,
+                'activity_type' => $activityType
+            ]);
+
+            Log::info('Making API request to edit endpoint', ['id' => $id]);
+            $activityData = Http::get("http://besiswa.test/api/crud/{$id}/edit")->json()['data'];
+            Log::info('Activity data retrieved for edit', ['activity_id' => $id]);
+            
+            $user = Auth::user();
+            $roleName = $user->getRole ? $user->getRole->role : '';
+            Log::info('User details for edit', [
+                'user_id' => $user->id,
+                'role_name' => $roleName
+            ]);
+            
+            $viewName = "admin.{$this->routeModuleMapping[$currentRouteName][1]}.edit";
+            Log::info('Rendering edit view', ['view' => $viewName]);
+            
+            return view($viewName, compact('activityData'), [
+                'role' => $roleName, 
+                'id_role' => $user->id_roles, 
+                'adminName' => $user->username
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in edit method', [
+                'exception' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'id' => $id
+            ]);
+        }
     }
 
     /**
@@ -172,31 +303,68 @@ class CrudController extends Controller
      */
     public function update(Request $request, $activityId)
     {
-        $requestData = array_merge(
-            $request->except(['_token', 'files'])
-        );
-
-        $httpRequest = Http::asMultipart();
-
-        // Add form data to multipart request
-        foreach ($requestData as $key => $value) {
-            $httpRequest = $httpRequest->attach($key, $value);
-        }
-
-        // Handle file attachment if present
-        if ($request->hasFile('file')) {
-            $uploadedFile = $request->file('file');
-            $httpRequest = $httpRequest->attach(
-                'file',
-                file_get_contents($uploadedFile->getRealPath()),
-                $uploadedFile->getClientOriginalName()
+        Log::info('Starting update method', ['activity_id' => $activityId]);
+        try {
+            $requestData = array_merge(
+                $request->except(['_token', 'files'])
             );
-        }
+            Log::info('Update request data prepared', [
+                'activity_id' => $activityId,
+                'data_keys' => array_keys($requestData)
+            ]);
 
-        $response = $httpRequest->post("http://besiswa.test/api/crud/{$activityId}");
-        
-        $currentRouteName = $request->route()->getName();
-        return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create");
+            $httpRequest = Http::asMultipart();
+
+            // Add form data to multipart request
+            foreach ($requestData as $key => $value) {
+                $httpRequest = $httpRequest->attach($key, $value);
+            }
+            Log::info('Form data attached for update');
+
+            // Handle file attachment if present
+            if ($request->hasFile('file')) {
+                $uploadedFile = $request->file('file');
+                Log::info('File upload detected for update', [
+                    'original_name' => $uploadedFile->getClientOriginalName(),
+                    'size' => $uploadedFile->getSize(),
+                    'mime_type' => $uploadedFile->getMimeType()
+                ]);
+                
+                $httpRequest = $httpRequest->attach(
+                    'file',
+                    file_get_contents($uploadedFile->getRealPath()),
+                    $uploadedFile->getClientOriginalName()
+                );
+                Log::info('File attached for update');
+            }
+
+            Log::info('Making API request to update endpoint', ['activity_id' => $activityId]);
+            $response = $httpRequest->post("http://besiswa.test/api/crud/{$activityId}");
+
+            if ($response->successful()) {
+                Log::info('Update operation successful', [
+                    'activity_id' => $activityId,
+                    'status_code' => $response->status()
+                ]);
+            } else {
+                Log::error('Update operation failed', [
+                    'activity_id' => $activityId,
+                    'status_code' => $response->status(),
+                    'response_body' => $response->body()
+                ]);
+            }
+
+            $currentRouteName = $request->route()->getName();
+            Log::info('Redirecting after update', ['route_name' => $currentRouteName]);
+            return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create");
+        } catch (\Exception $e) {
+            Log::error('Error in update method', [
+                'exception' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'activity_id' => $activityId
+            ]);
+        }
     }
 
     /**
@@ -204,26 +372,35 @@ class CrudController extends Controller
      */
     public function destroy($id, Request $request)
     {
+        Log::info('Starting destroy method', ['id' => $id]);
         try {
             $currentRouteName = $request->route()->getName();
-            $response = Http::delete("http://besiswa.test/api/crud/{$id}");
+            Log::info('Destroy operation details', ['route_name' => $currentRouteName]);
             
-            if ($response->successful()) {
-                /* return response()->json([
-                    'success' => true,
-                    'message' => 'Data berhasil dihapus'
-                ]); */
-                // return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create");
-                return redirect()->back()->with('success', 'Data berhasil dihapus');
+            Log::info('Making API request to delete endpoint', ['id' => $id]);
+            $response = Http::delete("http://besiswa.test/api/crud/{$id}");
 
+            if ($response->successful()) {
+                Log::info('Delete operation successful', [
+                    'id' => $id,
+                    'status_code' => $response->status()
+                ]);
+                return redirect()->back()->with('success', 'Data berhasil dihapus');
             } else {
-                /* return response()->json([
-                    'success' => false,
-                    'message' => 'Gagal menghapus data'
-                ], 500); */
+                Log::error('Delete operation failed', [
+                    'id' => $id,
+                    'status_code' => $response->status(),
+                    'response_body' => $response->body()
+                ]);
                 return redirect()->back()->with('error', 'Data Tidak berhasil dihapus');
             }
         } catch (\Exception $e) {
+            Log::error('Error in destroy method', [
+                'exception' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'id' => $id
+            ]);
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()

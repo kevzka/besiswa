@@ -60,7 +60,7 @@
                                             <i title="Edit" class="fa-solid fa-pencil"></i>
                                         </a>
                                     </form>
-                                    <a href=""><i title="Move">||</i></a>
+                                    <i>||</i>
                                     <form action="{{ route('admin.prestasi.destroy', ['kegiatan' => $item['id']]) }}"
                                         method="POST" style="display: inline;">
                                         @csrf
