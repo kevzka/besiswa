@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tb_kegiatan;
+use App\Models\TbEvidence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -249,9 +249,9 @@ class CrudController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Tb_kegiatan $tb_kegiatan)
+    public function show(TbEvidence $TbEvidence)
     {
-        Log::info('Accessing show method', ['kegiatan_id' => $tb_kegiatan->id ?? 'null']);
+        Log::info('Accessing show method', ['kegiatan_id' => $TbEvidence->id ?? 'null']);
         //
     }
 

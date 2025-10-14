@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Tb_kegiatan;
+use App\Models\TbEvidence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
@@ -42,7 +42,7 @@ class CrudApiController extends Controller
                 'id_admin' => $request->id_admin
             ]);
 
-            $activities = Tb_kegiatan::where('id_admin', $request->id_admin)->get();
+            $activities = TbEvidence::where('id_admin', $request->id_admin)->get();
             
             $countBimbingan = $activities->where('type', 1)->count();    
             $countPrestasi = $activities->where('type', 2)->count();
@@ -104,7 +104,7 @@ class CrudApiController extends Controller
             }
 
             Log::info('Retrieving activities by type', ['type' => $type]);
-            $activities = Tb_kegiatan::where('type', $type)->get();
+            $activities = TbEvidence::where('type', $type)->get();
 
             Log::info('Activities retrieved successfully', [
                 'type' => $type,
@@ -152,7 +152,7 @@ class CrudApiController extends Controller
             }
 
             Log::info('Retrieving activities for create form', ['type' => $request->type]);
-            $activities = Tb_kegiatan::where('type', $request->type)->get();
+            $activities = TbEvidence::where('type', $request->type)->get();
 
             Log::info('Create form data retrieved successfully', [
                 'type' => $request->type,
@@ -251,7 +251,7 @@ class CrudApiController extends Controller
             
             Log::info('Creating activity record');
             // Create new activity record
-            $activity = Tb_kegiatan::create([
+            $activity = TbEvidence::create([
                 'id_admin' => $validatedData['id_admin'],
                 'type' => $validatedData['type'],
                 'title' => $validatedData['title'],
@@ -308,10 +308,10 @@ class CrudApiController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Tb_kegiatan $Tb_kegiatan)
+    public function show(TbEvidence $TbEvidence)
     {
         Log::info('Accessing show activity', [
-            'activity_id' => $Tb_kegiatan->id ?? 'null'
+            'activity_id' => $TbEvidence->id ?? 'null'
         ]);
         //
     }
@@ -325,7 +325,7 @@ class CrudApiController extends Controller
 
         try {
             Log::info('Finding activity for edit', ['activity_id' => $activityId]);
-            $activity = Tb_kegiatan::findOrFail($activityId);
+            $activity = TbEvidence::findOrFail($activityId);
 
             Log::info('Activity found for edit', [
                 'activity_id' => $activity->id,
@@ -387,7 +387,7 @@ class CrudApiController extends Controller
             Log::info('Update validation passed');
             
             Log::info('Finding activity for update', ['activity_id' => $id]);
-            $activity = Tb_kegiatan::findOrFail($id);
+            $activity = TbEvidence::findOrFail($id);
             
             Log::info('Activity found for update', [
                 'activity_id' => $activity->id,
@@ -507,7 +507,7 @@ class CrudApiController extends Controller
 
         try {
             Log::info('Finding activity for deletion', ['activity_id' => $activityId]);
-            $activity = Tb_kegiatan::findOrFail($activityId);
+            $activity = TbEvidence::findOrFail($activityId);
 
             Log::info('Activity found for deletion', [
                 'activity_id' => $activity->id,

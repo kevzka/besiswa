@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $table = 'tb_kegiatan'; // ganti sesuai nama tabelmu
+    protected $table = 'TbEvidence'; // ganti sesuai nama tabelmu
 }

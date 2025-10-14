@@ -5,9 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CrudController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DashboardController;
-
-
-
+use App\Http\Controllers\PerformaController;
 
 // Authentication Routes
 Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
@@ -30,8 +28,6 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('profile', [DashboardController::class, 'profileDashboard'])->name('profile');
 });
 
-Route::get('/tes', function () {
-    return view('tes');
-});
+Route::resource('tes', PerformaController::class);
 
-Route::get('/search', [ProductController::class, 'search'])->name('products.search');
+// Route::get('/search', [ProductController::class, 'search'])->name('products.search');

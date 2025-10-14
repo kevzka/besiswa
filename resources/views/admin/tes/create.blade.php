@@ -17,16 +17,16 @@
     tingkat juara dropdwown 1,2,3, dan pilihan isi sendiri
     poin lomba
     --}}
-    <form action="" method="post" enctype="multipart/form-data">
-        {{-- @csrf --}}
+    <form action="{{ route('tes.store') }}" method="post" enctype="multipart/form-data">
+        @csrf
         <label for="nis">NIS Siswa:</label>
         <input type="text" id="nis" name="nis" required><br><br>
 
         <label for="nama_lomba">Nama Lomba:</label>
         <input type="text" id="nama_lomba" name="nama_lomba" required><br><br>
 
-        <label for="file_dokumentasi">File Dokumentasi:</label>
-        <input type="file" id="file_dokumentasi" name="file_dokumentasi" accept="image/*,application/pdf" required><br><br>
+        <label for="file_evidence">File Dokumentasi:</label>
+        <input type="file" id="file_evidence" name="file_evidence" accept="image/*,application/pdf" required><br><br>
 
         <label for="deskripsi_lomba">Deskripsi Lomba:</label>
         <textarea id="deskripsi_lomba" name="deskripsi_lomba" required></textarea><br><br>
@@ -70,5 +70,8 @@
             }
         });
     </script>
+    @php
+        dd($_POST, $_FILES);
+    @endphp
 </body>
 </html>

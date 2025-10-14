@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tb_kegiatan extends Model
+class TbEvidence extends Model
 {
-    protected $table = 'tb_kegiatan';
+    protected $table = 'tb_evidence';
 
     protected $fillable = [
         'id_admin',
