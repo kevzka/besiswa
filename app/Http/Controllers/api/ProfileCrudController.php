@@ -32,7 +32,7 @@ class ProfileCrudController extends Controller
             }
 
             Log::info('Finding user profile', ['id_admin' => $request->id_admin]);
-            $profile = User::where('id', $request->id_admin)->first();
+            $profile = User::where('id_admin', $request->id_admin)->first();
             
             if (!$profile) {
                 Log::warning('User profile not found', [

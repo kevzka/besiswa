@@ -67,7 +67,7 @@ class DashboardController extends Controller
                 Log::error('Failed to retrieve profile data', [
                     'status_code' => $response->status(),
                     'response_body' => $response->body(),
-                    'id_admin' => $user->id
+                    'id_admin' => $user->id_admin
                 ]);
                 throw new \Exception('Failed to retrieve profile data');
             }

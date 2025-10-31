@@ -41,7 +41,7 @@
                                 <span><i class="fas fa-cloud-upload-alt"></i></span> Pilih file
                         </label>
                         <input type="file" name="file" id="fileInput" class="file-upload-btn"
-                            accept="image/*,video/*,application/pdf" required>
+                            accept="image/*,video/*,application/pdf">
                     </div>
                     <div class="filePreview show" id="filePreview" style="">
                         <div class="thumbnail" id="thumbnail" style="width: fit-content; height: 100%;"><img
