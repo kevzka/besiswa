@@ -114,4 +114,9 @@ class DashboardController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat mengakses dashboard publik');
         }
     }
+    public function profile()
+    {
+        $user = Auth::user();
+        return view('admin.profile', ['user' => $user]);
+    }
 }

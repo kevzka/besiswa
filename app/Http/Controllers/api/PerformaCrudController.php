@@ -1,6 +1,10 @@
 <?php
 
+<<<<<<< HEAD
 namespace App\Http\Controllers\api;
+=======
+namespace App\Http\Controllers\Api;
+>>>>>>> 5582c58f29a520ba73d8d55abedc6bcf68152c84
 
 use App\Models\TbLomba;
 use App\Models\TbSiswas;

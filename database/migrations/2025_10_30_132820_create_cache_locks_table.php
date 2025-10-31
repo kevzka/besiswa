@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('admins', function (Blueprint $table) {
-            $table->foreign(['id_roles'], 'admins_ibfk_1')->references(['id'])->on('tb_roles')->onUpdate('restrict')->onDelete('restrict');
+        Schema::create('cache_locks', function (Blueprint $table) {
+            $table->string('key')->primary();
+            $table->string('owner');
+            $table->integer('expiration');
         });
     }
 
@@ -21,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('admins', function (Blueprint $table) {
-            $table->dropForeign('admins_ibfk_1');
-        });
+        Schema::dropIfExists('cache_locks');
     }
 };

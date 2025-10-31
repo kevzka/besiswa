@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
 use App\Models\TbEvidence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+=======
+use App\Models\Tb_kegiatan;
+use Illuminate\Http\Request;
+>>>>>>> 5582c58f29a520ba73d8d55abedc6bcf68152c84
 use Illuminate\Support\Facades\Http;
 
 class CrudController extends Controller
@@ -29,6 +34,7 @@ class CrudController extends Controller
         'admin.bimbingan.create' => [1, 'bimbingan'],
         'admin.prestasi.create' => [2, 'prestasi'],
         'admin.ekskul.create' => [3, 'ekskul'],
+<<<<<<< HEAD
         'admin.bimbingan.dashboard' => [1, 'bimbingan'],
         'admin.prestasi.dashboard' => [2, 'prestasi'],
         'admin.ekskul.dashboard' => [3, 'ekskul'],
@@ -94,6 +100,18 @@ class CrudController extends Controller
     public function index(Request $request)
     {
         Log::info('Accessing index method', ['route' => $request->route()->getName()]);
+=======
+    ];
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        $currentRouteName = $request->route()->getName();
+        $activityType = $this->routeModuleMapping[$currentRouteName][0];
+        $activities = Http::get('http://besiswa-api.test/api/crud')->json()['data'];
+        return view("admin.{$this->routeModuleMapping[$currentRouteName][1]}.index", compact('activities'));
+>>>>>>> 5582c58f29a520ba73d8d55abedc6bcf68152c84
     }
 
     /**
@@ -101,6 +119,7 @@ class CrudController extends Controller
      */
     public function create(Request $request)
     {
+<<<<<<< HEAD
         Log::info('Accessing create method');
         try {
             $currentRouteName = $request->route()->getName();
@@ -149,6 +168,11 @@ class CrudController extends Controller
                 'route' => $request->route()->getName()
             ]);
         }
+=======
+        $currentRouteName = $request->route()->getName();
+        $activityType = $this->routeModuleMapping[$currentRouteName][0];
+        return view("admin.{$this->routeModuleMapping[$currentRouteName][1]}.create");
+>>>>>>> 5582c58f29a520ba73d8d55abedc6bcf68152c84
     }
 
     /**
@@ -156,6 +180,7 @@ class CrudController extends Controller
      */
     public function store(Request $request)
     {
+<<<<<<< HEAD
         Log::info('Starting store method');
         try {
             $user = Auth::user();
@@ -244,12 +269,52 @@ class CrudController extends Controller
                 'message' => 'Pastikan di isi semua ya field nya!!!'
             ], 500);
         }
+=======
+        // Interact with API through HTTP request
+        $currentRouteName = $request->route()->getName();
+        $activityType = $this->routeModuleMapping[$currentRouteName][0];
+        $authenticatedUserId = 13; // TODO: Replace with Auth::user()->id
+
+        $requestData = array_merge(
+            $request->except(['_token', 'files']),
+            [
+                'id_admin' => $authenticatedUserId, 
+                'type' => $activityType
+            ]
+        );
+
+        $httpRequest = Http::asMultipart();
+
+        // Add form data to multipart request
+        foreach ($requestData as $key => $value) {
+            $httpRequest = $httpRequest->attach($key, $value);
+        }
+
+        // Handle file attachment if present
+        if ($request->hasFile('file')) {
+            $uploadedFile = $request->file('file');
+            $httpRequest = $httpRequest->attach(
+                'file',
+                file_get_contents($uploadedFile->getRealPath()),
+                $uploadedFile->getClientOriginalName()
+            );
+        }
+
+        $httpRequest->post('http://besiswa-api.test/api/crud');
+        
+        $currentRouteName = $request->route()->getName();
+        return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.index");
+>>>>>>> 5582c58f29a520ba73d8d55abedc6bcf68152c84
     }
 
     /**
      * Display the specified resource.
      */
+<<<<<<< HEAD
     public function show(TbEvidence $TbEvidence)
+=======
+    public function show(Tb_kegiatan $tb_kegiatan)
+>>>>>>> 5582c58f29a520ba73d8d55abedc6bcf68152c84
     {
         Log::info('Accessing show method', ['kegiatan_id' => $TbEvidence->id ?? 'null']);
         //
@@ -260,6 +325,7 @@ class CrudController extends Controller
      */
     public function edit($id, Request $request)
     {
+<<<<<<< HEAD
         Log::info('Accessing edit method', ['id' => $id]);
         try {
             $currentRouteName = $request->route()->getName();
@@ -296,6 +362,12 @@ class CrudController extends Controller
                 'id' => $id
             ]);
         }
+=======
+        $currentRouteName = $request->route()->getName();
+        $activityType = $this->routeModuleMapping[$currentRouteName][0];
+        $activityData = Http::get("http://besiswa-api.test/api/crud/{$id}/edit")->json()['data'];
+        return view("admin.{$this->routeModuleMapping[$currentRouteName][1]}.edit", compact('activityData'));
+>>>>>>> 5582c58f29a520ba73d8d55abedc6bcf68152c84
     }
 
     /**
@@ -303,6 +375,7 @@ class CrudController extends Controller
      */
     public function update(Request $request, $activityId)
     {
+<<<<<<< HEAD
         Log::info('Starting update method', ['activity_id' => $activityId]);
         try {
             $requestData = array_merge(
@@ -365,6 +438,33 @@ class CrudController extends Controller
                 'activity_id' => $activityId
             ]);
         }
+=======
+        $requestData = array_merge(
+            $request->except(['_token', 'files'])
+        );
+
+        $httpRequest = Http::asMultipart();
+
+        // Add form data to multipart request
+        foreach ($requestData as $key => $value) {
+            $httpRequest = $httpRequest->attach($key, $value);
+        }
+
+        // Handle file attachment if present
+        if ($request->hasFile('file')) {
+            $uploadedFile = $request->file('file');
+            $httpRequest = $httpRequest->attach(
+                'file',
+                file_get_contents($uploadedFile->getRealPath()),
+                $uploadedFile->getClientOriginalName()
+            );
+        }
+
+        $response = $httpRequest->post("http://besiswa-api.test/api/crud/{$activityId}");
+        
+        $currentRouteName = $request->route()->getName();
+        return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.index");
+>>>>>>> 5582c58f29a520ba73d8d55abedc6bcf68152c84
     }
 
     /**
@@ -372,6 +472,7 @@ class CrudController extends Controller
      */
     public function destroy($id, Request $request)
     {
+<<<<<<< HEAD
         Log::info('Starting destroy method', ['id' => $id]);
         try {
             $currentRouteName = $request->route()->getName();
@@ -406,5 +507,10 @@ class CrudController extends Controller
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()
             ], 500);
         }
+=======
+        $response = Http::delete("http://besiswa-api.test/api/crud/{$id}");
+        $currentRouteName = $request->route()->getName();
+        return redirect()->route("admin.{$this->routeModuleMapping[$currentRouteName][1]}.index");
+>>>>>>> 5582c58f29a520ba73d8d55abedc6bcf68152c84
     }
 }

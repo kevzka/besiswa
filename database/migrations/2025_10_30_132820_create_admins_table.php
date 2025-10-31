@@ -15,6 +15,10 @@ return new class extends Migration
             $table->integer('id', true);
             $table->string('username', 100)->unique('username');
             $table->string('password');
+            $table->string('email', 100);
+            $table->string('instagram');
+            $table->string('facebook');
+            $table->string('no_telp', 12);
             $table->integer('id_roles')->index('id_roles');
             $table->timestamp('created_at');
             $table->timestamp('updated_at');

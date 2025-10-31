@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('tb_kegiatan', function (Blueprint $table) {
-            $table->foreign(['id_admin'], 'tb_kegiatan_ibfk_1')->references(['id'])->on('admins')->onUpdate('restrict')->onDelete('restrict');
+        Schema::create('cache', function (Blueprint $table) {
+            $table->string('key')->primary();
+            $table->mediumText('value');
+            $table->integer('expiration');
         });
     }
 
@@ -21,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('tb_kegiatan', function (Blueprint $table) {
-            $table->dropForeign('tb_kegiatan_ibfk_1');
-        });
+        Schema::dropIfExists('cache');
     }
 };

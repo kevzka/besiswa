@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
+<<<<<<< HEAD
     protected $roles = [
         1 => 'bimbingan',
         2 => 'ekskul',
@@ -18,6 +19,9 @@ class AuthController extends Controller
         4 => 'utama'
     ];
     
+=======
+<<<<<<< Updated upstream
+>>>>>>> 5582c58f29a520ba73d8d55abedc6bcf68152c84
     public function showRegistrationForm()
     {
         Log::info('Accessing registration form');
@@ -37,6 +41,34 @@ class AuthController extends Controller
     }
 
     public function register(Request $request)
+=======
+    protected $roles = [
+        1 => 'bimbingan',
+        2 => 'ekskul',
+        3 => 'prestasi',
+        4 => 'utama'
+    ];
+
+    public function showRegistrationForm()
+    {
+        Log::info('Accessing registration form');
+
+        try {
+            Log::info('Rendering registration view');
+            return view('auth.register');
+        } catch (\Exception $e) {
+            Log::error('Error showing registration form', [
+                'exception' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat form registrasi');
+        }
+    }
+
+    /* public function register(Request $request)
+>>>>>>> Stashed changes
     {
         Log::info('Starting registration process');
         
@@ -151,9 +183,10 @@ class AuthController extends Controller
                         ->withInput($request->except(['password', 'password_confirmation']));
         }
     }
-
-    public function showLoginForm()
+ */
+    public function showLoginForm(Request $request)
     {
+<<<<<<< HEAD
         Log::info('Accessing login form');
         
         try {
@@ -168,9 +201,38 @@ class AuthController extends Controller
             
             return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat form login');
         }
+=======
+<<<<<<< Updated upstream
+        return view('auth.login');
+=======
+        if (session()->has('jwt_token')) {
+            return redirect('admin/dashboard');
+            dd('berhasil yahahah showLoginForm');
+        }
+
+        dd($request->cookie());
+
+        // dd('gagal  yahahah showLoginForm');
+
+        // Log::info('Accessing login form');
+
+        // try {
+        //     Log::info('Rendering login view');
+        //     return view('auth.login');
+        // } catch (\Exception $e) {
+        //     Log::error('Error showing login form', [
+        //         'exception' => $e->getMessage(),
+        //         'file' => $e->getFile(),
+        //         'line' => $e->getLine()
+        //     ]);
+
+        //     return redirect()->back()->with('error', 'Terjadi kesalahan saat memuat form login');
+        // }
+>>>>>>> Stashed changes
+>>>>>>> 5582c58f29a520ba73d8d55abedc6bcf68152c84
     }
 
-    public function login(Request $request)
+    /* public function login(Request $request)
     {
         Log::info('Starting login process', [
             'username' => $request->username,
@@ -247,6 +309,18 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+<<<<<<< HEAD
+=======
+<<<<<<< Updated upstream
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+=======
+>>>>>>> 5582c58f29a520ba73d8d55abedc6bcf68152c84
         Log::info('Starting logout process');
         
         try {
@@ -278,5 +352,38 @@ class AuthController extends Controller
             
             return redirect('/')->with('error', 'Terjadi kesalahan saat logout');
         }
+<<<<<<< HEAD
+=======
+    } */
+
+    public function register()
+    {
+        //register ke api jwt di App\Http\Controllers\Api\RegisterController
+        $response = Http::post('http://besiswa.test/api/register', [
+            'username' => request('username'),
+            'password' => request('password'),
+            'password_confirmation' => request('password_confirmation'),
+            'email' => request('email'),
+            'instagram' => request('instagram'),
+            'facebook' => request('facebook'),
+            'no_telp' => request('no_telp'),
+            'id_roles' => request('id_roles'),
+        ]);
+        $data = $response->json();
+        $jwtToken = cookie('jwt_token', json_encode($data['token']));
+        $adminData = cookie('user_data', json_encode($data['user']));
+
+        return redirect('/login')->with('success', 'Registrasi berhasil. Silakan login.')->withCookie($jwtToken)->withCookie($adminData);
+>>>>>>> Stashed changes
+>>>>>>> 5582c58f29a520ba73d8d55abedc6bcf68152c84
     }
+
+    public function login() {}
+    public function logout()
+    {
+        $jwtToken = cookie()->forget('jwt_token');
+        $adminData = cookie()->forget('user_data');
+        return redirect('/')->with('success', 'Logout berhasil.')->withCookie($jwtToken)->withCookie($adminData);
+    }
+
 }
