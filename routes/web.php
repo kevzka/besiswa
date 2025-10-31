@@ -23,11 +23,29 @@ Route::redirect('/', '/dashboard');
 Route::get('/dashboard', [DashboardController::class, 'publicDashboard']);
 
 // Admin Routes
+<<<<<<< Updated upstream
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'adminDashboard'])->name('dashboard');
     Route::resource('bimbingan', CrudController::class)->parameters(['bimbingan' => 'kegiatan'])->names('bimbingan');
     Route::resource('prestasi', CrudController::class)->parameters(['prestasi' => 'kegiatan'])->names('prestasi');
     Route::resource('ekskul', CrudController::class)->parameters(['ekskul' => 'kegiatan'])->names('ekskul');
+=======
+Route::middleware('jwt.auth')->group(function () {
+    Route::get('admin/dashboard', [CrudController::class, 'home'])->name('admin.dashboard');
+>>>>>>> Stashed changes
 });
+// Route::middleware('jwt.auth')->prefix('admin')->name('admin.')->group(function () {
+//     Route::get('dashboard', [CrudController::class, 'home'])->name('dashboard');
+//     Route::resource('bimbingan', CrudController::class)->parameters(['bimbingan' => 'kegiatan'])->names('bimbingan');
+//     Route::resource('prestasi', CrudController::class)->parameters(['prestasi' => 'kegiatan'])->names('prestasi');
+//     Route::resource('ekskul', CrudController::class)->parameters(['ekskul' => 'kegiatan'])->names('ekskul');
+//     Route::get('profile', [DashboardController::class, 'profileDashboard'])->name('profile');
+// });
 
+<<<<<<< Updated upstream
 Route::get('/search', [ProductController::class, 'search'])->name('products.search');
+=======
+Route::get('tes', [AuthController::class, 'tes']);
+
+// Route::get('/search', [ProductController::class, 'search'])->name('products.search');
+>>>>>>> Stashed changes
