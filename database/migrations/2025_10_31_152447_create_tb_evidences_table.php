@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title', 100);
             $table->string('file', 100)->unique('file');
             $table->text('description');
-            $table->date('date')->default('CURRENT_DATE');
+            $table->date('date');
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
         });
