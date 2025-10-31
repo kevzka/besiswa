@@ -11,13 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tb_kegiatan', function (Blueprint $table) {
-            $table->integer('id', true);
+        Schema::create('tb_evidences', function (Blueprint $table) {
+            $table->integer('id_evidence', true);
             $table->integer('id_admin')->index('id_admin');
+            $table->integer('type');
             $table->string('title', 100);
-            $table->string('file', 100);
+            $table->string('file', 100)->unique('file');
             $table->text('description');
-            $table->date('date')->useCurrent();
+            $table->date('date')->default('CURRENT_DATE');
+            $table->timestamp('created_at');
+            $table->timestamp('updated_at');
         });
     }
 
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_kegiatan');
+        Schema::dropIfExists('tb_evidences');
     }
 };

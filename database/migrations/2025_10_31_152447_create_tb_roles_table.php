@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tb_roles', function (Blueprint $table) {
-            $table->integer('id', true);
+            $table->integer('id_role', true);
             $table->string('role');
         });
     }

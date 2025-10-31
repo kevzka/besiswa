@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('tb_kegiatan', function (Blueprint $table) {
-            $table->foreign(['id_admin'], 'tb_kegiatan_ibfk_1')->references(['id'])->on('admins')->onUpdate('restrict')->onDelete('restrict');
+        Schema::table('tb_lombas', function (Blueprint $table) {
+            $table->foreign(['id_evidence'], 'tb_lombas_ibfk_1')->references(['id_evidence'])->on('tb_evidences')->onUpdate('restrict')->onDelete('restrict');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('tb_kegiatan', function (Blueprint $table) {
-            $table->dropForeign('tb_kegiatan_ibfk_1');
+        Schema::table('tb_lombas', function (Blueprint $table) {
+            $table->dropForeign('tb_lombas_ibfk_1');
         });
     }
 };
