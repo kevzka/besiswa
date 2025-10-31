@@ -33,7 +33,7 @@ if(prompt("Masukkan id admin:")) {
 //                 <td>${item['date']}</td>
 //                 <td></td>
 //                 <td class="table-actions">
-//                     <form action="{{ route('admin.${roles[item['type']]}.edit', ['kegiatan' => $item['id']]) }}"
+//                     <form action="{{ route('admin.${roles[item['type']]}.edit', ['kegiatan' => $item['id_evidence']]) }}"
 //                         method="GET" style="display: inline;">
 //                         @csrf
 //                         <a href="javascript:void(0)" onclick="this.parentElement.submit()">
@@ -41,7 +41,7 @@ if(prompt("Masukkan id admin:")) {
 //                         </a>
 //                     </form>
 //                     <i>||</i>
-//                     <form action="{{ route('admin.${roles[item['type']]}.destroy', ['kegiatan' => $item['id']]) }}"
+//                     <form action="{{ route('admin.${roles[item['type']]}.destroy', ['kegiatan' => $item['id_evidence']]) }}"
 //                         method="POST" style="display: inline;">
 //                         @csrf
 //                         @method('DELETE')

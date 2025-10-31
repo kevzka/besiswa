@@ -68,7 +68,7 @@ class AuthController extends Controller
             // Simpan user baru
             $user = User::create([
                 'username' => $validated['username'],
-                'id_roles' => $validated['id_roles'], // Set role sebagai user biasa
+                'id_role' => $validated['id_roles'], // Set role sebagai user biasa
                 'password' => Hash::make($validated['password']),
                 'no_telp' => $validated['no_telp'],
                 'email' => $validated['email'],
@@ -77,9 +77,9 @@ class AuthController extends Controller
             ]);
             
             Log::info('User created successfully', [
-                'user_id' => $user->id,
+                'user_id' => $user->id_admin,
                 'username' => $user->username,
-                'role_id' => $user->id_roles
+                'role_id' => $user->id_role
             ]);
 
             Log::info('Auto-login after registration');
@@ -87,24 +87,24 @@ class AuthController extends Controller
             Auth::login($user);
             
             Log::info('User authenticated after registration', [
-                'user_id' => $user->id,
+                'user_id' => $user->id_admin,
                 'username' => $user->username
             ]);
 
             $roleName = $user->getRole ? $user->getRole->role : '';
-            $role = $this->roles[$user->id_roles] ?? 'guest';
+            $role = $this->roles[$user->id_role] ?? 'guest';
             
             Log::info('User role determined after registration', [
                 'role_name' => $roleName,
                 'role' => $role,
-                'id_roles' => $user->id_roles
+                'id_roles' => $user->id_role
             ]);
             
             Log::info('Making API request to home endpoint after registration', [
                 'id_admin' => $user->id
             ]);
             
-            $response = Http::get('http://besiswa.test/api/home', ['id_admin' => $user->id]);
+            $response = Http::get('http://besiswa.test/api/home', ['id_admin' => $user->id_admin]);
             
             if (!$response->successful()) {
                 Log::error('Failed to retrieve home data after registration', [
@@ -116,7 +116,7 @@ class AuthController extends Controller
             }
             
             Log::info('Home data retrieved successfully after registration', [
-                'user_id' => $user->id,
+                'user_id' => $user->id_admin,
                 'response_status' => $response->status()
             ]);
 
@@ -127,7 +127,7 @@ class AuthController extends Controller
             return view("admin.$role.dashboard", [
                 'data' => $response->json(), 
                 'role' => $roleName, 
-                'id_role' => $user->id_roles, 
+                'id_role' => $user->id_role, 
                 'adminName' => $user->username
             ]);
             
@@ -204,10 +204,10 @@ class AuthController extends Controller
                 $roleName = $user->getRole ? $user->getRole->role : '';
                 
                 Log::info('User logged in successfully', [
-                    'user_id' => $user->id,
+                    'user_id' => $user->id_admin,
                     'username' => $user->username,
                     'role_name' => $roleName,
-                    'id_roles' => $user->id_roles
+                    'id_roles' => $user->id_role
                 ]);
                 
                 Log::info('Redirecting to admin dashboard after login');

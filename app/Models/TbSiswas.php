@@ -7,5 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class TbSiswas extends Model
 {
     protected $table = 'tb_siswas';
-    protected $fillable = ['nis', 'nama', 'kelas', 'jurusan', 'angkatan', 'poin_jiwa'];
+    protected $fillable = [
+        'id_siswa',
+        'nis',
+        'nama',
+        'kelas',
+        'jurusan',
+        'angkatan',
+        'poin_jiwa'
+    ];
 }

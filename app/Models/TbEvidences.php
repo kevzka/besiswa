@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TbEvidence extends Model
+class TbEvidences extends Model
 {
-    protected $table = 'tb_evidence';
+    protected $table = 'tb_evidences';
+    protected $primaryKey = 'id_evidence';
 
     protected $fillable = [
         'id_admin',
@@ -14,11 +15,11 @@ class TbEvidence extends Model
         'title',
         'file',
         'description',
-        'date',
+        'date'
     ];
 
     public function admin()
     {
-        return $this->belongsTo(User::class, 'id_admin', 'id');
+        return $this->belongsTo(User::class, 'id_admin', 'id_admin');
     }
 }

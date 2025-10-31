@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Roles extends Model
+class TbRoles extends Model
 {
     use HasFactory;
 
@@ -15,6 +15,6 @@ class Roles extends Model
     // Relationship dengan model User
     public function users()
     {
-        return $this->hasMany(User::class, 'id_roles', 'id');
+        return $this->hasMany(User::class, 'id_roles', 'id_role');
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Roles;
+use App\Models\TbRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     protected $table = 'admins';
+    protected $primaryKey = 'id_admin';
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -26,7 +27,7 @@ class User extends Authenticatable
         'instagram',
         'facebook',
         'no_telp',
-        'id_roles'
+        'id_role' 
     ];
 
     /**
@@ -53,7 +54,7 @@ class User extends Authenticatable
     // }
     public function getRole()
     {
-        return $this->belongsTo(Roles::class, 'id_roles', 'id');
+        return $this->belongsTo(TbRoles::class, 'id_role', 'id_role');
     }
 }
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TbLomba;
-use App\Models\TbEvidence;
+use App\Models\TbEvidences;
 use App\Models\TbSiswaLomba;
 use App\Models\TbSiswas;
 use Illuminate\Http\Request;
@@ -69,9 +69,9 @@ class PerformaController extends Controller
 
             // Log authenticated user info
             $user = Auth::user();
-            Log::info('User authenticated', ['user_id' => $user->id, 'username' => $user->username]);
+            Log::info('User authenticated', ['user_id' => $user->id_admin, 'username' => $user->username]);
 
-            dd($this->addTbLomba($request, $this->addTbEvidence($request), $nis_array));
+            dd($this->addTbLomba($request, $this->addTbEvidences($request), $nis_array));
         } catch (\Exception $e) {
             Log::error("Error storing resource: " . $e->getMessage());
             dd($e->getMessage());
@@ -110,16 +110,16 @@ class PerformaController extends Controller
         //
     }
 
-    public function addTbEvidence(Request $request)
+    public function addTbEvidences(Request $request)
     {
-        Log::info("Adding TbEvidence with request data: ", $request->all());
+        Log::info("Adding TbEvidences with request data: ", $request->all());
         try {
             if ($request->hasFile('file_evidence')) {
                 $file = $request->file('file_evidence');
                 $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('uploads', $fileName, 'public');
 
-                TbEvidence::create([
+                TbEvidences::create([
                     'id_admin' => Auth::user()->id,
                     'type' => 3,
                     'title' => $request->nama_lomba,
@@ -128,12 +128,12 @@ class PerformaController extends Controller
                     'date' => $request->tanggal_lomba,
                 ]);
                 //kembalikan id evidence yang baru dibuat
-                return TbEvidence::latest()->first()->id;
+                return TbEvidences::latest()->first()->id;
             }
             Log::warning("No file uploaded in the request");
             return "no file";
         } catch (\Exception $e) {
-            Log::error("Error adding TbEvidence: " . $e->getMessage());
+            Log::error("Error adding TbEvidences: " . $e->getMessage());
             return "error";
         }
     }

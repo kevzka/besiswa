@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TbEvidence;
+use App\Models\TbEvidences;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -46,14 +46,14 @@ class CrudController extends Controller
 
         try {
             $user = Auth::user();
-            Log::info('User authenticated', ['user_id' => $user->id, 'username' => $user->username]);
+            Log::info('User authenticated', ['user_id' => $user->id_admin, 'username' => $user->username]);
 
             $roleName = $user->getRole ? $user->getRole->role : '';
-            $role = $this->roles[$user->id_roles] ?? 'guest';
-            Log::info('User role determined', ['role_name' => $roleName, 'role' => $role, 'id_roles' => $user->id_roles]);
+            $role = $this->roles[$user->id_role] ?? 'guest';
+            Log::info('User role determined', ['role_name' => $roleName, 'role' => $role, 'id_roles' => $user->id_role]);
 
-            Log::info('Making API request to home endpoint', ['id_admin' => $user->id]);
-            $response = Http::get('http://besiswa.test/api/home', ['id_admin' => $user->id]);
+            Log::info('Making API request to home endpoint', ['id_admin' => $user->id_admin]);
+            $response = Http::get('http://besiswa.test/api/home', ['id_admin' => $user->id_admin]);
 
             if (!$response->successful()) {
                 Log::error('Failed to retrieve home dashboard data', [
@@ -73,7 +73,7 @@ class CrudController extends Controller
             return view("admin.$role.dashboard", [
                 'data' => $response->json()['data'],
                 'role' => $roleName,
-                'id_role' => $user->id_roles,
+                'id_role' => $user->id_role,
                 'adminName' => $user->username
             ]);
         } catch (\Exception $e) {
@@ -110,7 +110,7 @@ class CrudController extends Controller
             Log::info('Activity type mapped', ['activity_type' => $activityType]);
             
             $user = Auth::user();
-            Log::info('User authenticated for create', ['user_id' => $user->id, 'username' => $user->username]);
+            Log::info('User authenticated for create', ['user_id' => $user->id_admin, 'username' => $user->username]);
             
             $roleName = $user->getRole ? $user->getRole->role : '';
             Log::info('User role for create', ['role_name' => $roleName]);
@@ -126,7 +126,6 @@ class CrudController extends Controller
                 ]);
                 throw new \Exception('Failed to retrieve activities data');
             }
-
             Log::info('Activities data retrieved successfully', [
                 'activity_type' => $activityType,
                 'data_count' => count($activities->json()['data'] ?? [])
@@ -138,7 +137,7 @@ class CrudController extends Controller
 
             return view($viewName, compact('activities'), [
                 'role' => $roleName,
-                'id_role' => $user->id_roles,
+                'id_role' => $user->id_role,
                 'adminName' => $user->username
             ]);
         } catch (\Exception $e) {
@@ -159,7 +158,7 @@ class CrudController extends Controller
         Log::info('Starting store method');
         try {
             $user = Auth::user();
-            Log::info('User authenticated for store', ['user_id' => $user->id]);
+            Log::info('User authenticated for store', ['user_id' => $user->id_admin]);
             
             $currentRouteName = $request->route()->getName();
             $activityType = $this->routeModuleMapping[$currentRouteName][0];
@@ -181,7 +180,7 @@ class CrudController extends Controller
             $requestData = array_merge(
                 $request->except(['_token', 'files']),
                 [
-                    'id_admin' => $user->id,
+                    'id_admin' => $user->id_admin,
                     'type' => $activityType
                 ]
             );
@@ -249,9 +248,9 @@ class CrudController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TbEvidence $TbEvidence)
+    public function show(TbEvidences $TbEvidences)
     {
-        Log::info('Accessing show method', ['kegiatan_id' => $TbEvidence->id ?? 'null']);
+        // Log::info('Accessing show method', ['kegiatan_id' => $TbEvidences->id_evidence ?? 'null']);
         //
     }
 
@@ -276,7 +275,7 @@ class CrudController extends Controller
             $user = Auth::user();
             $roleName = $user->getRole ? $user->getRole->role : '';
             Log::info('User details for edit', [
-                'user_id' => $user->id,
+                'user_id' => $user->id_admin,
                 'role_name' => $roleName
             ]);
             
@@ -285,7 +284,7 @@ class CrudController extends Controller
             
             return view($viewName, compact('activityData'), [
                 'role' => $roleName, 
-                'id_role' => $user->id_roles, 
+                'id_role' => $user->id_role, 
                 'adminName' => $user->username
             ]);
         } catch (\Exception $e) {

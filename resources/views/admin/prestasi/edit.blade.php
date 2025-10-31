@@ -28,7 +28,7 @@
             <!-- Card Form Edit Berita -->
             <div class="card-form">
                 <h2>Edit Berita</h2>
-                <form action="{{ route('admin.prestasi.update', $activityData['id']) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.prestasi.update', $activityData['id_evidence']) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <input type="text" name="title" placeholder="Judul baru"

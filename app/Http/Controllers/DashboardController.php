@@ -16,20 +16,20 @@ class DashboardController extends Controller
         try {
             $user = Auth::user();
             Log::info('User authenticated for admin dashboard', [
-                'user_id' => $user->id,
+                'user_id' => $user->id_admin,
                 'username' => $user->username
             ]);
             
             $roleName = $user->getRole ? $user->getRole->role : '';
             Log::info('User role determined for admin dashboard', [
                 'role_name' => $roleName,
-                'id_roles' => $user->id_roles
+                'id_roles' => $user->id_role
             ]);
             
             Log::info('Rendering admin dashboard view');
             return view('admin.dashboard', [
                 'role' => $roleName, 
-                'id_role' => $user->id_roles
+                'id_role' => $user->id_role
             ]);
         } catch (\Exception $e) {
             Log::error('Error accessing admin dashboard', [
@@ -50,18 +50,18 @@ class DashboardController extends Controller
         try {
             $user = Auth::user();
             Log::info('User authenticated for profile dashboard', [
-                'user_id' => $user->id,
+                'user_id' => $user->id_admin,
                 'username' => $user->username
             ]);
             
             $roleName = $user->getRole ? $user->getRole->role : '';
             Log::info('User role determined for profile dashboard', [
                 'role_name' => $roleName,
-                'id_roles' => $user->id_roles
+                'id_roles' => $user->id_role
             ]);
             
-            Log::info('Making API request to get profile', ['id_admin' => $user->id]);
-            $response = Http::post('http://besiswa.test/api/getProfile', ['id_admin' => $user->id]);
+            Log::info('Making API request to get profile', ['id_admin' => $user->id_admin]);
+            $response = Http::post('http://besiswa.test/api/getProfile', ['id_admin' => $user->id_admin]);
             
             if (!$response->successful()) {
                 Log::error('Failed to retrieve profile data', [
@@ -73,7 +73,7 @@ class DashboardController extends Controller
             }
             
             Log::info('Profile data retrieved successfully', [
-                'user_id' => $user->id,
+                'user_id' => $user->id_admin,
                 'response_status' => $response->status()
             ]);
             
@@ -81,7 +81,7 @@ class DashboardController extends Controller
             return view('admin.profile', [
                 'user' => $response->json()['data'], 
                 'role' => $roleName, 
-                'id_role' => $user->id_roles, 
+                'id_role' => $user->id_role, 
                 'adminName' => $user->username
             ]);
         } catch (\Exception $e) {
