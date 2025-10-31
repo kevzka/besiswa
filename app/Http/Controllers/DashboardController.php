@@ -18,4 +18,9 @@ class DashboardController extends Controller
     {
         return view('public.dashboard');
     }
+    public function profile()
+    {
+        $user = Auth::user();
+        return view('admin.profile', ['user' => $user]);
+    }
 }
