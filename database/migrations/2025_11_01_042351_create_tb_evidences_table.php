@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tb_evidences', function (Blueprint $table) {
             $table->integer('id_evidence', true);
             $table->integer('id_admin')->index('id_admin');
-            $table->integer('type');
+            $table->integer('type')->index('type');
             $table->string('title', 100);
             $table->string('file', 100)->unique('file');
             $table->text('description');

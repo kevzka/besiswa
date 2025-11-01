@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('tb_evidences', function (Blueprint $table) {
             $table->foreign(['id_admin'], 'tb_evidences_ibfk_1')->references(['id_admin'])->on('admins')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreign(['type'], 'tb_evidences_ibfk_2')->references(['id_role'])->on('tb_roles')->onUpdate('restrict')->onDelete('restrict');
         });
     }
 
@@ -23,6 +24,7 @@ return new class extends Migration
     {
         Schema::table('tb_evidences', function (Blueprint $table) {
             $table->dropForeign('tb_evidences_ibfk_1');
+            $table->dropForeign('tb_evidences_ibfk_2');
         });
     }
 };

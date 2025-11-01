@@ -12,6 +12,6 @@ class TbLombas extends Model
         'id_evidence',
         'tingkat_lomba',
         'tingkat_juara',
-        'poin_lomb'
+        'poin_lomba'
     ];
 }

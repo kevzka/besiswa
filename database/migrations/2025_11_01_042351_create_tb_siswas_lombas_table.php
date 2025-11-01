@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tb_siswas_lombas', function (Blueprint $table) {
             $table->integer('id_siswa_lomba', true);
-            $table->string('nis_siswa', 20);
+            $table->char('nis_siswa', 9);
             $table->integer('id_lomba')->index('id_lomba');
             $table->timestamp('updated_at');
             $table->timestamp('created_at');

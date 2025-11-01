@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Models\TbLomba;
+use App\Models\TbLombas;
 use App\Models\TbSiswas;
 use App\Models\TbEvidences;
-use App\Models\TbSiswaLomba;
+use App\Models\TbSiswasLombas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -131,7 +131,7 @@ class PerformaCrudController extends Controller
         try {
             $tingkat_juara = $request->tingkat_juara == "lainnya" ? $request->tingkat_juara_lainnya : $request->tingkat_juara;
 
-            TbLomba::create([
+            TbLombas::create([
                 'id_evidence' => $id_evidence,
                 'tingkat_lomba' => $request->tingkat_lomba,
                 'tingkat_juara' => $tingkat_juara,
@@ -139,16 +139,16 @@ class PerformaCrudController extends Controller
             ]);
 
             foreach ($nis_siswas as $nis) {
-                TbSiswaLomba::create([
+                TbSiswasLombas::create([
                     'nis_siswa' => $nis,
-                    'id_lomba' => TbLomba::latest()->first()->id_lomba,
+                    'id_lomba' => TbLombas::latest()->first()->id_lomba,
                 ]);
             }
 
             Log::info("Successfully added TbLomba and associated TbSiswaLomba records");
             return "success add TbLomba";
         } catch (\Exception $e) {
-            Log::error("Error adding TbLomba: " . $e->getMessage());
+            Log::error("Error adding TbLombas: " . $e->getMessage());
             return "error";
         }
     }
