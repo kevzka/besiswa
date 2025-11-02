@@ -116,12 +116,16 @@ class PerformaController extends Controller
         try {
             if ($request->hasFile('file_evidence')) {
                 $file = $request->file('file_evidence');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $filePath = $file->storeAs('uploads', $fileName, 'public');
+                // $fileName = time() . '_' . $file->getClientOriginalName();
+                $sanitizedTitle = str_replace(' ', '_', $request->nama_lomba);
+                
+                // Create unique filename with timestamp
+                $finalFileName = time() . '_' . $sanitizedTitle . '.' . $file->getClientOriginalExtension();
+                $filePath = $file->storeAs('kegiatan', $finalFileName, 'public');
 
                 TbEvidences::create([
                     'id_admin' => Auth::user()->id_admin,
-                    'type' => 3,
+                    'type' => 2,
                     'title' => $request->nama_lomba,
                     'file' => $filePath,
                     'description' => $request->deskripsi_lomba,

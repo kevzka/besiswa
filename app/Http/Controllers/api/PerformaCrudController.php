@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use App\Models\TbLombas;
 use App\Models\TbSiswas;
 use App\Models\TbEvidences;
@@ -18,21 +19,50 @@ class PerformaCrudController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() {
-        $tbLombas = TbLombas::with(['id_evidence'])->get();
-        return response()->json(['data' => $tbLombas], 200);
-
-        // return response()->json(['data' => [
-        //     "nisSiswa" => [543241009, 543241010],
-        //     "namaLomba" => "lomba",
-        //     "fileDokumentasi" => "Merah dan Biru Ilustrasi Katakan Tidak Pada Narkoba Poster.png",
-        //     "deskripsiLomba" => "lomba",
-        //     "tanggalLomba" => "10/10/1000",
-        //     "tingkatLomba" => "Nasional",
-        //     "tingkatJuara" => 3,
-        //     "poinLomba" => 10000
-
-        // ]], 200);
+    public function index()
+    {
+        Log::info("Fetching all TbLombas with related evidences and siswa lombas");
+        try{
+            Log::info("Fetching all TbLombas with related evidences and siswa lombas");
+            $tbLombas = TbLombas::with(['tb_evidences', 'tb_siswas_lombas'])->get($columns = ['*']);
+            $data_terformat = [];
+    
+            Log::info("Formatting fetched data");
+            foreach ($tbLombas as $lomba) {
+                $nis_siswa_array = [];
+    
+                foreach ($lomba->tb_siswas_lombas as $siswa_lomba) {
+                    $nis_siswa_array[] = (int)$siswa_lomba->nis_siswa;
+                }
+    
+                $evidence = $lomba->tb_evidences;
+    
+                if ($evidence) {
+                    $nama_file = basename($evidence->file);
+                    $tanggal_lomba_format = Carbon::parse($evidence->date)->format('d/m/Y');
+    
+                    $data_lomba = [
+                        "idLomba" => (int)$lomba->id_lomba,
+                        "nisSiswa" => $nis_siswa_array,
+                        "namaLomba" => $evidence->title,
+                        "fileDokumentasi" => $nama_file,
+                        "deskripsiLomba" => $evidence->description,
+                        "tanggalLomba" => $tanggal_lomba_format,
+                        "tingkatLomba" => $lomba->tingkat_lomba,
+                        "tingkatJuara" => (int)$lomba->tingkat_juara,
+                        "poinLomba" => (int)$lomba->poin_lomba,
+                    ];
+    
+                    $data_terformat[] = $data_lomba;
+                }
+            }
+            Log::info("Data formatting complete, returning response");
+    
+            return response()->json(['data' => $data_terformat], 200);
+        }catch(\Exception $e){
+            Log::error("Error fetching TbLombas: " . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -86,9 +116,7 @@ class PerformaCrudController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-    }
+    public function show(string $id) {}
 
     /**
      * Update the specified resource in storage.
@@ -108,15 +136,15 @@ class PerformaCrudController extends Controller
         try {
             Log::info("Fetching related records for deletion");
 
-            try{
+            try {
                 $idLomba = TbSiswasLombas::where('id_lomba', $id)->get();
                 $idEvidence = TbLombas::where('id_lomba', $idLomba[0]->id_lomba)->first();
                 $dataEvidence = TbEvidences::where('id_evidence', $idEvidence->id_evidence)->first();
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
                 Log::error("Error fetching TbSiswasLombas (kemungkinan id tidak ada): " . $e->getMessage());
                 return response()->json(['error' => 'Resource not found'], 404);
             }
-            
+
             Log::info("Deleting related TbSiswasLombas records");
             foreach ($idLomba as $lomba) {
                 Log::info("Deleting TbSiswasLombas record: " . $lomba->id_siswa_lomba);
@@ -124,7 +152,7 @@ class PerformaCrudController extends Controller
             }
             $idEvidence->delete();
             $dataEvidence->delete();
-            
+
             if ($dataEvidence->file && Storage::disk('public')->exists($dataEvidence->file)) {
                 Log::info('Deleting associated file', [
                     'file_path' => $dataEvidence->file
@@ -136,7 +164,6 @@ class PerformaCrudController extends Controller
 
             Log::info("Resource and related records deleted successfully");
             return response()->json(['message' => 'Resource deleted successfully'], 200);
-
         } catch (\Exception $e) {
             Log::error("Error deleting resource: " . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);

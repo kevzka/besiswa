@@ -63,7 +63,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item['title'] }}</td>
-                                <td>{{ $item['date'] }}</td>
+                                <td>{{ date('Y-m-d', strtotime($item['date'])) }}</td>
                                 <td></td>
                                 <td class="table-actions">
                                     <form action="{{ route('admin.ekskul.edit', ['kegiatan' => $item['id_evidence']]) }}"

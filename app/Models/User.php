@@ -11,7 +11,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     protected $table = 'admins';
-    protected $primaryKey = 'id_admin';
+	protected $primaryKey = 'id_admin';
+
+	protected $casts = [
+		'id_role' => 'int'
+	];
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -21,14 +26,14 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'username',
-        'password',
-        'email',
-        'instagram',
-        'facebook',
-        'no_telp',
-        'id_role' 
-    ];
+		'username',
+		'password',
+		'email',
+		'instagram',
+		'facebook',
+		'no_telp',
+		'id_role'
+	];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -56,5 +61,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(TbRoles::class, 'id_role', 'id_role');
     }
-}
+	
+	public function tb_role()
+	{
+		return $this->belongsTo(TbRoles::class, 'id_role');
+	}
 
+	public function tb_evidences()
+	{
+		return $this->hasMany(TbEvidences::class, 'id_admin');
+	}
+}
