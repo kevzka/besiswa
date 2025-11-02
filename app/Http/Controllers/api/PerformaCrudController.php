@@ -49,7 +49,7 @@ class PerformaCrudController extends Controller
                         "deskripsiLomba" => $evidence->description,
                         "tanggalLomba" => $tanggal_lomba_format,
                         "tingkatLomba" => $lomba->tingkat_lomba,
-                        "tingkatJuara" => (int)$lomba->tingkat_juara,
+                        "tingkatJuara" => $lomba->tingkat_juara,
                         "poinLomba" => (int)$lomba->poin_lomba,
                     ];
     
@@ -87,6 +87,7 @@ class PerformaCrudController extends Controller
                 }
 
                 $request->validate([
+                    'username' => 'required|string|max:255',
                     'id_admin' => 'required|integer',
                     'nama_lomba' => 'required|string|max:255',
                     'deskripsi_lomba' => 'nullable|string',
@@ -116,7 +117,55 @@ class PerformaCrudController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id) {}
+    public function show(string $id) {
+        Log::info("Fetching all TbLombas with related evidences and siswa lombas");
+        try{
+            Log::info("Fetching all TbLombas with related evidences and siswa lombas");
+            $tbLombas = TbLombas::where('id_lomba', $id)->with(['tb_evidences', 'tb_siswas_lombas'])->get($columns = ['*']);
+            $data_terformat = [];
+
+            if($tbLombas->isEmpty()) {
+                Log::warning("No TbLombas found with id: " . $id);
+                return response()->json(['error' => 'Resource not found'], 404);
+            }
+    
+            Log::info("Formatting fetched data");
+            foreach ($tbLombas as $lomba) {
+                $nis_siswa_array = [];
+    
+                foreach ($lomba->tb_siswas_lombas as $siswa_lomba) {
+                    $nis_siswa_array[] = (int)$siswa_lomba->nis_siswa;
+                }
+    
+                $evidence = $lomba->tb_evidences;
+    
+                if ($evidence) {
+                    $nama_file = basename($evidence->file);
+                    $tanggal_lomba_format = Carbon::parse($evidence->date)->format('d/m/Y');
+    
+                    $data_lomba = [
+                        "idLomba" => (int)$lomba->id_lomba,
+                        "nisSiswa" => $nis_siswa_array,
+                        "namaLomba" => $evidence->title,
+                        "fileDokumentasi" => $nama_file,
+                        "deskripsiLomba" => $evidence->description,
+                        "tanggalLomba" => $tanggal_lomba_format,
+                        "tingkatLomba" => $lomba->tingkat_lomba,
+                        "tingkatJuara" => (int)$lomba->tingkat_juara,
+                        "poinLomba" => (int)$lomba->poin_lomba,
+                    ];
+    
+                    $data_terformat[] = $data_lomba;
+                }
+            }
+            Log::info("Data formatting complete, returning response");
+    
+            return response()->json(['data' => $data_terformat], 200);
+        }catch(\Exception $e){
+            Log::error("Error fetching TbLombas: " . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 
     /**
      * Update the specified resource in storage.
@@ -177,8 +226,12 @@ class PerformaCrudController extends Controller
             if ($request->hasFile('file_evidence')) {
                 Log::info("File uploaded: " . $request->file('file_evidence')->getClientOriginalName());
                 $file = $request->file('file_evidence');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $filePath = $file->storeAs('uploads', $fileName, 'public');
+                // $fileName = time() . '_' . $file->getClientOriginalName();
+                $sanitizedTitle = str_replace(' ', '_', $request->nama_lomba);
+                
+                // Create unique filename with timestamp
+                $finalFileName = time() . '_' . $sanitizedTitle . '.' . $file->getClientOriginalExtension();
+                $filePath = $file->storeAs('kegiatan', $finalFileName, 'public');
 
                 TbEvidences::create([
                     'id_admin' => $request->id_admin,
