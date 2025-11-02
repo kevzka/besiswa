@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class TbLombas extends Model
 {
     protected $table = 'tb_lombas';
+    protected $primaryKey = 'id_lomba';
     protected $fillable = [
         'id_lomba',
         'id_evidence',
@@ -14,4 +15,6 @@ class TbLombas extends Model
         'tingkat_juara',
         'poin_lomba'
     ];
+
+    
 }

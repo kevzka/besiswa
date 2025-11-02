@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\Api;
 
 use App\Models\TbLombas;
 use App\Models\TbSiswas;
 use App\Models\TbEvidences;
-use App\Models\TbSiswasLombas;
 use Illuminate\Http\Request;
+use App\Models\TbSiswasLombas;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class PerformaCrudController extends Controller
@@ -17,9 +18,21 @@ class PerformaCrudController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
+    public function index() {
+        $tbLombas = TbLombas::with(['id_evidence'])->get();
+        return response()->json(['data' => $tbLombas], 200);
+
+        // return response()->json(['data' => [
+        //     "nisSiswa" => [543241009, 543241010],
+        //     "namaLomba" => "lomba",
+        //     "fileDokumentasi" => "Merah dan Biru Ilustrasi Katakan Tidak Pada Narkoba Poster.png",
+        //     "deskripsiLomba" => "lomba",
+        //     "tanggalLomba" => "10/10/1000",
+        //     "tingkatLomba" => "Nasional",
+        //     "tingkatJuara" => 3,
+        //     "poinLomba" => 10000
+
+        // ]], 200);
     }
 
     /**
@@ -27,20 +40,9 @@ class PerformaCrudController extends Controller
      */
     public function store(Request $request)
     {
-        //
         Log::info("Storing new resource with data: ", $request->all());
         try {
             try {
-                $request->validate([
-                    'nis' => 'required|string',
-                    'nama_lomba' => 'required|string|max:255',
-                    'deskripsi_lomba' => 'nullable|string',
-                    'tanggal_lomba' => 'required|date',
-                    'tingkat_lomba' => 'required|string|max:255',
-                    'tingkat_juara' => 'required|string|max:255',
-                    'poin_lomba' => 'required|integer',
-                ]);
-
                 $nis_array = explode(" ", $request->nis);
                 $nis_array = array_map(function ($nis) {
                     return str_replace(",", "", $nis);
@@ -54,6 +56,15 @@ class PerformaCrudController extends Controller
                     }
                 }
 
+                $request->validate([
+                    'id_admin' => 'required|integer',
+                    'nama_lomba' => 'required|string|max:255',
+                    'deskripsi_lomba' => 'nullable|string',
+                    'tanggal_lomba' => 'required|date',
+                    'tingkat_lomba' => 'required|string|max:255',
+                    'tingkat_juara' => 'required|string|max:255',
+                    'poin_lomba' => 'required|integer',
+                ]);
 
                 Log::info("Validation passed for request data");
             } catch (ValidationException $e) {
@@ -62,11 +73,10 @@ class PerformaCrudController extends Controller
             }
 
             // Log authenticated user info
-            Log::info('start user athenticatation');
-            $user = Auth::user();
-            Log::info('User authenticated', ['user_id' => $user->id_admin, 'username' => $user->username]);
+            // $user = $request->user();
+            Log::info('User authenticated', ['user_id' => $request->id_admin, 'username' => $request->username]);
 
-            dd($this->addTbLomba($request, $this->addTbEvidences($request), $nis_array));
+            return response()->json($this->addTbLomba($request, $this->addTbEvidences($request), $nis_array));
         } catch (\Exception $e) {
             Log::error("Error storing resource: " . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
@@ -78,7 +88,6 @@ class PerformaCrudController extends Controller
      */
     public function show(string $id)
     {
-        //
     }
 
     /**
@@ -94,28 +103,67 @@ class PerformaCrudController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        //buatkan log satu function ini
+        Log::info("Deleting resource with id: " . $id);
+        try {
+            Log::info("Fetching related records for deletion");
+
+            try{
+                $idLomba = TbSiswasLombas::where('id_lomba', $id)->get();
+                $idEvidence = TbLombas::where('id_lomba', $idLomba[0]->id_lomba)->first();
+                $dataEvidence = TbEvidences::where('id_evidence', $idEvidence->id_evidence)->first();
+            }catch(\Exception $e){
+                Log::error("Error fetching TbSiswasLombas (kemungkinan id tidak ada): " . $e->getMessage());
+                return response()->json(['error' => 'Resource not found'], 404);
+            }
+            
+            Log::info("Deleting related TbSiswasLombas records");
+            foreach ($idLomba as $lomba) {
+                Log::info("Deleting TbSiswasLombas record: " . $lomba->id_siswa_lomba);
+                $lomba->delete();
+            }
+            $idEvidence->delete();
+            $dataEvidence->delete();
+            
+            if ($dataEvidence->file && Storage::disk('public')->exists($dataEvidence->file)) {
+                Log::info('Deleting associated file', [
+                    'file_path' => $dataEvidence->file
+                ]);
+
+                Storage::disk('public')->delete($dataEvidence->file);
+                Log::info('File deleted successfully');
+            }
+
+            Log::info("Resource and related records deleted successfully");
+            return response()->json(['message' => 'Resource deleted successfully'], 200);
+
+        } catch (\Exception $e) {
+            Log::error("Error deleting resource: " . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
-     public function addTbEvidences(Request $request)
+    public function addTbEvidences(Request $request)
     {
         Log::info("Adding TbEvidences with request data: ", $request->all());
         try {
             if ($request->hasFile('file_evidence')) {
+                Log::info("File uploaded: " . $request->file('file_evidence')->getClientOriginalName());
                 $file = $request->file('file_evidence');
                 $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('uploads', $fileName, 'public');
 
                 TbEvidences::create([
-                    'id_admin' => Auth::user()->id,
-                    'type' => 3,
+                    'id_admin' => $request->id_admin,
+                    'username' => $request->username,
+                    'type' => 2,
                     'title' => $request->nama_lomba,
                     'file' => $filePath,
                     'description' => $request->deskripsi_lomba,
                     'date' => $request->tanggal_lomba,
                 ]);
                 //kembalikan id evidence yang baru dibuat
-                return TbEvidences::latest()->first()->id;
+                return TbEvidences::latest()->first()->id_evidence;
             }
             Log::warning("No file uploaded in the request");
             return "no file";

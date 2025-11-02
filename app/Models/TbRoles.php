@@ -10,6 +10,7 @@ class TbRoles extends Model
     use HasFactory;
 
     protected $table = 'tb_roles';
+    protected $primaryKey = 'id_role';
     protected $fillable = ['role'];
 
     // Relationship dengan model User

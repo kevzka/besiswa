@@ -28,6 +28,9 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('profile', [DashboardController::class, 'profileDashboard'])->name('profile');
 });
 
+Route::middleware('auth')->group(function () {
 Route::resource('tes', PerformaController::class);
+})
 
 // Route::get('/search', [ProductController::class, 'search'])->name('products.search');
+?>
