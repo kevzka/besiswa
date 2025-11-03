@@ -63,7 +63,13 @@ class PerformaController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $response = Http::get("http://" . Config::get('app.API') . "/api/performa/" . $id);
+        if (isset($response->json()['error'])) {
+            return redirect()->route('tes.index')->with('error', 'Data tidak ditemukan');
+        }
+        $data = $response->json()['data'][0];
+
+        return view('admin.performa.show', compact('data'));
     }
 
     /**
@@ -71,7 +77,7 @@ class PerformaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('admin.performa.edit');
     }
 
     /**

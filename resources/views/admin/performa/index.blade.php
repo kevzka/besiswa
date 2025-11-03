@@ -11,28 +11,21 @@
     <table border="1">
         <tr>
             <th>id Lomba</th>
-            <th>nis Siswa</th>
             <th>nama Lomba</th>
             <th>file Dokumentasi</th>
             <th>deskripsi Lomba</th>
             <th>tanggal Lomba</th>
-            <th>tingkat Lomba</th>
-            <th>tingkat Juara</th>
-            <th>poin Lomba</th>
-            <th>Aksi</th>
+            <th>aksi</th>
         </tr>
         @foreach ($datas as $data)
             <tr>
                 <td>{{$data["idLomba"]}}</td>
-                <td>{{implode(', ', $data["nisSiswa"])}}</td>
                 <td>{{$data["namaLomba"]}}</td>
                 <td>{{$data["fileDokumentasi"]}}</td>
                 <td>{{$data["deskripsiLomba"]}}</td>
                 <td>{{$data["tanggalLomba"]}}</td>
-                <td>{{$data["tingkatLomba"]}}</td>
-                <td>{{$data["tingkatJuara"]}}</td>
-                <td>{{$data["poinLomba"]}}</td>
                 <td>
+                    <a href="{{route('tes.show', $data['idLomba'])}}">View</a>
                     <a href="{{route('tes.edit', $data['idLomba'])}}">Edit</a>
                     <form action="{{route('tes.destroy', $data['idLomba'])}}" method="POST">
                         @method('DELETE')
