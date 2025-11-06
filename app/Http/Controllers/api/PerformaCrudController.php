@@ -124,7 +124,7 @@ class PerformaCrudController extends Controller
         try {
             Log::info("Fetching all TbLombas with related evidences and siswa lombas");
             $tbLombas = TbLombas::where('id_lomba', $id)->with(['tb_evidences', 'tb_siswas_lombas'])->get($columns = ['*']);
-            return response()->json(['data' => $tbLombas], 200);
+            // return response()->json(['data' => $tbLombas], 200);
 
 
             $data_terformat = [];
