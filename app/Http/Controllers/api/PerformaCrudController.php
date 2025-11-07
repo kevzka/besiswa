@@ -146,17 +146,17 @@ class PerformaCrudController extends Controller
 
                 if ($evidence) {
                     $nama_file = basename($evidence->file);
-                    $tanggal_lomba_format = Carbon::parse($evidence->date)->format('d/m/Y');
+                    $tanggal_lomba_format = Carbon::parse($evidence->date)->format('Y-m-d');
 
                     $data_lomba = [
                         "idLomba" => (int)$lomba->id_lomba,
-                        "nisSiswa" => $nis_siswa_array,
+                        "nisSiswa" => implode(", ", $nis_siswa_array),
                         "namaLomba" => $evidence->title,
                         "fileDokumentasi" => $nama_file,
                         "deskripsiLomba" => $evidence->description,
                         "tanggalLomba" => $tanggal_lomba_format,
                         "tingkatLomba" => $lomba->tingkat_lomba,
-                        "tingkatJuara" => (int)$lomba->tingkat_juara,
+                        "tingkatJuara" => $lomba->tingkat_juara,
                         "poinLomba" => (int)$lomba->poin_lomba,
                     ];
 
@@ -178,14 +178,31 @@ class PerformaCrudController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        Log::info('update called', ['id_lomba' => $id]);
+        Log::info('API update called', [
+            'id_lomba' => $id,
+            'remote_addr' => $request->ip(),
+            'method' => $request->method(),
+            'content_type' => $request->header('content-type'),
+            'request_keys' => array_keys($request->all())
+        ]);
 
         try {
+            Log::info('Starting update process', ['id_lomba' => $id]);
+
             // cek keberadaan parent record
             $dataTbLombas = TbLombas::where('id_lomba', $id)->first();
             if (!$dataTbLombas) {
+                Log::warning('TbLombas not found for update', ['id_lomba' => $id]);
                 return response()->json(['success' => false, 'message' => 'Lomba not found'], 404);
             }
+
+            Log::info('Loaded existing TbLombas', [
+                'id_lomba' => $dataTbLombas->id_lomba,
+                'id_evidence' => $dataTbLombas->id_evidence,
+                'current_tingkat_lomba' => $dataTbLombas->tingkat_lomba,
+                'current_tingkat_juara' => $dataTbLombas->tingkat_juara,
+                'current_poin_lomba' => $dataTbLombas->poin_lomba,
+            ]);
 
             // normalisasi NIS input menjadi array
             $nisInput = (string) $request->input('nis', '');
@@ -193,13 +210,25 @@ class PerformaCrudController extends Controller
                 return trim(str_replace(',', '', $nis));
             }, preg_split('/[\s,]+/', $nisInput)), fn($v) => $v !== ''));
 
+            Log::info('Normalized NIS input', ['nis_input_raw' => $nisInput, 'nis_array' => $nis_array]);
+
             // cek setiap NIS ada di tabel siswa
             foreach ($nis_array as $nis) {
                 if (!TbSiswas::where('nis', $nis)->exists()) {
+                    Log::warning('NIS validation failed', ['missing_nis' => $nis]);
                     return response()->json(['success' => false, 'message' => "NIS not found: {$nis}"], 422);
                 }
             }
 
+            Log::info('Validation of NIS completed', ['nis_array' => $nis_array]);
+
+            // log payload preview (tanpa mengeluarkan teks panjang)
+            $payloadPreview = $request->only([
+                'nama_lomba','deskripsi_lomba','tanggal_lomba','tingkat_lomba','tingkat_juara','poin_lomba','nis'
+            ]);
+            Log::info('Request payload preview', ['payload' => $payloadPreview]);
+
+            Log::info('Validating request data (laravel validator) start', ['id_lomba' => $id]);
             // validasi request
             $request->validate([
                 'nama_lomba' => 'required|string|max:255',
@@ -209,28 +238,54 @@ class PerformaCrudController extends Controller
                 'tingkat_juara' => 'required|string|max:255',
                 'poin_lomba' => 'required|integer',
             ]);
+            Log::info('Validation passed', ['id_lomba' => $id]);
 
             // panggil update helper dan normalisasi respons
+            Log::info('Calling updateTbEvidences', ['id_evidence' => $dataTbLombas->id_evidence]);
             $respEvidence = $this->updateTbEvidences($request, $dataTbLombas->id_evidence);
-            $dataEvidence = $respEvidence instanceof \Illuminate\Http\JsonResponse ? $respEvidence->getData(true) : (is_array($respEvidence) ? $respEvidence : ['success' => true]);
+            $dataEvidence = $respEvidence instanceof \Illuminate\Http\JsonResponse
+                ? $respEvidence->getData(true)
+                : (is_array($respEvidence) ? $respEvidence : ['success' => true]);
+
+            Log::info('updateTbEvidences result', ['result' => $dataEvidence]);
 
             if (isset($dataEvidence['success']) && $dataEvidence['success'] === false) {
+                Log::error('updateTbEvidences returned failure', ['detail' => $dataEvidence]);
                 return response()->json(['success' => false, 'message' => 'Failed to update evidence', 'detail' => $dataEvidence], 500);
             }
 
+            Log::info('Calling updateTbLombas', ['id_lomba' => $id]);
             $respLomba = $this->updateTbLombas($request, $id);
-            $dataLomba = $respLomba instanceof \Illuminate\Http\JsonResponse ? $respLomba->getData(true) : (is_array($respLomba) ? $respLomba : ['success' => true]);
+            $dataLomba = $respLomba instanceof \Illuminate\Http\JsonResponse
+                ? $respLomba->getData(true)
+                : (is_array($respLomba) ? $respLomba : ['success' => true]);
+
+            Log::info('updateTbLombas result', ['result' => $dataLomba]);
 
             if (isset($dataLomba['success']) && $dataLomba['success'] === false) {
+                Log::error('updateTbLombas returned failure', ['detail' => $dataLomba]);
                 return response()->json(['success' => false, 'message' => 'Failed to update lomba', 'detail' => $dataLomba], 500);
             }
 
+            Log::info('Calling updateTbSiswasLombas', ['id_lomba' => $id, 'nis_count' => count($nis_array)]);
             $respSiswas = $this->updateTbSiswasLombas($request, $id, $nis_array);
-            $dataSiswas = $respSiswas instanceof \Illuminate\Http\JsonResponse ? $respSiswas->getData(true) : (is_array($respSiswas) ? $respSiswas : ['success' => true]);
+            $dataSiswas = $respSiswas instanceof \Illuminate\Http\JsonResponse
+                ? $respSiswas->getData(true)
+                : (is_array($respSiswas) ? $respSiswas : ['success' => true]);
+
+            Log::info('updateTbSiswasLombas result', ['result' => $dataSiswas]);
 
             if (isset($dataSiswas['success']) && $dataSiswas['success'] === false) {
+                Log::error('updateTbSiswasLombas returned failure', ['detail' => $dataSiswas]);
                 return response()->json(['success' => false, 'message' => 'Failed to update siswa-lomba associations', 'detail' => $dataSiswas], 500);
             }
+
+            Log::info('All update helpers completed successfully', [
+                'id_lomba' => $id,
+                'evidence' => isset($dataEvidence['data']) ? $dataEvidence['data'] : $dataEvidence,
+                'lomba' => isset($dataLomba['data']) ? $dataLomba['data'] : $dataLomba,
+                'siswas' => isset($dataSiswas['data']) ? $dataSiswas['data'] : $dataSiswas,
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -242,9 +297,16 @@ class PerformaCrudController extends Controller
                 ]
             ], 200);
         } catch (ValidationException $e) {
+            Log::warning('ValidationException in update', ['id_lomba' => $id, 'errors' => $e->errors()]);
             return response()->json(['success' => false, 'message' => 'Validation failed', 'errors' => $e->errors()], 422);
         } catch (\Exception $e) {
-            Log::error('Unexpected error in update', ['id_lomba' => $id, 'error' => $e->getMessage()]);
+            Log::error('Unexpected error in update', [
+                'id_lomba' => $id,
+                'exception' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => substr($e->getTraceAsString(), 0, 1000)
+            ]);
             return response()->json(['success' => false, 'message' => 'Server error', 'error' => $e->getMessage()], 500);
         }
     }
@@ -263,7 +325,7 @@ class PerformaCrudController extends Controller
 
             if (!$lomba) {
                 Log::warning('TbLombas not found', ['id_lomba' => $id]);
-                DB::rollBack();
+                DB::rollBack(); 
                 return response()->json([
                     'success' => false,
                     'message' => 'Resource not found',

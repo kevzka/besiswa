@@ -22,7 +22,7 @@
             </tr>
              <tr>
                 <td>{{$data["idLomba"]}}</td>
-                <td>{{implode(', ', $data["nisSiswa"])}}</td>
+                <td>{{$data["nisSiswa"]}}</td>
                 <td>{{$data["namaLomba"]}}</td>
                 <td>{{$data["fileDokumentasi"]}}</td>
                 <td>{{$data["deskripsiLomba"]}}</td>

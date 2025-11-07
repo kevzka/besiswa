@@ -77,7 +77,13 @@ class PerformaController extends Controller
      */
     public function edit(string $id)
     {
-        return view('admin.performa.edit');
+        $response = Http::get("http://" . Config::get('app.API') . "/api/performa/" . $id);
+        if (isset($response->json()['error'])) {
+            return redirect()->route('tes.index')->with('error', 'Data tidak ditemukan');
+        }
+        $data = $response->json()['data'][0];
+
+        return view('admin.performa.edit', compact('data'));
     }
 
     /**
@@ -85,7 +91,47 @@ class PerformaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $user = Auth::user();
+            $uploadedFile = $request->file('file_evidence');
+            $tingkat_juara = $request->tingkat_juara == "lainnya" ? $request->tingkat_juara_lainnya : $request->tingkat_juara;
+
+            $url = "http://" . Config::get('app.API') . "/api/performa/" . $id;
+
+            $payload = [
+                'username' => $user->username,
+                'id_admin' => $user->id_admin,
+                'nis' => $request->nis,
+                'nama_lomba' => $request->nama_lomba,
+                'deskripsi_lomba' => $request->deskripsi_lomba,
+                'tanggal_lomba' => $request->tanggal_lomba,
+                'tingkat_lomba' => $request->tingkat_lomba,
+                'tingkat_juara' => $tingkat_juara,
+                'poin_lomba' => $request->poin_lomba,
+            ];
+
+            if ($uploadedFile && $uploadedFile->isValid()) {
+                // kirim multipart sebagai POST dan spoof method PUT
+                $payload['_method'] = 'PUT';
+                $response = Http::attach(
+                    'file_evidence',
+                    file_get_contents($uploadedFile->getRealPath()),
+                    $uploadedFile->getClientOriginalName()
+                )->post($url, $payload);
+            } else {
+                // tidak ada file -> langsung PUT biasa
+                $response = Http::put($url, $payload);
+            }
+
+            if ($response->successful()) {
+                return redirect()->route('tes.index')->with('success', 'Data berhasil diperbarui');
+            }
+
+            return response()->json($response->json());
+            // return redirect()->back()->with('error', 'API error: ' . $response->body())->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
+        }
     }
 
     /**
