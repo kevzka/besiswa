@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Foundation\Application;
+use Tymon\JWTAuth\Http\Middleware\Authenticate;
+use Tymon\JWTAuth\Http\Middleware\RefreshToken;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
@@ -12,7 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            // Add a 'jwt' alias for the JWT-Auth middleware
+            'jwt.auth' => Authenticate::class,
+            'jwt.refresh' => RefreshToken::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
