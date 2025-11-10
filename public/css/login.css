@@ -150,12 +150,27 @@ body, html {
   margin-left: 500px;
 }
 .titlelogin{
-  z-index: 2;
+  /* z-index: 2;
   position: absolute;
   height: 200px;
   left: 20%;
   top: 20%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); */
+
 }
 
 
+@media (max-width: 600px) {
+  .image-panel {
+    display: none;
+  }
+  .login-panel {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    -o-border-radius: 0;
+}
+}

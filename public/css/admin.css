@@ -418,3 +418,24 @@ a {
     width: 100%;
     color: #222;
 }
+
+
+@media (max-width: 600px) {
+    /* *{
+        display: none;
+    } */
+
+    .main-content {
+        width: 100vw;
+        min-height: 100vh;
+        padding: 0;
+    }
+
+    .main-content .content-wrapper .stats-boxes {
+        flex-direction: column;
+    }
+
+    .main-content .content-wrapper .table-card{
+        width: 90%;
+    }
+}

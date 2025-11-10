@@ -23,7 +23,6 @@
 		<div class="content-wrapper">
             <div class="banner-box"></div>
 
-            <!-- Tambahan headline + box statistik -->
             <h2 class="headline">Ada berita apa hari ini?</h2>
 
             <div class="stats-boxes">

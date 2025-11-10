@@ -13,6 +13,8 @@
     <!-- Panel kiri -->
     <div class="login-panel">
       
+      <img src="{{asset('img/titlelogin.png')}}" alt="Sekolah" class="titlelogin">
+      
       <div class="welcome">
         <h2>Halo Admin!</h2>
         <p>Selamat datang di website kesiswaan</p>
@@ -49,7 +51,6 @@
     <div class="image-panel">
       <img src="{{asset('img/logoskatel.png')}}" alt="Sekolah" class="logoskatel">
       <img src="{{asset('img/bgnoteks.png')}}" alt="Sekolah" class="bglogin">
-      <img src="{{asset('img/titlelogin.png')}}" alt="Sekolah" class="titlelogin">
 
     </div>
   </div>
