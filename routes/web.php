@@ -18,6 +18,8 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 // Dashboard Routes
 Route::redirect('/', '/dashboard');
+Route::redirect('/admin', '/admin/dashboard');
+
 Route::get('/dashboard', [DashboardController::class, 'publicDashboard']);
 
 Route::get('/bimbingan', [UserViewController::class, 'bimbingan'])->name('bimbingan');

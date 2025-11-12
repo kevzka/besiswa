@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Dummy Image Generator</title>
+  <style>
+    body{font-family:Arial, Helvetica, sans-serif;margin:20px}
+    label{display:block;margin:8px 0 4px}
+    input,select,button{padding:6px;margin-right:8px}
+    .preview{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    .item{display:flex;flex-direction:column;align-items:center}
+    canvas{border:1px solid #ddd}
+  </style>
+</head>
+<body>
+  <h3>Dummy Image Generator</h3>
+
+  <label>Template text (use {i} placeholder for index):</label>
+  <input id="tpl" value="Dummy {i}" style="width:320px"/>
+
+  <label>Count / Size / Colors / Font:</label>
+  <input id="count" type="number" value="10" min="1" max="1000" style="width:80px"/>
+  <input id="w" type="number" value="800" style="width:80px"/> x
+  <input id="h" type="number" value="600" style="width:80px"/>
+  <input id="bg" type="color" value="#CCCCCC" />
+  <input id="fg" type="color" value="#000000" />
+  <input id="fontsize" type="number" value="48" style="width:80px"/> px
+  <select id="font">
+    <option value="Arial">Arial</option>
+    <option value="Helvetica">Helvetica</option>
+    <option value="Verdana">Verdana</option>
+    <option value="Times New Roman">Times New Roman</option>
+    <option value="Courier New">Courier New</option>
+  </select>
+
+  <div style="margin-top:10px">
+    <label><input id="zip" type="checkbox" /> Download all as ZIP</label>
+    <button id="gen">Generate</button>
+    <button id="clear">Clear</button>
+  </div>
+
+  <div class="preview" id="preview"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script>
+    const tpl = id => document.getElementById(id);
+    function makeText(text, w, h, bg, fg, font, size){
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = bg; ctx.fillRect(0,0,w,h);
+      ctx.fillStyle = fg;
+      ctx.font = `${size}px ${font}`;
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'center';
+      // wrap long text
+      const maxWidth = w * 0.9;
+      const words = text.split(' ');
+      let line = '', lines = [], lineHeight = size * 1.2;
+      for(let n=0;n<words.length;n++){
+        const test = line ? line + ' ' + words[n] : words[n];
+        const metrics = ctx.measureText(test);
+        if(metrics.width > maxWidth && line){
+          lines.push(line); line = words[n];
+        } else line = test;
+      }
+      if(line) lines.push(line);
+      const startY = (h - (lines.length * lineHeight)) / 2 + lineHeight/2;
+      for(let i=0;i<lines.length;i++){
+        ctx.fillText(lines[i], w/2, startY + i*lineHeight);
+      }
+      return c;
+    }
+
+    document.getElementById('gen').addEventListener('click', async ()=>{
+      const preview = tpl('preview');
+      preview.innerHTML = '';
+      const count = parseInt(tpl('count').value) || 1;
+      const w = parseInt(tpl('w').value) || 800;
+      const h = parseInt(tpl('h').value) || 600;
+      const bg = tpl('bg').value;
+      const fg = tpl('fg').value;
+      const size = parseInt(tpl('fontsize').value) || 48;
+      const font = tpl('font').value;
+      const template = tpl('tpl').value || 'Dummy {i}';
+      const makeZip = tpl('zip').checked;
+      let zip, added=0;
+      if(makeZip){ zip = new JSZip(); }
+
+      for(let i=1;i<=count;i++){
+        const text = template.replace(/\{i\}/g, i);
+        const c = makeText(text, w, h, bg, fg, font, size);
+        const dataUrl = c.toDataURL('image/png');
+        // preview item
+        const div = document.createElement('div');
+        div.className = 'item';
+        const img = document.createElement('img');
+        img.src = dataUrl;
+        img.width = Math.min(240, w/2);
+        img.style.height = 'auto';
+        const a = document.createElement('a');
+        const filename = `${text}.png`;
+        a.href = dataUrl;
+        a.download = filename;
+        a.textContent = 'Download';
+        a.style.marginTop = '6px';
+        div.appendChild(img);
+        div.appendChild(a);
+        preview.appendChild(div);
+
+        if(makeZip){
+          // convert dataUrl to blob and add to zip
+          const blob = await (await fetch(dataUrl)).blob();
+          zip.file(filename, blob);
+          added++;
+        }
+      }
+
+      if(makeZip && added>0){
+        zip.generateAsync({type:"blob"}).then(function(content) {
+          saveAs(content, `dummy-images-${Date.now()}.zip`);
+        });
+      }
+    });
+
+    document.getElementById('clear').addEventListener('click', ()=> tpl('preview').innerHTML = '');
+  </script>
+</body>
+</html>

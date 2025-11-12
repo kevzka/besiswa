@@ -34,6 +34,16 @@ class TbSiswasSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'nis' => '543241011',
+                'nama' => 'Michael Johnson',
+                'kelas' => '12C',
+                'jurusan' => 'Commerce',
+                'angkatan' => '2020',
+                'poin_jiwa' => 150,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
         ]);
     }
 }

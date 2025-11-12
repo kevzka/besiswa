@@ -17,6 +17,9 @@ class DatabaseSeeder extends Seeder
         $this->call(TbRolesSeeder::class);
         $this->call(TbSiswasSeeder::class);
         $this->call(TbAdminsSeeder::class);
+        $this->call(TbEvidencesSeeder::class);
+        $this->call(TbLombasSeeder::class);
+        $this->call(TbSiswasLombasSeeder::class);
 
         // User::factory()->create([
         //     'name' => 'Test User',
