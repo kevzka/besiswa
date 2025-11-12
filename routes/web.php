@@ -4,8 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CrudController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PerformaController;
+use App\Http\Controllers\UserViewController;
+use App\Http\Controllers\DashboardController;
 
 // Authentication Routes
 Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
@@ -18,6 +19,10 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 // Dashboard Routes
 Route::redirect('/', '/dashboard');
 Route::get('/dashboard', [DashboardController::class, 'publicDashboard']);
+
+Route::get('/bimbingan', [UserViewController::class, 'bimbingan'])->name('bimbingan');
+Route::get('/prestasi', [UserViewController::class, 'prestasi'])->name('prestasi');
+Route::get('/ekskul', [UserViewController::class, 'ekskul'])->name('ekskul');
 
 // Admin Routes
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {

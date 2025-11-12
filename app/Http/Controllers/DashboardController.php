@@ -102,7 +102,7 @@ class DashboardController extends Controller
         
         try {
             Log::info('Rendering public dashboard view');
-            return view('public.dashboard');
+            return view('user.landingpage');
         } catch (\Exception $e) {
             Log::error('Error accessing public dashboard', [
                 'exception' => $e->getMessage(),
