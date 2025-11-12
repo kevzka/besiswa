@@ -229,7 +229,7 @@
                 ADASISWA
             </div>
 
-            <div class="nav-actions">
+            {{-- <div class="nav-actions">
                 <div class="nav-links">
                     <a href="#"class="active">AdaSiswa</a>
                     <a href="{{route('bimbingan')}}">Bimbingan</a>
@@ -237,7 +237,8 @@
                     <a href="{{route('ekskul')}}">Ekskul</a>
                     <a href="portofolio.php">Portofolio</a>
                 </div>
-            </div>
+            </div> --}}
+            <x-nav-user-view :activeMenu="'dashboard'"/>
         </div>
     </nav>
 
