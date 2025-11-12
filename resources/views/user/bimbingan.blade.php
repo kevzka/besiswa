@@ -306,12 +306,14 @@
 		.news-content p {
 			height: 45px;
 			overflow: hidden;
-			/* white-space: nowrap; */
-			/* text-overflow: ellipsis; */
 			font-size: 14px;
 			color: #444;
 			line-height: 1.5;
 			margin-bottom: 10px;
+			display: -webkit-box; /* Menggunakan sintaks WebKit untuk memotong multi-baris */
+			-webkit-line-clamp: 2; /* JUMLAH BARIS MAKSIMUM yang ditampilkan (misalnya, 5 baris untuk tinggi 100px) */
+			-webkit-box-orient: vertical; /* Arah kotak ke vertikal */
+			text-overflow: ellipsis; /* Properti ini tidak selalu berfungsi sendiri untuk multi-baris, tetapi sering digunakan bersama-sama */
 		}
 
 		.read-more {
@@ -377,6 +379,8 @@
 			text-decoration: none;
 		}
 
+		
+
 		@media (max-width: 900px) {
 			.nav-links {
 				gap: 24px;
@@ -423,7 +427,6 @@
 </head>
 
 <body>
-
 	<!-- ===== Navbar ===== -->
 	<nav>
 		<div class="navbar-container">
@@ -434,11 +437,11 @@
 
 			<div class="nav-actions">
 				<div class="nav-links">
-					<a href="landingpage.php">AdaSiswa</a>
+					<a href="{{route('dashboard')}}">AdaSiswa</a>
 					<a href="#" class="active">Bimbingan</a>
-					<a href="prestasi.php">Prestasi</a>
-					<a href="ekskul.php">Ekskul</a>
-					<a href="portofolio.php">Portofolio</a>
+					<a href="{{route('prestasi')}}">Prestasi</a>
+					<a href="{{route('ekskul')}}">Ekskul</a>
+					<a href="{{route('portofolio')}}">Portofolio</a>
 				</div>
 			</div>
 		</div>

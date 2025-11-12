@@ -20,11 +20,12 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 Route::redirect('/', '/dashboard');
 Route::redirect('/admin', '/admin/dashboard');
 
-Route::get('/dashboard', [DashboardController::class, 'publicDashboard']);
+Route::get('/dashboard', [DashboardController::class, 'publicDashboard'])->name('dashboard');
 
 Route::get('/bimbingan', [UserViewController::class, 'bimbingan'])->name('bimbingan');
 Route::get('/prestasi', [UserViewController::class, 'prestasi'])->name('prestasi');
 Route::get('/ekskul', [UserViewController::class, 'ekskul'])->name('ekskul');
+Route::get('/portofolio', [UserViewController::class, 'portofolio'])->name('portofolio');
 
 // Admin Routes
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {

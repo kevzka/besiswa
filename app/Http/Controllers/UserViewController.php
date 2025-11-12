@@ -10,14 +10,23 @@ class UserViewController extends Controller
 {
     public function bimbingan(){
         $response = Http::post('http://' . Config::get('app.API') . '/api/user', [
-            'function' => 'bimbingan',
+            'function' => 'dataIndex',
+            'type' => 1,
         ])->json();
         return view('user.bimbingan', compact('response'));
     }
     public function prestasi(){
-        return view('user.prestasi');
+        $response = Http::post('http://' . Config::get('app.API') . '/api/user', [
+            'function' => 'dataIndex',
+            'type' => 2,
+        ])->json();
+        return view('user.prestasi', compact('response'));
     }
     public function ekskul(){
-        return view('user.ekskul');
+        $response = Http::post('http://' . Config::get('app.API') . '/api/user', [
+            'function' => 'dataIndex',
+            'type' => 3,
+        ])->json();
+        return view('user.ekskul', compact('response'));
     }
 }

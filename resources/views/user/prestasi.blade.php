@@ -1,5 +1,5 @@
 <?php
-// bimbingan.php — Halaman Bimbingan Adasiswa SMK Telkom Banjarbaru
+// prestasi.php — Halaman prestasi Adasiswa SMK Telkom Banjarbaru
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -7,7 +7,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Bimbingan | Adasiswa SMK Telkom Banjarbaru</title>
+	<title>prestasi | Adasiswa SMK Telkom Banjarbaru</title>
 	<link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Amiko:wght@400;700&display=swap" rel="stylesheet">
@@ -290,7 +290,7 @@
 
 		.news-content {
 			padding: 20px 25px;
-			flex: 1;
+			/* flex: 1; */
 			padding-bottom: 56px;
 			/* reserve space for the absolute link */
 			position: relative;
@@ -304,10 +304,16 @@
 		}
 
 		.news-content p {
+			height: 45px;
+			overflow: hidden;
 			font-size: 14px;
 			color: #444;
 			line-height: 1.5;
 			margin-bottom: 10px;
+			display: -webkit-box; /* Menggunakan sintaks WebKit untuk memotong multi-baris */
+			-webkit-line-clamp: 2; /* JUMLAH BARIS MAKSIMUM yang ditampilkan (misalnya, 5 baris untuk tinggi 100px) */
+			-webkit-box-orient: vertical; /* Arah kotak ke vertikal */
+			text-overflow: ellipsis; /* Properti ini tidak selalu berfungsi sendiri untuk multi-baris, tetapi sering digunakan bersama-sama */
 		}
 
 		.read-more {
@@ -430,11 +436,11 @@
 
 			<div class="nav-actions">
 				<div class="nav-links">
-					<a href="landingpage.php">AdaSiswa</a>
-					<a href="bimbingan.php">Bimbingan</a>
-					<a href="#"class="active">Prestasi</a>
-					<a href="ekskul.php">Ekskul</a>
-					<a href="portofolio.php">Portofolio</a>
+					<a href="{{route('dashboard')}}">AdaSiswa</a>
+					<a href="{{route('bimbingan')}}">Bimbingan</a>
+					<a href="#" class="active">Prestasi</a>
+					<a href="{{route('ekskul')}}">Ekskul</a>
+					<a href="{{route('portofolio')}}">Portofolio</a>
 				</div>
 			</div>
 		</div>
@@ -448,7 +454,7 @@
 	<!-- ===== Header ===== -->
 	<section class="header">
 		<h1>Prestasi</h1>
-		<p>PRESTASI SMK TEKOM BANJARBARU</p>
+		<p>KEGIATAN PRESTASI SMK TELKOM BANJARBARU</p>
 	</section>
 
 	<section class="recent-wrap" aria-label="Recent news">
@@ -459,11 +465,11 @@
 
 		<div class="recent-grid">
 			<div class="recent-card">
-				<img src="/user/img/dokumbimbingan/news1.png" alt="">
+				<img src="{{asset('storage/' . $response['topData'][0]['file'])}}" alt="">
 				<p>Sistem Penerimaan Murid Baru SMK Telkom Banjarbaru untuk Tahun Ajaran 2026/2027<br><a href="#">Lihat selengkapnya..</a></p>
 			</div>
 			<div class="recent-card">
-				<img src="/user/img/dokumbimbingan/news2.png" alt="">
+				<img src="{{asset('storage/' . $response['topData'][1]['file'])}}" alt="">
 				<p>Perayaan Ulang Tahun SMK Telkom Banjarbaru Ke-26: Harmoni Dalam Kreasi Tanpa Batas<br><a href="#">Lihat selengkapnya..</a></p>
 			</div>
 			<div class="recent-card">
@@ -477,18 +483,22 @@
 
 	<section class="news-wrap">
 		<h2 class="news-label">NEWS</h2>
+
+		@foreach ($response['allData'] as $data)
 		<div class="news-card">
-			<img src="/user/img/dokumbimbingan/news1.png" alt="">
+			<img src="{{asset('storage/' . $data['file'])}}" alt="">
 			<div class="news-content">
-				<h3>SMK Telkom Banjarbaru Resmi Membuka Sistem Penerimaan Murid Baru 2026/2027</h3>
-				<p>SMK Telkom Banjarbaru resmi membuka Seleksi Penerimaan Murid Baru (SPMB) Tahun Ajaran 2026/2027 bertepatan dengan peringatan HUT RI ke-80...</p>
-				<small>Senin, 10/22/25</small><br>
-				<a href="user/berita/beritabimbingan/SPMB" class="read-more">Lihat Selengkapnya....</a>
+				<h3>{{ $data['title'] }}</h3>
+				<p>{{ $data['description'] }} Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, assumenda impedit perferendis quaerat autem nulla labore magni error quisquam vitae voluptatibus cupiditate enim voluptates nam ab magnam iure accusantium, nostrum eligendi. Consectetur omnis provident illum quasi neque accusantium eaque ab distinctio, excepturi ipsa cupiditate molestias qui culpa reprehenderit nisi molestiae eveniet reiciendis voluptatum nesciunt minus et in? Quo hic expedita dolores velit voluptate. Maiores deserunt aut, quod quidem temporibus ab possimus atque ipsum itaque ex recusandae praesentium voluptas et sapiente iure! Hic, deleniti non. Esse, laborum fugiat nobis perferendis cupiditate placeat, natus et voluptatem incidunt reiciendis quidem neque sequi a adipisci maiores tempora ducimus quia soluta tempore atque ex aut. Est placeat quod porro ipsa beatae cum ut excepturi delectus impedit reiciendis molestiae harum officia tenetur recusandae neque iure, sapiente magni, labore aspernatur obcaecati provident tempora. Quam nam deleniti libero repellendus at, ut excepturi enim tenetur eum facere provident explicabo quia ullam architecto similique, nemo omnis reprehenderit voluptatem nesciunt sunt vero ipsum molestias. Minima, itaque aspernatur. Officiis dolores pariatur sint quos eveniet beatae nihil ea iusto, voluptatum adipisci doloremque quae consectetur nam modi harum fugiat nesciunt. Blanditiis quam esse ratione alias voluptates praesentium reprehenderit suscipit facilis, cumque incidunt tempora eos.</p>
+				<small>{{ date("D, d-m-Y", strtotime($data['date']))}}</small><br>
+				<a href="user/berita/beritaprestasi/SPMB" class="read-more">Lihat Selengkapnya....</a>
 			</div>
 		</div>
+		@endforeach
 
+		{{-- 
 		<div class="news-card">
-			<img src="/user/img/dokumbimbingan/news2.png" alt="">
+			<img src="/user/img/dokumprestasi/news2.png" alt="">
 			<div class="news-content">
 				<h3>Perayaan Ulang Tahun SMK Telkom Banjarbaru Ke-26 Harmoni Dalam Kreasi Tanpa Batas</h3>
 				<p>SMK Telkom Banjarbaru merayakan HUT ke-26 melalui rangkaian Skafest (8–17 Mei 2025)...</p>
@@ -498,7 +508,7 @@
 		</div>
 
 		<div class="news-card">
-			<img src="/user/img/dokumbimbingan/news3.png" alt="">
+			<img src="/user/img/dokumprestasi/news3.png" alt="">
 			<div class="news-content">
 				<h3>Kegiatan Pesantren Ramadhan 1446 H: Merayakan Keberkahan Bulan Ramadhan</h3>
 				<p>SMK Telkom Banjarbaru mengadakan Pesantren Ramadhan 1446 H dengan kegiatan Salat Dhuha, Tadarus, Dzuhur berjamaah...</p>
@@ -508,7 +518,7 @@
 		</div>
 
 		<div class="news-card">
-			<img src="/user/img/dokumbimbingan/news4.png" alt="">
+			<img src="/user/img/dokumprestasi/news4.png" alt="">
 			<div class="news-content">
 				<h3>Momentum Classmeet Skatel: Menyegarkan Pikiran dan Menjalin Keakraban</h3>
 				<p>SMK Telkom Banjarbaru kembali mengadakan Classmeet sebagai ajang penyegar dan kenangan sebelum naik kelas...</p>
@@ -518,14 +528,14 @@
 		</div>
 
 		<div class="news-card">
-			<img src="/user/img/dokumbimbingan/news5.png" alt="">
+			<img src="/user/img/dokumprestasi/news5.png" alt="">
 			<div class="news-content">
 				<h3>Pelaksanaan Isra Mi’raj di SMK Telkom Banjarbaru: Menjaga Keistiqomahan Generasi Muda</h3>
 				<p>SMK Telkom Banjarbaru memperingati Isra Mi’raj dengan pembacaan surah, sholawat, dan ceramah oleh Habib Salim A...</p>
 				<small>Senin, 10/22/25</small><br>
 				<a href="#" class="read-more">Lihat Selengkapnya....</a>
 			</div>
-		</div>
+		</div> --}}
 	</section>
 
 	<!-- ===== Footer ===== -->
@@ -565,7 +575,7 @@
 
 					let target = href;
 					if (!href || href === '#') {
-						if (text === 'bimbingan') target = 'bimbingan.php';
+						if (text === 'prestasi') target = 'prestasi.php';
 						else return;
 					}
 
