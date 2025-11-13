@@ -34,7 +34,7 @@
                     <input type="text" name="title" placeholder="Judul baru"
                         value="{{ old('title', $activityData['title']) }}">
                     <textarea name="description" placeholder="Deskripsi baru">{{ old('description', $activityData['description']) }}</textarea>
-                    <input type="date" name="date" value="{{ old('date', $activityData['date']) }}">
+                    <input type="date" name="date" value="{{ old('date', date('Y-m-d', strtotime($activityData['date']))) }}">
 
                     <div class="file-upload disnone" id="fileUploadContainer">
                         <label for="fileInput"><span style="font-size:1.2em;">
