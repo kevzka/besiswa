@@ -15,6 +15,7 @@
         "vite": "^7.0.4"
     },
     "dependencies": {
+        "@chriscdn/pdf-thumbnails": "^0.0.6",
         "sweetalert2": "^11.23.0"
     }
 }
