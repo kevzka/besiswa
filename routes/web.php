@@ -4,8 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CrudController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PerformaController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TesPdfImgController;
 
 // Authentication Routes
 Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
@@ -29,8 +30,10 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-Route::resource('tes', PerformaController::class);
-})
+// Route::resource('tes', PerformaController::class);
+});
+
+Route::get('/tes', [TesPdfImgController::class, 'index']);
 
 // Route::get('/search', [ProductController::class, 'search'])->name('products.search');
 ?>
