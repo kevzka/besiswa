@@ -37,4 +37,8 @@ class UserViewController extends Controller
         $response = array_merge($response, ['logoRotation' => 225, 'startLogoRotation' => ($deg == 0) ? 0 : (($deg-1)*90)+45, 'posArrStart' => $deg == 0 ? $this->posArrStart : $this->posArrIdle]);
         return view('user.ekskul', compact('response'));
     }
+
+    public function portofolio(){
+        return response()->json(['status' => 'success', 'message' => 'Portofolio Page under development']);
+    }
 }
