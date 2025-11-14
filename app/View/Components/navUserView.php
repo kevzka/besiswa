@@ -10,12 +10,14 @@ class navUserView extends Component
 {
     
     public $activeMenu;
+    public $deg;
     /**
      * Create a new component instance.
      */
-    public function __construct($activeMenu = 'dashboard')
+    public function __construct($activeMenu = 'dashboard', $deg)
     {
         $this->activeMenu = $activeMenu;
+        $this->deg = $deg;
     }
 
     /**

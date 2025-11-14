@@ -22,10 +22,10 @@ Route::redirect('/admin', '/admin/dashboard');
 
 Route::get('/dashboard', [DashboardController::class, 'publicDashboard'])->name('dashboard');
 
-Route::get('/bimbingan', [UserViewController::class, 'bimbingan'])->name('bimbingan');
-Route::get('/prestasi', [UserViewController::class, 'prestasi'])->name('prestasi');
-Route::get('/ekskul', [UserViewController::class, 'ekskul'])->name('ekskul');
-Route::get('/portofolio', [UserViewController::class, 'portofolio'])->name('portofolio');
+Route::get('/bimbingan/{deg}', [UserViewController::class, 'bimbingan'])->name('bimbingan');
+Route::get('/prestasi/{deg}', [UserViewController::class, 'prestasi'])->name('prestasi');
+Route::get('/ekskul/{deg}', [UserViewController::class, 'ekskul'])->name('ekskul');
+Route::get('/portofolio/{deg}', [UserViewController::class, 'portofolio'])->name('portofolio');
 
 // Admin Routes
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {

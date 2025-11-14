@@ -466,17 +466,17 @@
 		<div class="recent-grid">
 			<div class="recent-card">
 				<img src="{{asset('storage/' . $response['topData'][0]['file'])}}" alt="">
-				<p>Sistem Penerimaan Murid Baru SMK Telkom Banjarbaru untuk Tahun Ajaran 2026/2027<br><a href="#">Lihat selengkapnya..</a></p>
+				<p>{{ $response['topData'][0]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
 			</div>
 			<div class="recent-card">
 				<img src="{{asset('storage/' . $response['topData'][1]['file'])}}" alt="">
-				<p>Perayaan Ulang Tahun SMK Telkom Banjarbaru Ke-26: Harmoni Dalam Kreasi Tanpa Batas<br><a href="#">Lihat selengkapnya..</a></p>
+				<p>{{ $response['topData'][1]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
 			</div>
 			<div class="recent-card">
 				<div class="cloud-icon" aria-hidden="true">
 					<span class="material-icons">cloud_download</span>
 				</div>
-				<p>SMK TELKOM HARI INI..<br><a href="#">Lihat selengkapnya..</a></p>
+				<p>{{ $response['topData'][2]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
 			</div>
 		</div>
 	</section>

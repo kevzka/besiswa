@@ -238,7 +238,7 @@
                     <a href="portofolio.php">Portofolio</a>
                 </div>
             </div> --}}
-            <x-nav-user-view :activeMenu="'dashboard'"/>
+            <x-nav-user-view :activeMenu="'dashboard'" :deg="0" />
         </div>
     </nav>
 

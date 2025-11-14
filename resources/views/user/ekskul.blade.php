@@ -24,7 +24,7 @@
 		body {
 			font-family: "Poppins", sans-serif;
 			color: #222;
-			background-image: linear-gradient(rgba(255, 255, 255, 0.85), rgba(233, 233, 233, 0.85)), url('/user/img/bguniversal.png');
+			background-image: linear-gradient(rgba(255, 255, 255, 0.85), rgba(233, 233, 233, 0.85)), url({{ asset('img/bguniversal.png') }});
 			background-size: cover;
 			background-position: center;
 			background-attachment: fixed;
@@ -152,18 +152,20 @@
 			top: 20px;
 			right: 50px;
 			width: 80px;
-			animation: logoMove 0.8s ease-out forwards;
+			/* gunakan transition, nilai rotasi di-set lewat JS */
+			transition: transform 0.8s ease-out;
+			transform: rotate({{$response['startLogoRotation'] ?? 0}}deg);
 			z-index: 999;
 		}
 
-		@keyframes logoMove {
+		/* @keyframes logoMove {
 			from {
-				transform: rotate(-52deg);
+				transform: rotate(0);
 			}
 			to {
-				transform: rotate(0deg);
+				transform: rotate(45deg)
 			}
-		}
+		} */
 
 
 		/* .logo-move {
@@ -456,7 +458,7 @@
 					<a href="#" class="active">Ekskul</a>
 					<a href="{{route('portofolio')}}">Portofolio</a>
 				</div> --}}
-				<x-nav-user-view :activeMenu="'ekskul'"/>
+				<x-nav-user-view :activeMenu="'ekskul'" :deg="3" />
 			</div>
 		</div>
 	</nav>
@@ -481,17 +483,17 @@
 		<div class="recent-grid">
 			<div class="recent-card">
 				<img src="{{asset('storage/' . $response['topData'][0]['file'])}}" alt="">
-				<p>Sistem Penerimaan Murid Baru SMK Telkom Banjarbaru untuk Tahun Ajaran 2026/2027<br><a href="#">Lihat selengkapnya..</a></p>
+				<p>{{ $response['topData'][0]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
 			</div>
 			<div class="recent-card">
 				<img src="{{asset('storage/' . $response['topData'][1]['file'])}}" alt="">
-				<p>Perayaan Ulang Tahun SMK Telkom Banjarbaru Ke-26: Harmoni Dalam Kreasi Tanpa Batas<br><a href="#">Lihat selengkapnya..</a></p>
+				<p>{{ $response['topData'][1]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
 			</div>
 			<div class="recent-card">
 				<div class="cloud-icon" aria-hidden="true">
 					<span class="material-icons">cloud_download</span>
 				</div>
-				<p>SMK TELKOM HARI INI..<br><a href="#">Lihat selengkapnya..</a></p>
+				<p>{{ $response['topData'][2]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
 			</div>
 		</div>
 	</section>
@@ -510,47 +512,6 @@
 			</div>
 		</div>
 		@endforeach
-
-		{{-- 
-		<div class="news-card">
-			<img src="/user/img/dokumekskul/news2.png" alt="">
-			<div class="news-content">
-				<h3>Perayaan Ulang Tahun SMK Telkom Banjarbaru Ke-26 Harmoni Dalam Kreasi Tanpa Batas</h3>
-				<p>SMK Telkom Banjarbaru merayakan HUT ke-26 melalui rangkaian Skafest (8–17 Mei 2025)...</p>
-				<small>Senin, 10/22/25</small><br>
-				<a href="#" class="read-more">Lihat Selengkapnya....</a>
-			</div>
-		</div>
-
-		<div class="news-card">
-			<img src="/user/img/dokumekskul/news3.png" alt="">
-			<div class="news-content">
-				<h3>Kegiatan Pesantren Ramadhan 1446 H: Merayakan Keberkahan Bulan Ramadhan</h3>
-				<p>SMK Telkom Banjarbaru mengadakan Pesantren Ramadhan 1446 H dengan kegiatan Salat Dhuha, Tadarus, Dzuhur berjamaah...</p>
-				<small>Senin, 10/22/25</small><br>
-				<a href="#" class="read-more">Lihat Selengkapnya....</a>
-			</div>
-		</div>
-
-		<div class="news-card">
-			<img src="/user/img/dokumekskul/news4.png" alt="">
-			<div class="news-content">
-				<h3>Momentum Classmeet Skatel: Menyegarkan Pikiran dan Menjalin Keakraban</h3>
-				<p>SMK Telkom Banjarbaru kembali mengadakan Classmeet sebagai ajang penyegar dan kenangan sebelum naik kelas...</p>
-				<small>Senin, 10/22/25</small><br>
-				<a href="#" class="read-more">Lihat Selengkapnya....</a>
-			</div>
-		</div>
-
-		<div class="news-card">
-			<img src="/user/img/dokumekskul/news5.png" alt="">
-			<div class="news-content">
-				<h3>Pelaksanaan Isra Mi’raj di SMK Telkom Banjarbaru: Menjaga Keistiqomahan Generasi Muda</h3>
-				<p>SMK Telkom Banjarbaru memperingati Isra Mi’raj dengan pembacaan surah, sholawat, dan ceramah oleh Habib Salim A...</p>
-				<small>Senin, 10/22/25</small><br>
-				<a href="#" class="read-more">Lihat Selengkapnya....</a>
-			</div>
-		</div> --}}
 	</section>
 
 	<!-- ===== Footer ===== -->
@@ -575,6 +536,23 @@
 		</div>
 	</footer>
 	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const logo = document.getElementById('main-logo');
+
+			// nilai di-inject dari controller: $logoRotation (derajat)
+			const logoRotation = @json($response['logoRotation'] ?? 0);
+
+			if (logo) {
+				setTimeout(() => {
+					logo.style.transform = `rotate(${logoRotation}deg)`;
+				}, 1000);
+			}
+			console.log('test');
+
+			// ...existing JS (nav click handling dst.)...
+		});
+	</script>
+	{{-- <script>
 		document.addEventListener('DOMContentLoaded', function() {
 			const logo = document.getElementById('main-logo');
 
@@ -606,7 +584,7 @@
 				});
 			});
 		});
-	</script>
+	</script> --}}
 </body>
 
 </html>
