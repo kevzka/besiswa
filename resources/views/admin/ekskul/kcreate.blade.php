@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <title>Ekskul Admin</title>
-    <link rel="stylesheet" href="{{asset('css/admin.css')}}">
 </head>
 
 <body>
     <x-deleteButton1 title="YAKIN INGIN HAPUS?"></x-deleteButton1>
-    <x-admin.sidebar :role="$role" :id-role="$id_role" :adminName="$adminName" active-menu='bimbingan' />
+    <x-admin.sidebar :role="$role" :id-role="$id_role" :adminName="$adminName" active-menu='ekskul' />
     <div class="main-content">
         <div class="topbar">
             <div class="menu-icon"><img src=" {{ asset('icons/bars-solid-full.svg') }}" alt="ini gambar"
@@ -21,7 +21,7 @@
         <div class="content-wrapper">
             <div class="banner-box"></div>
             <div class="card-form">
-                <form action="{{ route('admin.bimbingan.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.ekskul.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="text" name="title" placeholder="Judul berita" required>
                     <textarea name="description" placeholder="Deskripsi" required></textarea>
@@ -49,11 +49,19 @@
             </div>
             <div class="table-card">
                 <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Event</th>
+                            <th>Tanggal</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         @if (empty($activities))
                             <tr>
                                 <td colspan="5" style="text-align: center; padding: 20px 0;">
-                                    Tidak ada data kegiatan bimbingan.
+                                    Tidak ada data kegiatan ekskul.
                                 </td>
                             </tr>
                         @else
@@ -62,9 +70,8 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item['title'] }}</td>
                                 <td>{{ date('Y-m-d', strtotime($item['date'])) }}</td>
-                                <td></td>
                                 <td class="table-actions">
-                                    <form action="{{ route('admin.bimbingan.edit', ['kegiatan' => $item['id_evidence']]) }}"
+                                    <form action="{{ route('admin.ekskul.edit', ['kegiatan' => $item['id_evidence']]) }}"
                                         method="GET" style="display: inline;">
                                         @csrf
                                         <a href="javascript:void(0)" onclick="this.parentElement.submit()">
@@ -72,7 +79,7 @@
                                         </a>
                                     </form>
                                     <i>||</i>
-                                    <form action="{{ route('admin.bimbingan.destroy', ['kegiatan' => $item['id_evidence']]) }}"
+                                    <form action="{{ route('admin.ekskul.destroy', ['kegiatan' => $item['id_evidence']]) }}"
                                         method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
@@ -92,6 +99,39 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.5/js/dataTables.js"></script>
+    <script>
+        let table = new DataTable('#DataTable', {
+            drawCallback: function() {
+                var api = this.api();
+                var rowCount = api.rows({
+                    page: 'current'
+                }).count();
+
+                for (var i = 0; i < api.page.len() - (rowCount === 0 ? 1 : rowCount); i++) {
+                    $('#DataTable tbody').append($(
+                        "<tr ><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>"));
+                }
+            },
+            columnDefs: [{
+                    width: '1%',
+                    targets: 0
+                },
+                {
+                    className: 'dt-center',
+                    targets: [0, 2, 3]
+                },
+                {
+                    className: 'dt-left',
+                    targets: 1
+                }
+            ],
+            layout: {
+                topStart: null
+            }
+        });
+    </script>
     <script src="{{ asset('js/create1.js') }}"></script>
 
 

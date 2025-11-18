@@ -16,9 +16,7 @@
         <div class="topbar">
             <div class="menu-icon"><img src=" {{ asset('icons/bars-solid-full.svg') }}" alt="ini gambar"
                     style="width: 100%;"></div>
-            <div class="search-bar">
-                <input type="text" placeholder="Search">
-            </div>
+            
         </div>
         <div class="content-wrapper">
             <div class="banner-box"></div>
