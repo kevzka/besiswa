@@ -161,7 +161,20 @@ body {
     width: 90%;
 }
 
-table {
+#DataTable {
+    table-layout: fixed;
+    width: 100%;
+}
+#DataTable th {
+    background-color: #c7c7c7;
+    font-weight: normal;
+}
+.dataTables_wrapper .page-item.active .page-link {
+    background-color: #4f93ce;
+    border: 1px solid #4f93ce;
+}
+
+/* table {
     width: 100%;
     border-collapse: collapse;
 }
@@ -195,7 +208,7 @@ tr:nth-child(even) {
 
 tr:nth-child(odd) {
     background: #fff;
-}
+} */
 
 .table-actions {
     display: flex;
@@ -214,7 +227,7 @@ tr:nth-child(odd) {
     position: absolute;
     width: 100%;
     height: 271px;
-    background-color:#953636;
+    background-color: #953636;
 }
 
 .upload-icon {
@@ -419,7 +432,6 @@ a {
     color: #222;
 }
 
-
 @media (max-width: 600px) {
     /* *{
         display: none;
@@ -435,7 +447,7 @@ a {
         flex-direction: column;
     }
 
-    .main-content .content-wrapper .table-card{
+    .main-content .content-wrapper .table-card {
         width: 90%;
     }
 }
