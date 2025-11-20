@@ -72,21 +72,7 @@
         </div>
     </section>
 
-    <section class="news-wrap">
-        <h2 class="news-label">NEWS</h2>
-
-        @foreach ($response['allData'] as $data)
-        <div class="news-card">
-            <img src="{{asset('storage/' . $data['file'])}}" alt="">
-            <div class="news-content">
-                <h3>{{ $data['title'] }}</h3>
-                <p>{{ $data['description'] }} Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, assumenda impedit perferendis quaerat autem nulla labore magni error quisquam vitae voluptatibus cupiditate enim voluptates nam ab magnam iure accusantium, nostrum eligendi.</p>
-                <small>{{ date("D, d-m-Y", strtotime($data['date']))}}</small><br>
-                <a href="user/berita/beritabimbingan/SPMB" class="read-more">Lihat Selengkapnya....</a>
-            </div>
-        </div>
-        @endforeach
-    </section>
+    <x-pagination :type="1"/>
 
     <footer>
         <div class="left">

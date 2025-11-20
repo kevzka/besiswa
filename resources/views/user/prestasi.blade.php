@@ -75,21 +75,7 @@
 		</div>
 	</section>
 
-	<section class="news-wrap">
-		<h2 class="news-label">NEWS</h2>
-
-		@foreach ($response['allData'] as $data)
-		<div class="news-card">
-			<img src="{{asset('storage/' . $data['file'])}}" alt="">
-			<div class="news-content">
-				<h3>{{ $data['title'] }}</h3>
-				<p>{{ $data['description'] }} Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, assumenda impedit perferendis quaerat autem nulla labore magni error quisquam vitae voluptatibus cupiditate enim voluptates nam ab magnam iure accusantium, nostrum eligendi. Consectetur omnis provident illum quasi neque accusantium eaque ab distinctio, excepturi ipsa cupiditate molestias qui culpa reprehenderit nisi molestiae eveniet reiciendis voluptatum nesciunt minus et in? Quo hic expedita dolores velit voluptate. Maiores deserunt aut, quod quidem temporibus ab possimus atque ipsum itaque ex recusandae praesentium voluptas et sapiente iure! Hic, deleniti non. Esse, laborum fugiat nobis perferendis cupiditate placeat, natus et voluptatem incidunt reiciendis quidem neque sequi a adipisci maiores tempora ducimus quia soluta tempore atque ex aut. Est placeat quod porro ipsa beatae cum ut excepturi delectus impedit reiciendis molestiae harum officia tenetur recusandae neque iure, sapiente magni, labore aspernatur obcaecati provident tempora. Quam nam deleniti libero repellendus at, ut excepturi enim tenetur eum facere provident explicabo quia ullam architecto similique, nemo omnis reprehenderit voluptatem nesciunt sunt vero ipsum molestias. Minima, itaque aspernatur. Officiis dolores pariatur sint quos eveniet beatae nihil ea iusto, voluptatum adipisci doloremque quae consectetur nam modi harum fugiat nesciunt. Blanditiis quam esse ratione alias voluptates praesentium reprehenderit suscipit facilis, cumque incidunt tempora eos.</p>
-				<small>{{ date("D, d-m-Y", strtotime($data['date']))}}</small><br>
-				<a href="user/berita/beritaprestasi/SPMB" class="read-more">Lihat Selengkapnya....</a>
-			</div>
-		</div>
-		@endforeach
-	</section>
+	<x-pagination :type="2"/>
 
 	<footer>
 		<div class="left">

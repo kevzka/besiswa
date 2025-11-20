@@ -42,7 +42,7 @@ class CrudApiController extends Controller
                 'id_admin' => $request->id_admin
             ]);
 
-            $activities = TbEvidences::where('id_admin', $request->id_admin)->get();
+            $activities = TbEvidences::where('id_admin', $request->id_admin)->orderBy('created_at', 'desc')->get();
             
             $countBimbingan = $activities->where('type', 1)->count();    
             $countPrestasi = $activities->where('type', 2)->count();
@@ -104,7 +104,7 @@ class CrudApiController extends Controller
             }
 
             Log::info('Retrieving activities by type', ['type' => $type]);
-            $activities = TbEvidences::where('type', $type)->get();
+            $activities = TbEvidences::where('type', $type)->orderBy('created_at', 'desc')->get();
 
             Log::info('Activities retrieved successfully', [
                 'type' => $type,
@@ -152,7 +152,7 @@ class CrudApiController extends Controller
             }
 
             Log::info('Retrieving activities for create form', ['type' => $request->type]);
-            $activities = TbEvidences::where('type', $request->type)->get();
+            $activities = TbEvidences::where('type', $request->type)->orderBy('created_at', 'desc')->get();
 
             Log::info('Create form data retrieved successfully', [
                 'type' => $request->type,

@@ -200,6 +200,8 @@ nav {
 }
 
 .news-wrap {
+    position: relative;
+    min-height: 1205.6px;
     max-width: 1100px;
     margin: 60px auto 100px;
     background: #fff;
@@ -221,9 +223,10 @@ nav {
 
 .news-card:hover { transform: translateY(-8px); box-shadow: 0 12px 28px rgba(0,0,0,.15); }
 
-.news-card img { width: 280px; height: 180px; object-fit: cover; }
+.news-card img { width: 280px; height: 180px; object-fit: cover; flex-shrink: 0;}
 
 .news-content {
+    width: 100%;
     padding: 20px 25px;
     padding-bottom: 56px;
     position: relative;
