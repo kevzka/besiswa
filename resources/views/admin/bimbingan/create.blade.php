@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -88,19 +87,18 @@
                                             action="{{ route('admin.bimbingan.edit', ['kegiatan' => $item['id_evidence']]) }}"
                                             method="GET" style="display: inline;">
                                             @csrf
-                                            <a href="javascript:void(0)" onclick="this.parentElement.submit()">
-                                                <i title="Edit" class="fa-solid fa-pencil"></i>
+                                            <a href="javascript:void(0)" onclick="({{$item['id_admin']}} == {{$adminId}}) ? this.parentElement.submit() : alert('Tidak memiliki izin untuk mengedit.');">
+                                                <i title="Edit" class="fa-solid fa-pencil" style="opacity: {{($item['id_admin'] == $adminId) ? 1 : 0.5}}"></i>
                                             </a>
                                         </form>
-                                        <i>||</i>
+                                        <i style="opacity: {{($item['id_admin'] == $adminId) ? 1 : 0.5}}">||</i>
                                         <form
                                             action="{{ route('admin.bimbingan.destroy', ['kegiatan' => $item['id_evidence']]) }}"
                                             method="POST" style="display: inline;">
                                             @csrf
                                             @method('DELETE')
-
-                                            <a href="javascript:void(0)" onclick="showButtonModal(this)">
-                                                <i title="Delete" class="fa-solid fa-trash"></i>
+                                            <a href="javascript:void(0)" onclick="({{$item['id_admin']}} == {{$adminId}}) ? showButtonModal(this) : alert('Tidak memiliki izin untuk menghapus.');">
+                                                <i title="Delete" class="fa-solid fa-trash" style="opacity: {{($item['id_admin'] == $adminId) ? 1 : 0.5}}"></i>
                                             </a>
                                         </form>
                                     </td>
@@ -353,6 +351,9 @@
                 console.log('File removed successfully');
             }
         });
+    </script>
+    <script>
+            
     </script>
 </body>
 

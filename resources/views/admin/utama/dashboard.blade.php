@@ -91,8 +91,8 @@
                                         method="GET" style="display: inline;">
                                         @csrf
                                         <a href="javascript:void(0)" onclick="this.parentElement.submit()">
-                                            <i title="Edit" class="fa-solid fa-pencil"></i>
-                                        </a>
+                                                <i title="Edit" class="fa-solid fa-pencil"></i>
+                                            </a>
                                     </form>
                                     <i>||</i>
                                     <form action="{{ route('admin.bimbingan.destroy', ['kegiatan' => $item['id_evidence']]) }}"
@@ -101,8 +101,8 @@
                                         @method('DELETE')
 
                                         <a href="javascript:void(0)" onclick="showButtonModal(this)">
-                                            <i title="Delete" class="fa-solid fa-trash"></i>
-                                        </a>
+                                                <i title="Delete" class="fa-solid fa-trash"></i>
+                                            </a>
                                     </form>
                                 </td>
                             </tr>

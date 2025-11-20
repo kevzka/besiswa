@@ -87,19 +87,19 @@
                                     <form action="{{ route('admin.ekskul.edit', ['kegiatan' => $item['id_evidence']]) }}"
                                         method="GET" style="display: inline;">
                                         @csrf
-                                        <a href="javascript:void(0)" onclick="this.parentElement.submit()">
-                                            <i title="Edit" class="fa-solid fa-pencil"></i>
-                                        </a>
+                                        <a href="javascript:void(0)" onclick="({{$item['id_admin']}} == {{$adminId}}) ? this.parentElement.submit() : alert('Tidak memiliki izin untuk mengedit.');">
+                                                <i title="Edit" class="fa-solid fa-pencil" style="opacity: {{($item['id_admin'] == $adminId) ? 1 : 0.5}}"></i>
+                                            </a>
                                     </form>
-                                    <i>||</i>
+                                    <i style="opacity: {{($item['id_admin'] == $adminId) ? 1 : 0.5}}">||</i>
                                     <form action="{{ route('admin.ekskul.destroy', ['kegiatan' => $item['id_evidence']]) }}"
                                         method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
 
-                                        <a href="javascript:void(0)" onclick="showButtonModal(this)">
-                                            <i title="Delete" class="fa-solid fa-trash"></i>
-                                        </a>
+                                        <a href="javascript:void(0)" onclick="({{$item['id_admin']}} == {{$adminId}}) ? showButtonModal(this) : alert('Tidak memiliki izin untuk menghapus.');">
+                                                <i title="Delete" class="fa-solid fa-trash" style="opacity: {{($item['id_admin'] == $adminId) ? 1 : 0.5}}"></i>
+                                            </a>
                                     </form>
                                 </td>
                             </tr>

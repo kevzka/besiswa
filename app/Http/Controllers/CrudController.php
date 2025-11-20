@@ -138,6 +138,7 @@ class CrudController extends Controller
             return view($viewName, compact('activities'), [
                 'role' => $roleName,
                 'id_role' => $user->id_role,
+                'adminId' => $user->id_admin,
                 'adminName' => $user->username
             ]);
         } catch (\Exception $e) {
