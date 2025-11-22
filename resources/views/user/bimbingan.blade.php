@@ -3,6 +3,9 @@
 <html lang="id">
 
 <head>
+
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bimbingan | Adasiswa SMK Telkom Banjarbaru</title>
@@ -11,28 +14,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Amiko:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" href="{{asset('css/userView.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/userView.css') }}">
     <style>
-		#main-logo {
+        #main-logo {
             position: absolute;
-            top: {{$response['posArrStart'][0] ?? 210}}px;
-            right: {{$response['posArrStart'][1] ?? 100}}px;
-            width: {{$response['posArrStart'][2] ?? '400px'}};
+            top: {{ $response['posArrStart'][0] ?? 210 }}px;
+            right: {{ $response['posArrStart'][1] ?? 100 }}px;
+            width: {{ $response['posArrStart'][2] ?? '400px' }};
             transition: top .8s ease, right .8s ease, width .8s ease, transform .8s ease;
-            transform: rotate({{$response['startLogoRotation'] ?? 0}}deg);
+            transform: rotate({{ $response['startLogoRotation'] ?? 0 }}deg);
             z-index: 999;
         }
-		.logo-to-corner {
-		}
-	</style>
+
+        .logo-to-corner {}
+    </style>
 </head>
 
 <body>
     <nav>
         <div class="navbar-container">
             <div class="logo">
-                <img src="{{asset('img/logo.png')}}" alt="Adasiswa Logo">
-                ADASISWA
+                <img src="{{ asset('img/logo.png') }}" alt="Adasiswa Logo">
+                <p>ADASISWA</p>
             </div>
 
             <x-nav-user-view :activeMenu="'bimbingan'" :deg="1" />
@@ -40,7 +43,7 @@
     </nav>
 
     <div class="hero-image">
-        <img id="main-logo" src="{{asset('img/logo.png')}}" alt="Hero Logo Image" width="400">
+        <img id="main-logo" src="{{ asset('img/logo.png') }}" alt="Hero Logo Image" width="400">
     </div>
 
     <section class="header">
@@ -56,11 +59,11 @@
 
         <div class="recent-grid">
             <div class="recent-card">
-                <img src="{{asset('storage/' . $response['topData'][0]['file'])}}" alt="">
+                <img src="{{ asset('storage/' . $response['topData'][0]['file']) }}" alt="">
                 <p>{{ $response['topData'][0]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
             </div>
             <div class="recent-card">
-                <img src="{{asset('storage/' . $response['topData'][1]['file'])}}" alt="">
+                <img src="{{ asset('storage/' . $response['topData'][1]['file']) }}" alt="">
                 <p>{{ $response['topData'][1]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
             </div>
             <div class="recent-card">
@@ -72,11 +75,11 @@
         </div>
     </section>
 
-    <x-pagination :type="1"/>
+    <x-pagination :type="1" />
 
     <footer>
         <div class="left">
-            <img src="{{asset('img/logo.png')}}" alt="Logo Adasiswa">
+            <img src="{{ asset('img/logo.png') }}" alt="Logo Adasiswa">
             <h2>ADASISWA</h2>
         </div>
 
@@ -104,7 +107,9 @@
                 setTimeout(() => {
                     logo.style.transform = `rotate(${logoRotation}deg)`;
                     if (moveToCorner) {
-                        setTimeout(() => { logo.classList.add('logo-to-corner'); }, 0);
+                        setTimeout(() => {
+                            logo.classList.add('logo-to-corner');
+                        }, 0);
                     } else {
                         logo.classList.remove('logo-to-corner');
                     }

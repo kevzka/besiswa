@@ -60,6 +60,14 @@
             font-family: 'Aboreto', cursive;
         }
 
+        .logo p{
+            font-weight: 600;
+            font-size: 28px;
+            color: #a61d2d;
+            letter-spacing: 0.5px;
+            font-family: 'Aboreto', cursive;
+        }
+
         .logo img {
             width: 40px;
             height: auto;
@@ -216,6 +224,26 @@
             }
         }
     </style>
+    <style>
+        @media (max-width: 600px) {
+            .hero {
+                padding: 120px 20px 60px;
+            }
+
+            .hero-text h1 {
+                font-size: 28px;
+            }
+
+            .buttons a {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            .logo p {
+                display: none;
+            }
+        }
+    </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
@@ -226,7 +254,7 @@
         <div class="navbar-container">
             <div class="logo">
                 <img src="{{asset('img/logo.png')}}" alt="Adasiswa Logo">
-                ADASISWA
+                <p>ADASISWA</p>
             </div>
 
             {{-- <div class="nav-actions">

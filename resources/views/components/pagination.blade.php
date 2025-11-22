@@ -127,7 +127,7 @@
             const ASSET_STORAGE_URL = "{{ asset('storage') }}";
             const BASE_URL = "{{ url('/') }}";
             const API_BASE_URL = "{{ config('app.API') }}";
-            const apiUrl = 'http://' + API_BASE_URL + '/api/user';
+            const apiUrl = 'https://' + API_BASE_URL + '/api/user';
 
             document.addEventListener('DOMContentLoaded', initPaginationComponents);
 

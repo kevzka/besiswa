@@ -1,597 +1,314 @@
-<?php
-// bimbingan.php — Halaman Bimbingan Adasiswa SMK Telkom Banjarbaru
-?>
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Bimbingan | Adasiswa SMK Telkom Banjarbaru</title>
-	<link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Amiko:wght@400;700&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio - ADASISWA</title>
+    <style>
+        /* RESET DASAR */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
 
-	<style>
-		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-		}
+        body {
+            background-color: #000000;
+            color: #333;
+        }
 
-		body {
-			font-family: "Poppins", sans-serif;
-			color: #222;
-			background-image: linear-gradient(rgba(255, 255, 255, 0.85), rgba(233, 233, 233, 0.85)), url('/user/img/bguniversal.png');
-			background-size: cover;
-			background-position: center;
-			background-attachment: fixed;
-		}
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 100px;
+        }
 
-		/* ===== Navbar ===== */
-		nav {
-			width: 100%;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			padding: 20px 0;
-			backdrop-filter: blur(6px);
-			position: fixed;
-			top: 0;
-			left: 0;
-			z-index: 100;
-		}
+        /* --- BAGIAN PRESTASI BERDASARKAN TINGKAT --- */
+        .achievement-level-section {
+            margin-top: 30px;
+        }
 
-		.navbar-container {
-			display: flex;
-			align-items: center;
-			width: 100%;
-			max-width: 95%;
-			padding-left: 30px;
-		}
+        .level-cards-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            background-color: #F7F7F7;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px; 
+        }
 
-		.logo {
-			display: flex;
-			align-items: center;
-			gap: 12px;
-			font-weight: 600;
-			font-size: 28px;
-			color: #a61d2d;
-			letter-spacing: 0.5px;
-			font-family: 'Aboreto', cursive;
-		}
+        .level-card {
+            height: 14rem;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            overflow: hidden;
+            padding-bottom: 20px;
+        }
 
-		.logo img {
-			width: 40px;
-			height: auto;
-		}
+        .card-header {
+            background-color: #cc3333;
+            color: #fff;
+            padding: 15px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-		.nav-actions {
-			display: flex;
-			align-items: center;
-			flex: 1;
-		}
+        .level-title {
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
 
-		.nav-links {
-			display: flex;
-			gap: 70px;
-			margin: 0 auto;
-			align-items: center;
-		}
+        .icon {
+            font-size: 1.5em;
+        }
 
-		.nav-links a {
-			text-decoration: none;
-			color: #333;
-			font-weight: 500;
-			font-size: 17px;
-			position: relative;
-			transition: color 0.25s ease;
-			padding: 6px 0;
-			font-family: 'Josefin Sans', sans-serif;
-			line-height: 1;
-		}
+        .score {
+            font-size: 3em;
+            font-weight: bold;
+            color: #333;
+            margin: 30px 0 5px 0;
+        }
 
-		.nav-links a:hover {
-			color: #a61d2d;
-		}
+        .detail {
+            font-size: 0.9em;
+            color: #666;
+        }
 
-		.nav-links a.active {
-			color: #a61d2d;
-		}
+        /* --- BAGIAN PERFORMA ANGKATAN --- */
+        .batch-performance-section {
+            margin-top: 40px;
+            background-color: #F7F7F7;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
 
-		.nav-links a.active::after {
-			content: "";
-			position: absolute;
-			bottom: -4px;
-			left: 50%;
-			transform: translateX(-50%);
-			width: 60%;
-			height: 2px;
-			background: #000;
-			border-radius: 1px;
-			transition: all 0.3s ease;
-		}
+        .section-title-bar {
+            background-color: #cc3333;
+            color: #fff;
+            padding: 15px 20px;
+            text-align: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            margin-bottom: 20px;
+        }
 
+        .section-title {
+            font-size: 1.2em;
+            letter-spacing: 1px;
+        }
 
-		/* ===== Header ===== */
-		.header {
-			padding-top: 130px;
-			text-align: left;
-			max-width: 1150px;
-			margin: 0 auto;
-			padding-left: 60px;
-			padding-right: 30px;
-		}
+        .batch-cards-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
 
-		.header h1 {
-			font-family: 'Josefin Sans', sans-serif;
-			font-size: 40px;
-			margin-bottom: 6px;
-		}
+        .batch-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: relative;
+        }
 
-		.header p {
-			font-family: 'Amiko', sans-serif;
-			color: #555;
-			font-size: 15px;
-			letter-spacing: 0.5px;
-		}
+        .batch-number {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
 
-		.hero-image img {
-			max-width: 100%;
-			height: auto;
-			margin-left: 10px;
-			transition: all 0.8s ease-in-out;
-			transform-origin: center;
-			z-index: 999;
-		}
+        .arrow-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.2em;
+            color: #cc3333;
+        }
 
-		#main-logo {
-			z-index: 999;
-		}
+        .batch-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
 
+        .stat-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9em;
+            color: #666;
+        }
 
-		.logo-move {
-			position: fixed;
-			top: 20px;
-			right: 50px;
-			width: 80px;
-			transform: rotate(52deg);
-			z-index: 999;
-		}
+        .stat-icon {
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
 
+        .batch-detail {
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #cc3333;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
 
-		.recent-wrap {
-			max-width: 1100px;
-			margin: 50px auto 0;
-			background: #fff;
-			padding: 40px 40px 60px 60px;
-			/* kurangi radius atas supaya sudut busur lebih tajam */
-			border-radius: 100px 100px 10px 10px;
-			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-			position: relative;
-			overflow: visible;
-		}
+        /* --- MEDIA QUERIES untuk Responsif --- */
+        @media (max-width: 900px) {
+            .level-cards-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
 
-		.recent-title {
-			text-align: center;
-			font-family: 'Aboreto', cursive;
-			letter-spacing: 1px;
-			font-size: 18px;
-			color: #000;
-			margin-top: -28px;
-			position: relative;
-			z-index: 2;
-		}
+            .batch-cards-container {
+                grid-template-columns: 1fr;
+            }
+        }
 
-		.recent-title i {
-			display: block;
-			font-size: 36px;
-			margin-bottom: 8px;
-			padding-top: 25px;
-		}
-
-		.recent-grid {
-			display: flex;
-			gap: 20px;
-			justify-content: center;
-			margin-top: 30px;
-			flex-wrap: wrap;
-		}
-
-		.recent-card {
-			background: #fff;
-			width: 300px;
-			border-radius: 10px;
-			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-			overflow: hidden;
-			transition: transform 0.3s ease;
-		}
-
-		.recent-card:hover {
-			transform: translateY(-6px);
-		}
-
-		.recent-card img {
-			width: 100%;
-			height: 180px;
-			object-fit: cover;
-		}
-
-		.recent-card p {
-			padding: 14px;
-			font-size: 13.5px;
-			color: #333;
-		}
-
-		.recent-card p a {
-			text-decoration: underline;
-			color: #000000ff;
-			opacity: 75%;
-			font-weight: 500;
-		}
-
-		.recent-card .cloud-icon {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			width: 100%;
-			height: 180px;
-			font-size: 72px;
-			color: #6b6b6b;
-			background: #f7f7f7;
-			padding: 0;
-		}
-
-		.news-label {
-			max-width: 1100px;
-			margin: 90px auto 0;
-			margin-top: 30px;
-			padding-bottom: 30px;
-			font-family: 'Aboreto', cursive;
-			font-size: 22px;
-			text-align: center;
-			/* -> dipusatkan */
-			color: #111;
-		}
-
-		.news-wrap {
-			max-width: 1100px;
-			margin: 60px auto 100px;
-			background: #fff;
-			border-radius: 12px;
-			padding: 30px 30px;
-			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-		}
-
-		.news-card {
-			background: #fff;
-			border-radius: 8px;
-			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-			display: flex;
-			margin-bottom: 20px;
-			overflow: hidden;
-			transition: all 0.3s cubic-bezier(0.22, 0.9, 0.32, 1);
-			position: relative;
-			/* added so read-more can be absolutely positioned */
-		}
-
-		.news-card:hover {
-			transform: translateY(-8px);
-			box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
-		}
-
-		.news-card img {
-			width: 280px;
-			height: 180px;
-			object-fit: cover;
-		}
-
-		.news-content {
-			padding: 20px 25px;
-			/* flex: 1; */
-			padding-bottom: 56px;
-			/* reserve space for the absolute link */
-			position: relative;
-		}
-
-		.news-content h3 {
-			font-size: 17px;
-			font-weight: 600;
-			color: #111;
-			margin-bottom: 8px;
-		}
-
-		.news-content p {
-			height: 45px;
-			overflow: hidden;
-			font-size: 14px;
-			color: #444;
-			line-height: 1.5;
-			margin-bottom: 10px;
-			display: -webkit-box; /* Menggunakan sintaks WebKit untuk memotong multi-baris */
-			-webkit-line-clamp: 2; /* JUMLAH BARIS MAKSIMUM yang ditampilkan (misalnya, 5 baris untuk tinggi 100px) */
-			-webkit-box-orient: vertical; /* Arah kotak ke vertikal */
-			text-overflow: ellipsis; /* Properti ini tidak selalu berfungsi sendiri untuk multi-baris, tetapi sering digunakan bersama-sama */
-		}
-
-		.read-more {
-			position: absolute;
-			right: 18px;
-			bottom: 14px;
-			display: inline-block;
-			font-size: 13.5px;
-			font-weight: 500;
-			color: #000;
-			text-decoration: none;
-			background: transparent;
-		}
-
-		.read-more:hover {
-			text-decoration: underline;
-		}
-
-		/* ===== Footer ===== */
-		footer {
-			background: linear-gradient(to top, #2e2e2e, #444);
-			color: #fff;
-			padding: 50px 80px;
-			display: flex;
-			justify-content: space-between;
-			flex-wrap: wrap;
-			padding-right: 7vh;
-			text-decoration: none;
-		}
-
-		footer .left {
-			display: flex;
-			align-items: center;
-			gap: 15px;
-		}
-
-		footer .left img {
-			width: 60px;
-		}
-
-		footer .left h2 {
-			font-family: 'Aboreto', cursive;
-			font-size: 26px;
-			color: #f3f3f3;
-		}
-
-		footer .menu,
-		footer .contact {
-			font-family: 'Amiko', sans-serif;
-			font-size: 14px;
-			color: #ccc;
-		}
-
-		footer .menu h3,
-		footer .contact h3 {
-			margin-bottom: 10px;
-			color: #fff;
-			font-family: 'Josefin Sans', sans-serif;
-		}
-
-		footer .menu a {
-			color: #ccc;
-			text-decoration: none;
-		}
-
-		@media (max-width: 900px) {
-			.nav-links {
-				gap: 24px;
-			}
-
-			.navbar-container {
-				padding-left: 16px;
-				padding-right: 16px;
-			}
-
-			.header {
-				padding-left: 20px;
-				padding-right: 20px;
-				padding-top: 110px;
-				text-align: center;
-			}
-
-			.recent-wrap,
-			.news-wrap,
-			.news-label {
-				max-width: 95%;
-				padding-left: 20px;
-				padding-right: 20px;
-			}
-
-			.recent-grid {
-				justify-content: center;
-			}
-
-			.news-card {
-				flex-direction: column;
-			}
-
-			.news-card img {
-				width: 100%;
-				height: auto;
-			}
-
-			footer {
-				padding: 40px 20px;
-			}
-		}
-	</style>
+        @media (max-width: 500px) {
+            .level-cards-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiko:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/userView.css') }}">
 </head>
 
 <body>
+    <nav>
+        <div class="navbar-container">
+            <div class="logo">
+                <img src="{{ asset('img/logo.png') }}" alt="Adasiswa Logo">
+                <p>ADASISWA</p>
+            </div>
 
-	<!-- ===== Navbar ===== -->
-	<nav>
-		<div class="navbar-container">
-			<div class="logo">
-				<img src="{{asset('img/logo.png')}}" alt="Adasiswa Logo">
-				ADASISWA
-			</div>
-
-			<div class="nav-actions">
-				<div class="nav-links">
-					<a href="{{route('dashboard')}}">AdaSiswa</a>
-					<a href="{{route('bimbingan')}}">Bimbingan</a>
-					<a href="{{route('prestasi')}}">Prestasi</a>
-					<a href="#" class="active">Ekskul</a>
-					<a href="{{route('portofolio')}}">Portofolio</a>
-				</div>
-			</div>
-		</div>
-	</nav>
-
-	<div class="hero-image">
-		<img id="main-logo" src="{{asset('img/logo.png')}}" alt="Hero Logo Image" width="400">
-	</div>
+            <x-nav-user-view :activeMenu="'portofolio'" :deg="4" />
+        </div>
+    </nav>
 
 
-	<!-- ===== Header ===== -->
-	<section class="header">
-		<h1>Bimbingan</h1>
-		<p>KEGIATAN BIMBINGAN & KARAKTER SMK TELKOM BANJARBARU</p>
-	</section>
+    <main class="main-content">
+        <section class="achievement-level-section">
+            <div class="level-cards-container">
 
-	<section class="recent-wrap" aria-label="Recent news">
-		<div class="recent-title">
-			<i class="fas fa-envelope-open-text"></i>
-			RECENT NEWS
-		</div>
+                <div class="level-card international">
+                    <div class="card-header">
+                        <span class="icon">👑</span>
+                        <h3 class="level-title">TINGKAT INTERNASIONAL</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="score">0</p>
+                        <p class="detail">0.0% Dari total</p>
+                    </div>
+                </div>
 
-		<div class="recent-grid">
-			<div class="recent-card">
-				<img src="{{asset('storage/' . $response['topData'][0]['file'])}}" alt="">
-				<p>{{ $response['topData'][0]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
-			</div>
-			<div class="recent-card">
-				<img src="{{asset('storage/' . $response['topData'][1]['file'])}}" alt="">
-				<p>{{ $response['topData'][1]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
-			</div>
-			<div class="recent-card">
-				<div class="cloud-icon" aria-hidden="true">
-					<span class="material-icons">cloud_download</span>
-				</div>
-				<p>{{ $response['topData'][2]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
-			</div>
-		</div>
-	</section>
+                <div class="level-card national">
+                    <div class="card-header">
+                        <span class="icon">🏆</span>
+                        <h3 class="level-title">TINGKAT NASIONAL</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="score">0</p>
+                        <p class="detail">0.0% Dari total</p>
+                    </div>
+                </div>
 
-	<section class="news-wrap">
-		<h2 class="news-label">NEWS</h2>
+                <div class="level-card province">
+                    <div class="card-header">
+                        <span class="icon">🥉</span>
+                        <h3 class="level-title">TINGKAT PROVINSI</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="score">0</p>
+                        <p class="detail">0.0% Dari total</p>
+                    </div>
+                </div>
 
-		@foreach ($response['allData'] as $data)
-		<div class="news-card">
-			<img src="{{asset('storage/' . $data['file'])}}" alt="">
-			<div class="news-content">
-				<h3>{{ $data['title'] }}</h3>
-				<p>{{ $data['description'] }} Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, assumenda impedit perferendis quaerat autem nulla labore magni error quisquam vitae voluptatibus cupiditate enim voluptates nam ab magnam iure accusantium, nostrum eligendi. Consectetur omnis provident illum quasi neque accusantium eaque ab distinctio, excepturi ipsa cupiditate molestias qui culpa reprehenderit nisi molestiae eveniet reiciendis voluptatum nesciunt minus et in? Quo hic expedita dolores velit voluptate. Maiores deserunt aut, quod quidem temporibus ab possimus atque ipsum itaque ex recusandae praesentium voluptas et sapiente iure! Hic, deleniti non. Esse, laborum fugiat nobis perferendis cupiditate placeat, natus et voluptatem incidunt reiciendis quidem neque sequi a adipisci maiores tempora ducimus quia soluta tempore atque ex aut. Est placeat quod porro ipsa beatae cum ut excepturi delectus impedit reiciendis molestiae harum officia tenetur recusandae neque iure, sapiente magni, labore aspernatur obcaecati provident tempora. Quam nam deleniti libero repellendus at, ut excepturi enim tenetur eum facere provident explicabo quia ullam architecto similique, nemo omnis reprehenderit voluptatem nesciunt sunt vero ipsum molestias. Minima, itaque aspernatur. Officiis dolores pariatur sint quos eveniet beatae nihil ea iusto, voluptatum adipisci doloremque quae consectetur nam modi harum fugiat nesciunt. Blanditiis quam esse ratione alias voluptates praesentium reprehenderit suscipit facilis, cumque incidunt tempora eos.</p>
-				<small>{{ date("D, d-m-Y", strtotime($data['date']))}}</small><br>
-				<a href="user/berita/beritabimbingan/SPMB" class="read-more">Lihat Selengkapnya....</a>
-			</div>
-		</div>
-		@endforeach
+                <div class="level-card city-regency">
+                    <div class="card-header">
+                        <span class="icon">⭐</span>
+                        <h3 class="level-title">TINGKAT KOTA/KABUPATEN</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="score">0</p>
+                        <p class="detail">0.0% Dari total</p>
+                    </div>
+                </div>
 
-		{{-- 
-		<div class="news-card">
-			<img src="/user/img/dokumbimbingan/news2.png" alt="">
-			<div class="news-content">
-				<h3>Perayaan Ulang Tahun SMK Telkom Banjarbaru Ke-26 Harmoni Dalam Kreasi Tanpa Batas</h3>
-				<p>SMK Telkom Banjarbaru merayakan HUT ke-26 melalui rangkaian Skafest (8–17 Mei 2025)...</p>
-				<small>Senin, 10/22/25</small><br>
-				<a href="#" class="read-more">Lihat Selengkapnya....</a>
-			</div>
-		</div>
+            </div>
+        </section>
 
-		<div class="news-card">
-			<img src="/user/img/dokumbimbingan/news3.png" alt="">
-			<div class="news-content">
-				<h3>Kegiatan Pesantren Ramadhan 1446 H: Merayakan Keberkahan Bulan Ramadhan</h3>
-				<p>SMK Telkom Banjarbaru mengadakan Pesantren Ramadhan 1446 H dengan kegiatan Salat Dhuha, Tadarus, Dzuhur berjamaah...</p>
-				<small>Senin, 10/22/25</small><br>
-				<a href="#" class="read-more">Lihat Selengkapnya....</a>
-			</div>
-		</div>
+        <section class="batch-performance-section">
+            <div class="section-title-bar">
+                <h2 class="section-title">PERFORMA ANGKATAN</h2>
+            </div>
 
-		<div class="news-card">
-			<img src="/user/img/dokumbimbingan/news4.png" alt="">
-			<div class="news-content">
-				<h3>Momentum Classmeet Skatel: Menyegarkan Pikiran dan Menjalin Keakraban</h3>
-				<p>SMK Telkom Banjarbaru kembali mengadakan Classmeet sebagai ajang penyegar dan kenangan sebelum naik kelas...</p>
-				<small>Senin, 10/22/25</small><br>
-				<a href="#" class="read-more">Lihat Selengkapnya....</a>
-			</div>
-		</div>
+            <div class="batch-cards-container">
 
-		<div class="news-card">
-			<img src="/user/img/dokumbimbingan/news5.png" alt="">
-			<div class="news-content">
-				<h3>Pelaksanaan Isra Mi’raj di SMK Telkom Banjarbaru: Menjaga Keistiqomahan Generasi Muda</h3>
-				<p>SMK Telkom Banjarbaru memperingati Isra Mi’raj dengan pembacaan surah, sholawat, dan ceramah oleh Habib Salim A...</p>
-				<small>Senin, 10/22/25</small><br>
-				<a href="#" class="read-more">Lihat Selengkapnya....</a>
-			</div>
-		</div> --}}
-	</section>
+                <div class="batch-card">
+                    <h3 class="batch-number">Angkatan 25</h3>
+                    <span class="arrow-icon">></span>
+                    <div class="batch-stats">
+                        <div class="stat-item">
+                            <span class="stat-icon">🧑‍🤝‍🧑</span>
+                            <p class="stat-label">Total prestasi</p>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">📈</span>
+                            <p class="stat-label">Total JIWA</p>
+                        </div>
+                    </div>
+                    <p class="batch-detail">0.0% Dari total JIWA</p>
+                </div>
 
-	<!-- ===== Footer ===== -->
-	<footer>
-		<div class="left">
-			<img src="{{asset('img/logo.png')}}" alt="Logo Adasiswa">
-			<h2>ADASISWA</h2>
-		</div>
+                <div class="batch-card">
+                    <h3 class="batch-number">Angkatan 26</h3>
+                    <span class="arrow-icon">></span>
+                    <div class="batch-stats">
+                        <div class="stat-item">
+                            <span class="stat-icon">🧑‍🤝‍🧑</span>
+                            <p class="stat-label">Total prestasi</p>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">📈</span>
+                            <p class="stat-label">Total JIWA</p>
+                        </div>
+                    </div>
+                    <p class="batch-detail">0.0% Dari total JIWA</p>
+                </div>
 
-		<div class="menu">
-			<h3>MENU UTAMA</h3>
-			<a href="landingpage.php"> >Tentang kami</a>
-			<br>
-			<a href="landingpage.php"> >Beranda</a>
-		</div>
+                <div class="batch-card">
+                    <h3 class="batch-number">Angkatan 27</h3>
+                    <span class="arrow-icon">></span>
+                    <div class="batch-stats">
+                        <div class="stat-item">
+                            <span class="stat-icon">🧑‍🤝‍🧑</span>
+                            <p class="stat-label">Total prestasi</p>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">📈</span>
+                            <p class="stat-label">Total JIWA</p>
+                        </div>
+                    </div>
+                    <p class="batch-detail">0.0% Dari total JIWA</p>
+                </div>
 
-		<div class="contact">
-			<h3>CONTACT US</h3>
-			<p>Jl. Pangeran Suriansyah No.3<br>Kec. Banjarbaru Utara, 70711<br>Kalimantan Selatan</p>
-			<br>
-			<p>Contact Person: 0811 500 5857<br>Contact Person: 0851 0165 6160</p>
-		</div>
-	</footer>
-	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			const logo = document.getElementById('main-logo');
+            </div>
+        </section>
 
-			if (logo) {
-				setTimeout(() => logo.classList.add('logo-move'), 200);
-			}
+    </main>
 
-			const navAnchors = document.querySelectorAll('.nav-links a');
-			navAnchors.forEach(a => {
-				a.addEventListener('click', function(e) {
-					const href = this.getAttribute('href');
-					const text = this.textContent.trim().toLowerCase();
-
-					let target = href;
-					if (!href || href === '#') {
-						if (text === 'bimbingan') target = 'bimbingan.php';
-						else return;
-					}
-
-					e.preventDefault();
-
-					if (logo) {
-						logo.classList.add('small');
-					}
-
-					setTimeout(() => {
-						window.location.href = target;
-					}, 700);
-				});
-			});
-		});
-	</script>
 </body>
 
 </html>

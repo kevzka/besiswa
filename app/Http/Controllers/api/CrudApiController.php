@@ -2,25 +2,32 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Http\Controllers\Controller;
+use \Imagick;
 use App\Models\TbEvidences;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class CrudApiController extends Controller
 {
     public function test(Request $request)
     {
-        Log::info('Testing API endpoint', [
-            'query_params' => $request->query()
-        ]);
+        //check if imagick has installed
+        if (class_exists('Imagick')) {
+            $test = new Imagick();
+            return response()->json([
+                'success' => true,
+                'message' => 'Imagick is installed',
+                'version' => $test->getVersion()
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Imagick is not installed' 
+            ]);;
+        }
         
-        return response()->json([
-            'success' => true,
-            'message' => 'API test successful',
-            'data' => $request->query()
-        ]);
     }
 
     public function home(Request $request)
@@ -223,7 +230,7 @@ class CrudApiController extends Controller
 
                 $sanitizedTitle = str_replace(' ', '_', $request->title);
                 
-                // Create unique filename with timestamp
+                // Create unique filename with timestamp for the original file
                 $finalFileName = time() . '_' . $sanitizedTitle . '.' . $uploadedFile->getClientOriginalExtension();
 
                 Log::info('Storing file', ['filename' => $finalFileName]);
@@ -247,6 +254,84 @@ class CrudApiController extends Controller
                     'stored_path' => $storedFilePath,
                     'filename' => $finalFileName
                 ]);
+
+                // --- Generate thumbnail for PDFs, Word and video files ---
+                $thumbnailPath = null;
+                try {
+                    $mime = $uploadedFile->getClientMimeType();
+                    $ext = strtolower($uploadedFile->getClientOriginalExtension());
+                    $storageFullPath = storage_path('app/public/' . $storedFilePath);
+                    $thumbFileName = time() . '_' . $sanitizedTitle . '_thumb.jpg';
+                    $thumbRelative = 'thumbnail/' . $thumbFileName;
+                    $thumbFullPath = storage_path('app/public/' . $thumbRelative);
+
+                    if ($mime === 'application/pdf' || $ext === 'pdf') {
+                        // Use Imagick to render first page
+                        if (class_exists('\Imagick')) {
+                            $im = new Imagick();
+                            $im->setResolution(150, 150);
+                            // read first page only
+                            $im->readImage($storageFullPath . '[0]');
+                            $im->setImageFormat('jpeg');
+                            $im->setImageCompressionQuality(85);
+                            $im->writeImage($thumbFullPath);
+                            $im->clear();
+                            $im->destroy();
+                            $thumbnailPath = $thumbRelative;
+                            Log::info('PDF thumbnail created', ['thumb' => $thumbnailPath]);
+                        } else {
+                            Log::warning('Imagick not available: cannot create PDF thumbnail');
+                        }
+                    } elseif (in_array($ext, ['doc','docx','odt','rtf'])) {
+                        // Convert Word to PDF via LibreOffice (soffice), then render first page with Imagick
+                        $tmpDir = storage_path('app/public/kegiatan/tmp');
+                        if (!file_exists($tmpDir)) {
+                            mkdir($tmpDir, 0755, true);
+                        }
+                        $tmpPdf = $tmpDir . '/' . $sanitizedTitle . '_' . time() . '.pdf';
+                        $sofficeCmd = 'soffice --headless --convert-to pdf --outdir ' . escapeshellarg($tmpDir) . ' ' . escapeshellarg($storageFullPath);
+                        exec($sofficeCmd, $out, $ret);
+                        $convertedPdf = $tmpDir . '/' . pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME) . '.pdf';
+                        if (file_exists($convertedPdf) && class_exists('\Imagick')) {
+                            $im = new Imagick();
+                            $im->setResolution(150, 150);
+                            $im->readImage($convertedPdf . '[0]');
+                            $im->setImageFormat('jpeg');
+                            $im->setImageCompressionQuality(85);
+                            $im->writeImage($thumbFullPath);
+                            $im->clear();
+                            $im->destroy();
+                            $thumbnailPath = $thumbRelative;
+                            // cleanup converted pdf
+                            @unlink($convertedPdf);
+                            Log::info('Word -> PDF -> thumbnail created', ['thumb' => $thumbnailPath]);
+                        } else {
+                            Log::warning('Failed to convert Word to PDF or Imagick missing', ['soffice_ret' => $ret]);
+                        }
+                    } elseif (strpos($mime, 'video/') === 0 || in_array($ext, ['mp4','avi','mov','mkv'])) {
+                        // Use ffmpeg to capture a frame (at 1 second)
+                        $ffmpegCmd = 'ffmpeg -i ' . escapeshellarg($storageFullPath) . ' -ss 00:00:01 -vframes 1 -q:v 2 ' . escapeshellarg($thumbFullPath) . ' 2>&1';
+                        exec($ffmpegCmd, $out, $ret);
+                        if ($ret === 0 && file_exists($thumbFullPath)) {
+                            $thumbnailPath = $thumbRelative;
+                            Log::info('Video thumbnail created', ['thumb' => $thumbnailPath]);
+                        } else {
+                            Log::warning('FFmpeg failed to create thumbnail', ['cmd' => $ffmpegCmd, 'ret' => $ret]);
+                        }
+                    } else {
+                        Log::info('No thumbnail generation for this mime/type', ['mime' => $mime, 'ext' => $ext]);
+                    }
+
+                    // optional: if thumbnail created, you can store its path in DB or return it
+                    if ($thumbnailPath) {
+                        Log::info('Thumbnail available', ['thumbnail' => $thumbnailPath]);
+                    }
+                } catch (\Exception $thumbEx) {
+                    Log::error('Thumbnail generation error', [
+                        'message' => $thumbEx->getMessage()
+                    ]);
+                }
+                // --- end thumbnail ---
             }
             
             Log::info('Creating activity record');

@@ -35,7 +35,7 @@
 		<div class="navbar-container">
 			<div class="logo">
 				<img src="{{asset('img/logo.png')}}" alt="Adasiswa Logo">
-				ADASISWA
+				<p>ADASISWA</p>
 			</div>
 
 			<x-nav-user-view :activeMenu="'prestasi'" :deg="2" />

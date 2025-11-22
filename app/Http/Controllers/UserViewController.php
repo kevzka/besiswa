@@ -39,6 +39,7 @@ class UserViewController extends Controller
     }
 
     public function portofolio(){
-        return response()->json(['status' => 'success', 'message' => 'Portofolio Page under development']);
+        // return response()->json(['status' => 'success', 'message' => 'Portofolio Page under development']);
+        return view('user.portofolio');
     }
 }
