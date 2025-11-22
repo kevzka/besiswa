@@ -17,7 +17,7 @@ class UserViewController extends Controller
             'type' => 1,
         ])->json();
         $response = array_merge($response, ['logoRotation' => 45, 'startLogoRotation' => ($deg == 0) ? 0 : (($deg-1)*90)+45, 'posArrStart' => $deg == 0 ? $this->posArrStart : $this->posArrIdle]);
-        return view('user.bimbingan', compact('response'));
+        return view('user.bimbingan.bimbingan', compact('response'));
     }
     public function prestasi($deg){
         $response = Http::post('http://' . Config::get('app.API') . '/api/user', [
@@ -25,7 +25,7 @@ class UserViewController extends Controller
             'type' => 2,
         ])->json();
         $response = array_merge($response, ['logoRotation' => 135, 'startLogoRotation' => ($deg == 0) ? 0 : (($deg-1)*90)+45, 'posArrStart' => $deg == 0 ? $this->posArrStart : $this->posArrIdle]);
-        return view('user.prestasi', compact('response'));
+        return view('user.prestasi.prestasi', compact('response'));
     }
     public function ekskul($deg){
         $response = Http::post('http://' . Config::get('app.API') . '/api/user', [
@@ -35,11 +35,11 @@ class UserViewController extends Controller
         
 
         $response = array_merge($response, ['logoRotation' => 225, 'startLogoRotation' => ($deg == 0) ? 0 : (($deg-1)*90)+45, 'posArrStart' => $deg == 0 ? $this->posArrStart : $this->posArrIdle]);
-        return view('user.ekskul', compact('response'));
+        return view('user.ekskul.ekskul', compact('response'));
     }
 
     public function portofolio(){
         // return response()->json(['status' => 'success', 'message' => 'Portofolio Page under development']);
-        return view('user.portofolio');
+        return view('user.portofolio.portofolio');
     }
 }

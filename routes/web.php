@@ -41,7 +41,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 // })
 
 Route::get('/tes', function () {
-    return view('tes');
+    return view('user.portofolio.detail');
 });
 
 // Route::get('/search', [ProductController::class, 'search'])->name('products.search');

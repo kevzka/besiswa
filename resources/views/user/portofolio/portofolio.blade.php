@@ -49,6 +49,23 @@
             text-align: center;
             overflow: hidden;
             padding-bottom: 20px;
+            transition: box-shadow 0.18s ease, transform 0.12s ease;
+        }
+        
+        .batch-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: relative;
+            transition: box-shadow 0.18s ease, transform 0.12s ease;
+        }
+
+        /* Hover: pertegas / menghitamkan box-shadow dan sedikitangkat */
+        .level-card:hover,
+        .batch-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.38);
+            transform: translateY(-6px);
         }
 
         .card-header {
@@ -118,6 +135,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             position: relative;
+            transition: box-shadow 0.18s ease, transform 0.12s ease;
         }
 
         .batch-number {
