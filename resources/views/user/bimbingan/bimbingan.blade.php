@@ -59,19 +59,24 @@
 
         <div class="recent-grid">
             <div class="recent-card">
+                @if (empty($response['topData'][0]['file']))
+                    <p>tidak ada top data</p>
+                @else
                 <img src="{{ asset('storage/' . $response['topData'][0]['file']) }}" alt="">
-                <p>{{ $response['topData'][0]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
+                <p>{{ $response['topData'][0]['title'] ?? '' }}<br><a href="{{route('bimbingan.detail', ['id' => $response['topData'][0]['id_evidence']])}}">Lihat selengkapnya..</a></p>
+                
             </div>
             <div class="recent-card">
                 <img src="{{ asset('storage/' . $response['topData'][1]['file']) }}" alt="">
-                <p>{{ $response['topData'][1]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
+                <p>{{ $response['topData'][1]['title'] ?? '' }}<br><a href="{{route('bimbingan.detail', ['id' => $response['topData'][1]['id_evidence']])}}">Lihat selengkapnya..</a></p>
             </div>
             <div class="recent-card">
                 <div class="cloud-icon" aria-hidden="true">
                     <span class="material-icons">cloud_download</span>
                 </div>
-                <p>{{ $response['topData'][2]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
+                <p>{{ $response['topData'][2]['title'] ?? '' }}<br><a href="{{route('bimbingan.detail', ['id' => $response['topData'][2]['id_evidence']])}}">Lihat selengkapnya..</a></p>
             </div>
+            @endif
         </div>
     </section>
 

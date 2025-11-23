@@ -178,7 +178,7 @@
 <body>
 
     <header class="header">
-        <i class="fa-solid fa-angle-left" style="font-size: 1.5rem"></i>
+        <i class="fa-solid fa-angle-left" style="font-size: 1.5rem; cursor: pointer;" onclick="history.back()"></i>
         <div class="logo-container-wrapper" style="display: flex; align-items: center;">
             <div class="logo-container" style="display: inline-block">
                 <img src="{{ asset('img/logo.png') }}" alt="Logo Sekolah" class="logo">
@@ -205,8 +205,8 @@
                         //lalu pisahkan kutipan tersebut dari deskripsi utama
                         $description = $response['data']['description'];
                         $quote = '';
-                        if (strpos($description, "'") !== false) {
-                            $parts = explode("'", $description);
+                        if (strpos($description, '"') !== false) {
+                            $parts = explode('"', $description);
                             $newDescription = '';
                             for ($i = 0; $i < count($parts); $i++) {
                                 if ($i % 2 == 0) {
@@ -214,7 +214,7 @@
                                     $newDescription .= $parts[$i];
                                 } else {
                                     // Bagian kutipan
-                                    $quote .= "'" . $parts[$i] . "'\n\n";
+                                    $quote .= '"' . $parts[$i] . "\"\n\n";
                                 }
                             }
                             //trim spasi awal dan akhir
