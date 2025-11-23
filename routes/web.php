@@ -25,7 +25,9 @@ Route::get('/dashboard', [DashboardController::class, 'publicDashboard'])->name(
 Route::get('/bimbingan/{deg}', [UserViewController::class, 'bimbingan'])->name('bimbingan');
 Route::get('/bimbingan/detail/{id}', [UserViewController::class, 'bimbinganDetail'])->name('bimbingan.detail');
 Route::get('/prestasi/{deg}', [UserViewController::class, 'prestasi'])->name('prestasi');
+Route::get('/prestasi/detail/{id}', [UserViewController::class, 'prestasiDetail'])->name('prestasi.detail');
 Route::get('/ekskul/{deg}', [UserViewController::class, 'ekskul'])->name('ekskul');
+Route::get('/ekskul/detail/{id}', [UserViewController::class, 'ekskulDetail'])->name('ekskul.detail');
 Route::get('/portofolio/{deg}', [UserViewController::class, 'portofolio'])->name('portofolio');
 Route::get('/portofolio/detail/{id}', [UserViewController::class, 'portofolioDetail'])->name('portofolio.detail');
 

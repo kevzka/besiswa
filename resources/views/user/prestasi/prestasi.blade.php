@@ -1,10 +1,11 @@
-<?php
-// prestasi.php — Halaman prestasi Adasiswa SMK Telkom Banjarbaru
-?>
+<?php ?>
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
+
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>prestasi | Adasiswa SMK Telkom Banjarbaru</title>
@@ -24,10 +25,8 @@
             transform: rotate({{$response['startLogoRotation'] ?? 0}}deg);
             z-index: 999;
         }
-		.logo-to-corner {
-		}
+		.logo-to-corner {}
 	</style>
-	
 </head>
 
 <body>
@@ -56,22 +55,26 @@
 			<i class="fas fa-envelope-open-text"></i>
 			RECENT NEWS
 		</div>
-
+		
 		<div class="recent-grid">
 			<div class="recent-card">
+                @if (empty($response['topData'][0]['file']))
+                    <p>tidak ada top data</p>
+                @else
 				<img src="{{asset('storage/' . $response['topData'][0]['file'])}}" alt="">
-				<p>{{ $response['topData'][0]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
+				<p>{{ $response['topData'][0]['title'] ?? '' }}<br><a href="{{route('prestasi.detail', ['id' => $response['topData'][0]['id_evidence']])}}">Lihat selengkapnya..</a></p>
 			</div>
 			<div class="recent-card">
 				<img src="{{asset('storage/' . $response['topData'][1]['file'])}}" alt="">
-				<p>{{ $response['topData'][1]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
+				<p>{{ $response['topData'][1]['title'] ?? '' }}<br><a href="{{route('prestasi.detail', ['id' => $response['topData'][1]['id_evidence']])}}">Lihat selengkapnya..</a></p>
 			</div>
 			<div class="recent-card">
 				<div class="cloud-icon" aria-hidden="true">
 					<span class="material-icons">cloud_download</span>
 				</div>
-				<p>{{ $response['topData'][2]['title'] ?? '' }}<br><a href="#">Lihat selengkapnya..</a></p>
+				<p>{{ $response['topData'][2]['title'] ?? '' }}<br><a href="{{route('prestasi.detail', ['id' => $response['topData'][2]['id_evidence']])}}">Lihat selengkapnya..</a></p>
 			</div>
+            @endif
 		</div>
 	</section>
 
@@ -97,6 +100,7 @@
 			<p>Contact Person: 0811 500 5857<br>Contact Person: 0851 0165 6160</p>
 		</div>
 	</footer>
+
 	<script>
         document.addEventListener('DOMContentLoaded', function() {
             const logo = document.getElementById('main-logo');
@@ -107,7 +111,9 @@
                 setTimeout(() => {
                     logo.style.transform = `rotate(${logoRotation}deg)`;
                     if (moveToCorner) {
-                        setTimeout(() => { logo.classList.add('logo-to-corner'); }, 0);
+                        setTimeout(() => {
+							logo.classList.add('logo-to-corner');
+						}, 0);
                     } else {
                         logo.classList.remove('logo-to-corner');
                     }
