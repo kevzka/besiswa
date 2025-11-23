@@ -52,4 +52,22 @@ class UserDataApiController extends Controller
             ], 500);
         }
     }
+
+    public function detailData($id){
+        try{
+            $data = TbEvidences::find($id);
+            if (!$data) {
+                return response()->json([
+                    'message' => 'Data not found',
+                ], 404);
+            }
+            return response()->json([
+                'data' => $data,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

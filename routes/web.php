@@ -23,9 +23,11 @@ Route::redirect('/admin', '/admin/dashboard');
 Route::get('/dashboard', [DashboardController::class, 'publicDashboard'])->name('dashboard');
 
 Route::get('/bimbingan/{deg}', [UserViewController::class, 'bimbingan'])->name('bimbingan');
+Route::get('/bimbingan/detail/{id}', [UserViewController::class, 'bimbinganDetail'])->name('bimbingan.detail');
 Route::get('/prestasi/{deg}', [UserViewController::class, 'prestasi'])->name('prestasi');
 Route::get('/ekskul/{deg}', [UserViewController::class, 'ekskul'])->name('ekskul');
 Route::get('/portofolio/{deg}', [UserViewController::class, 'portofolio'])->name('portofolio');
+Route::get('/portofolio/detail/{id}', [UserViewController::class, 'portofolioDetail'])->name('portofolio.detail');
 
 // Admin Routes
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
@@ -42,6 +44,10 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
 Route::get('/tes', function () {
     return view('user.portofolio.detail');
+});
+
+Route::get('/tesbimbingan', function () {
+    return view('user.bimbingan.show');
 });
 
 // Route::get('/search', [ProductController::class, 'search'])->name('products.search');

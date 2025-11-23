@@ -14,6 +14,7 @@ Route::post('/getProfile', [ProfileCrudController::class, 'getProfile']);
 Route::apiResource('performa', PerformaCrudController::class);
 
 Route::post('/user', [UserDataApiController::class, 'userData']);
+Route::get('/user/detailData/{id}', [UserDataApiController::class, 'detailData']);
 
 Route::get('/test', [CrudApiController::class, 'test']);
 Route::get('/home', [CrudApiController::class, 'home']);

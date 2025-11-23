@@ -19,6 +19,10 @@ class UserViewController extends Controller
         $response = array_merge($response, ['logoRotation' => 45, 'startLogoRotation' => ($deg == 0) ? 0 : (($deg-1)*90)+45, 'posArrStart' => $deg == 0 ? $this->posArrStart : $this->posArrIdle]);
         return view('user.bimbingan.bimbingan', compact('response'));
     }
+    public function bimbinganDetail($id){
+        $response = Http::get('http://' . Config::get('app.API') . '/api/user/detailData/' . $id)->json();
+        return view('user.bimbingan.show', compact('response'));
+    }
     public function prestasi($deg){
         $response = Http::post('http://' . Config::get('app.API') . '/api/user', [
             'function' => 'dataIndex',
@@ -41,5 +45,9 @@ class UserViewController extends Controller
     public function portofolio(){
         // return response()->json(['status' => 'success', 'message' => 'Portofolio Page under development']);
         return view('user.portofolio.portofolio');
+    }
+    public function portofolioDetail($id){
+
+        // return view('user.portofolio.detail', ['id' => $id]);
     }
 }

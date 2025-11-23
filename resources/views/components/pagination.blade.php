@@ -198,7 +198,7 @@
                                     <h3>${escapeHtml(item.title)}</h3>
                                     <p>${escapeHtml(item.description)}</p>
                                     <small>${formatDate(item.date)}</small><br>
-                                    <a href="${BASE_URL}/user/berita/beritabimbingan/SPMB" class="read-more">Lihat Selengkapnya....</a>
+                                    <a href="${BASE_URL}/bimbingan/detail/${item.id_evidence}" class="read-more">Lihat Selengkapnya....</a>
                                 </div>
                             </div>
                         `;

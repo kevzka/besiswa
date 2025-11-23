@@ -228,10 +228,9 @@ class CrudApiController extends Controller
                     'mime_type' => $uploadedFile->getMimeType()
                 ]);
 
-                $sanitizedTitle = str_replace(' ', '_', $request->title);
-                
                 // Create unique filename with timestamp for the original file
-                $finalFileName = time() . '_' . $sanitizedTitle . '.' . $uploadedFile->getClientOriginalExtension();
+                $finalFileName = time().'.' . $uploadedFile->getClientOriginalExtension();
+                // $finalFileName = time() . '_' .  . '.' . $uploadedFile->getClientOriginalExtension();
 
                 Log::info('Storing file', ['filename' => $finalFileName]);
                 // Store file in public storage
@@ -500,7 +499,7 @@ class CrudApiController extends Controller
                 $sanitizedTitle = str_replace(' ', '_', $request->title);
                 
                 // Create unique filename with timestamp
-                $finalFileName = time() . '_' . $sanitizedTitle . '.' . $uploadedFile->getClientOriginalExtension();
+                $finalFileName = time().'.' . $uploadedFile->getClientOriginalExtension();
                 
                 Log::info('Storing new file', ['filename' => $finalFileName]);
                 // Store file in public storage
