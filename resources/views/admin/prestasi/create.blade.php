@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.5/css/dataTables.dataTables.css" />
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
          #DataTable { table-layout: fixed; width: 100%; }
          #DataTable th {
             background-color: #c7c7c7;
@@ -17,6 +18,11 @@
 
             background-color: #4f93ce;
             border: 1px solid #4f93ce;
+        }
+        .card-form h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 300;
+            margin-bottom: 16px;
         }
     </style>
     <title>Prestasi Admin</title>
@@ -34,6 +40,7 @@
         <div class="content-wrapper">
             <div class="banner-box"></div>
             <div class="card-form">
+                <h2>Data Prestasi</h2>
                 <form action="{{ route('admin.prestasi.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="text" name="title" placeholder="Judul berita" required>

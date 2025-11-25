@@ -94,12 +94,28 @@
                     transform: translateY(0);
                 }
             }
+            
+            .news-icon{
+                width: fit-content;
+                margin: auto;
+            }
+            .news-icon .news-label {
+                display: inline-block;
+
+            }
+            .news-icon img{
+                display: inline-block;
+                width: 1rem;
+            }
         </style>
     @endonce
 
     {{-- news list container (ubah id jadi class agar bisa multiple instance) --}}
     <section class="news-wrap">
-        <h2 class="news-label">NEWS</h2>
+        <div class="news-icon">
+            <img src="{{asset('icons/news.png')}}" alt="news icon" class="news-icon">
+            <h2 class="news-label">NEWS</h2>
+        </div>
         <div class="news-list-container"></div>
 
         <div class="pagination-container">
@@ -153,24 +169,28 @@
                 if (nextBtn) nextBtn.addEventListener('click', () => { if (currentPage < totalPages) goToPage(currentPage + 1); });
 
                 // fetch data then init pagination
-                fetchData(apiUrl, { function: 'dataIndex', type: {{ $type }} })
-                    .then(response => {
-                        if (response && response.allData && Array.isArray(response.allData)) {
-                            allData = response.allData;
-                            totalPages = Math.max(1, Math.ceil(allData.length / itemsPerPage));
-                            renderPage();
-                        } else {
-                            // fallback: show empty state
-                            newsContainer.innerHTML = '<div class="news-content-area" style="padding:20px">Tidak ada data.</div>';
-                            renderPage(); // still render pagination defaults
-                        }
-                    })
-                    .catch(err => {
-                        console.error('Fetch error:', err);
-                        newsContainer.innerHTML = '<div class="news-content-area" style="padding:20px">Terjadi kesalahan saat mengambil data.</div>';
-                        renderPage();
-                    });
+                // fetchData(apiUrl, { function: 'dataIndex', type: {{ $type }} })
+                //     .then(response => {
+                //         if (response && response.allData && Array.isArray(response.allData)) {
+                //             allData = response.allData;
+                //             totalPages = Math.max(1, Math.ceil(allData.length / itemsPerPage));
+                //             renderPage();
+                //         } else {
+                //             // fallback: show empty state
+                //             newsContainer.innerHTML = '<div class="news-content-area" style="padding:20px">Tidak ada data.</div>';
+                //             renderPage(); // still render pagination defaults
+                //         }
+                //     })
+                //     .catch(err => {
+                //         console.error('Fetch error:', err);
+                //         newsContainer.innerHTML = '<div class="news-content-area" style="padding:20px">Terjadi kesalahan saat mengambil data.</div>';
+                //         renderPage();
+                //     });
 
+                allData = @json($dataNya ?? []);
+                allData = allData.allData;
+                totalPages = Math.max(1, Math.ceil(allData.length / itemsPerPage));
+                renderPage();
                 // ----- helper functions for this component -----
                 function renderPage() {
                     renderPagination();
@@ -191,7 +211,8 @@
                     }
 
                     const html = items.map(item => {
-                        return `
+                        console.log(item);
+                        return `    
                             <div class="news-card" ">
                                 <img src="${ASSET_STORAGE_URL}/${item.file}" alt="${escapeHtml(item.title)}" ">
                                 <div class="news-content">

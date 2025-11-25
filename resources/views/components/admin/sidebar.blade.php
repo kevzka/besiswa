@@ -52,20 +52,29 @@
             </form>
         </div>
     </nav>
+
+    {{-- Logout pinned to bottom --}}
+    <div class="sidebar-logout">
+        <form action="{{ route('logout') }}" method="POST" style="margin:0;">
+            @csrf
+            <a href="#" onclick="confirmLogout()" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </form>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function confirmLogout() {
         Swal.fire({
-            title: "Yakin ingin keluar?", // Judul pop-up
-            text: "Anda akan diarahkan ke halaman login.", // Deskripsi atau pesan
+            title: "Yakin ingin Logout?", // Judul pop-up
             icon: "warning", // Ikon yang ditampilkan (pilihan lain: 'info', 'question', 'success', 'error')
             showCancelButton: true, // Tampilkan tombol 'Batal'
-            confirmButtonColor: "#d33", // Warna tombol 'Ya, Keluar' (merah)
-            cancelButtonColor: "#3085d6", // Warna tombol 'Batal' (biru)
-            confirmButtonText: "Ya, Keluar!", // Teks tombol konfirmasi
-            cancelButtonText: "Batal" // Teks tombol batal
+            confirmButtonColor: "#1D1E5B", // Warna tombol 'Ya, Keluar' (merah)
+            cancelButtonColor: "#D10B0B", // Warna tombol 'Batal' (biru)
+            confirmButtonText: "Yakin", // Teks tombol konfirmasi
+            cancelButtonText: "Tidak" // Teks tombol batal
         }).then((result) => {
             if (result.isConfirmed) {
                 document.querySelector('form[action="{{ route('logout') }}"]').submit();

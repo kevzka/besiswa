@@ -121,6 +121,7 @@
         margin: 0;
         font-style: italic;
         color: #555;
+        border-radius: 10px;
     }
 
     .quote-box p:last-child {

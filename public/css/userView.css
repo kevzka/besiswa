@@ -228,6 +228,7 @@ nav {
     color: #000000ff;
     opacity: 0.75;
     font-weight: 500;
+    text-decoration: none;
 }
 
 .recent-card .cloud-icon {
@@ -321,7 +322,6 @@ nav {
     font-size: 13.5px;
     font-weight: 500;
     color: #000;
-    text-decoration: none;
     background: transparent;
 }
 
@@ -340,6 +340,15 @@ footer {
     padding-right: 7vh;
     text-decoration: none;
 }
+
+.footer2 {
+        background-color: #7E7E7E;
+        text-align: center;
+        padding: 20px;
+        font-size: 0.8em;
+        font-weight: bold;
+        color: #fff;
+    }
 
 footer .left {
     display: flex;

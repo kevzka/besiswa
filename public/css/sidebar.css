@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Anaheim&display=swap');
+
 .sidebar {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     position: fixed;
@@ -55,7 +57,40 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+   .sidebar-logout {
+       margin-top: auto;
+       background: #581B1B;
+       width: 100%;
+       text-align: center;
+       padding: 12px 0;
+   }
+   .sidebar-logout a {
+       color: #fff;
+       font-family: ;
+       text-decoration: none;
+       display: inline-flex;
+       align-items: center;
+       gap: 8px;
+       justify-content: center;
+       width: 100%;
+       padding: 10px 0;
+   }
+
+div.swal2-icon.swal2-warning.swal2-icon-show {
+        border-color: #eb3223;
+        border-width: 4px;
+    }
+
+div.swal2-icon-content {
+        color: #eb3223;
+    }
+
+h2#swal2-title.swal2-title {
+        color: #000;
+    }
 
 .nav-item {
     /* border-bottom: 1px solid rgba(255, 255, 255, 1); */

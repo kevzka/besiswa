@@ -47,7 +47,7 @@
 
 	<section class="header">
 		<h1>Ekskul</h1>
-		<p>KEGIATAN EKSKUL SMK TELKOM BANJARBARU</p>
+		<p>EKSKUL SMK TELKOM BANJARBARU</p>
 	</section>
 
 	<section class="recent-wrap" aria-label="Recent news">
@@ -100,6 +100,10 @@
 			<p>Contact Person: 0811 500 5857<br>Contact Person: 0851 0165 6160</p>
 		</div>
 	</footer>
+
+	<div class="footer2">
+        <p>&copy; 2025 - ADASISWA</p>
+    </div>
 
 	<script>
         document.addEventListener('DOMContentLoaded', function() {
