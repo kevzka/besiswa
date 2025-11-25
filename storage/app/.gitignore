@@ -1,5 +1,5 @@
 *
 !private/
 !public/
-!public/kegiatan/dummy/*
+!public/kegiatan/dummy/
 !.gitignore
