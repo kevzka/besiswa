@@ -95,9 +95,9 @@
 
         <div class="menu">
             <h3>MENU UTAMA</h3>
-            <a href="landingpage.php"> >Tentang kami</a>
+            <a href="/"> >Tentang kami</a>
             <br>
-            <a href="landingpage.php"> >Beranda</a>
+            <a href="/"> >Beranda</a>
         </div>
 
         <div class="contact">
