@@ -7,7 +7,7 @@
     <title>Edit - Admin Utama</title>
     <link rel="stylesheet" href="../sidebar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="{{asset('css/admin.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 </head>
 
 <body>
@@ -41,7 +41,7 @@
                                 <span><i class="fas fa-cloud-upload-alt"></i></span> Pilih file
                         </label>
                         <input type="file" name="file" id="fileInput" class="file-upload-btn"
-                            accept="image/*,video/*,application/pdf">
+                            accept="image/*,video/*,application/pdf" required>
                     </div>
                     <div class="filePreview show" id="filePreview" style="">
                         <div class="thumbnail" id="thumbnail" style="width: fit-content; height: 100%;"><img

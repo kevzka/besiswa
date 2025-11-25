@@ -25,7 +25,7 @@
 </head>
 <body>
     <x-deleteButton1 title="YAKIN INGIN HAPUS?"></x-deleteButton1>
-    <x-admin.sidebar :role="$role" :id-role="$id_role" :adminName="$adminName" active-menu='home'/>
+    <x-admin.sidebar :role="$role" :id-role="$id_role" :adminName="$adminName" active-menu='home' :adminName="$adminName"/>
     <div class="main-content">
 		<div class="topbar">
 			<div class="menu-icon"><img src="{{asset('icons/bars-solid-full.svg')}}" alt="" style="width: 100%;"></div>
@@ -34,7 +34,6 @@
 		<div class="content-wrapper">
             <div class="banner-box"></div>
 
-            <!-- Tambahan headline + box statistik -->
             <h2 class="headline">Ada berita apa hari ini?</h2>
 
             <div class="stats-boxes">

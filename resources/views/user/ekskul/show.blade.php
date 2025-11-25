@@ -130,13 +130,13 @@
 
     /* Footer */
     .footer {
-        background-color: #303030;
+        background-color: #7E7E7E;
         text-align: center;
         padding: 20px;
         margin-top: 50px;
         font-size: 0.8em;
         font-weight: bold;
-        color: #aaa;
+        color: #fff;
         border-top: 1px solid #eee;
     }
 

@@ -90,8 +90,7 @@
                                     <td>{{ $item['title'] }}</td>
                                     <td>{{ date('Y-m-d', strtotime($item['date'])) }}</td>
                                     <td class="table-actions">
-                                        <form
-                                            action="{{ route('admin.bimbingan.edit', ['kegiatan' => $item['id_evidence']]) }}"
+                                        <form action="{{ route('admin.bimbingan.edit', ['kegiatan' => $item['id_evidence']]) }}"
                                             method="GET" style="display: inline;">
                                             @csrf
                                             <a href="javascript:void(0)" onclick="({{$item['id_admin']}} == {{$adminId}}) ? this.parentElement.submit() : alert('Tidak memiliki izin untuk mengedit.');">
@@ -99,11 +98,11 @@
                                             </a>
                                         </form>
                                         <i style="opacity: {{($item['id_admin'] == $adminId) ? 1 : 0.5}}">||</i>
-                                        <form
-                                            action="{{ route('admin.bimbingan.destroy', ['kegiatan' => $item['id_evidence']]) }}"
+                                        <form action="{{ route('admin.bimbingan.destroy', ['kegiatan' => $item['id_evidence']]) }}"
                                             method="POST" style="display: inline;">
                                             @csrf
                                             @method('DELETE')
+
                                             <a href="javascript:void(0)" onclick="({{$item['id_admin']}} == {{$adminId}}) ? showButtonModal(this) : alert('Tidak memiliki izin untuk menghapus.');">
                                                 <i title="Delete" class="fa-solid fa-trash" style="opacity: {{($item['id_admin'] == $adminId) ? 1 : 0.5}}"></i>
                                             </a>
@@ -117,8 +116,6 @@
             </div>
         </div>
     </div>
-
-    
 
     <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
     <script src="https://cdn.datatables.net/2.3.5/js/dataTables.js"></script>
@@ -358,9 +355,6 @@
                 console.log('File removed successfully');
             }
         });
-    </script>
-    <script>
-            
     </script>
 </body>
 

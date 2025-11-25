@@ -7,20 +7,7 @@
     <title>Edit - Admin Utama</title>
     <link rel="stylesheet" href="../sidebar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.5/css/dataTables.dataTables.css" />
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-    <style>
-         #DataTable { table-layout: fixed; width: 100%; }
-         #DataTable th {
-            background-color: #c7c7c7;
-            font-weight: normal;
-         }
-         .dataTables_wrapper .page-item.active .page-link {
-
-            background-color: #4f93ce;
-            border: 1px solid #4f93ce;
-        }
-    </style>
 </head>
 
 <body>
@@ -47,7 +34,7 @@
                     <input type="text" name="title" placeholder="Judul baru"
                         value="{{ old('title', $activityData['title']) }}">
                     <textarea name="description" placeholder="Deskripsi baru">{{ old('description', $activityData['description']) }}</textarea>
-                    <input type="date" name="date" value="{{ old('date', $activityData['date']) }}">
+                    <input type="date" name="date" value="{{ old('date', date('Y-m-d', strtotime($activityData['date']))) }}">
 
                     <div class="file-upload disnone" id="fileUploadContainer">
                         <label for="fileInput"><span style="font-size:1.2em;">

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -90,7 +89,6 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item['title'] }}</td>
                                 <td>{{ date('Y-m-d', strtotime($item['date'])) }}</td>
-                                
                                 <td class="table-actions">
                                     <form action="{{ route('admin.ekskul.edit', ['kegiatan' => $item['id_evidence']]) }}"
                                         method="GET" style="display: inline;">

@@ -4,7 +4,7 @@
 
 <head>
 
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    {{-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> --}}
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -106,7 +106,6 @@
             <br>
             <p>Contact Person: 0811 500 5857<br>Contact Person: 0851 0165 6160</p>
         </div>
-
     </footer>
 
     <div class="footer2">

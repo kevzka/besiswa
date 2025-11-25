@@ -90,7 +90,6 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item['title'] }}</td>
                                 <td>{{ date('Y-m-d', strtotime($item['date'])) }}</td>
-                                
                                 <td class="table-actions">
                                     <form action="{{ route('admin.prestasi.edit', ['kegiatan' => $item['id_evidence']]) }}"
                                         method="GET" style="display: inline;">

@@ -58,11 +58,7 @@
                     </thead>
                     <tbody>
                         @if (empty($data['activities']))
-                            <tr>
-                                <td colspan="5" style="text-align: center; padding: 20px 0;">
-                                    Kamu belum menambahkan kegiatan apapun.
-                                </td>
-                            </tr>
+                            
                         @else
                         @foreach ($data['activities'] as $item)
                             <tr>
