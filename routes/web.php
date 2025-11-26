@@ -52,9 +52,9 @@ Route::get('/tes', function () {
     return view('tes');
 });
 
-//kirim kode csrf
-Route::get('/csrf-token', function () {
-    return response()->json(['csrf_token' => csrf_token()]);
+//kirim kode csrf sesudah login
+ROute::get('/csrf-token', function() {
+    return csrf_token();
 });
 
 Route::get('/tesbimbingan', function () {

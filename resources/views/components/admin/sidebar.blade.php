@@ -41,7 +41,7 @@
         @endif
         @if ($id_role == 5 || $id_role == 4)
             <div class="nav-item {{ $activeMenu == 'portofolio' ? 'active' : '' }}">
-                <a href="{{ route('admin.portofolio.create') }}"><img src="{{asset('icons/Portofolio.svg')}}" alt="" style="height: 1rem;"> Portofolio</a>
+                <a href="{{ route('admin.portofolio.create') }}"><img src="{{asset('icons/Portofolio.svg')}}" alt="" style="height: 1rem; margin-right: 10px;"> Portofolio</a>
             </div>
         @endif
         <div class="nav-item {{ $activeMenu == 'profil' ? 'active' : '' }}">
