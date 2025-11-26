@@ -15,8 +15,8 @@
         }
 
         body {
-            background-color: #000000;
-            color: #333;
+            background-image: url('{{ asset('img/bgporto.png') }}');
+            background-size: cover;
         }
 
         .main-content {
@@ -38,7 +38,7 @@
             background-color: #F7F7F7;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px; 
+            border-radius: 8px;
         }
 
         .level-card {
@@ -51,7 +51,7 @@
             padding-bottom: 20px;
             transition: box-shadow 0.18s ease, transform 0.12s ease;
         }
-        
+
         .batch-card {
             background-color: #fff;
             border-radius: 8px;
@@ -59,6 +59,7 @@
             padding: 20px;
             position: relative;
             transition: box-shadow 0.18s ease, transform 0.12s ease;
+            font-family: 'Poppins', sans-serif;
         }
 
         /* Hover: pertegas / menghitamkan box-shadow dan sedikitangkat */
@@ -69,7 +70,7 @@
         }
 
         .card-header {
-            background-color: #cc3333;
+            background-color: #AE2727;
             color: #fff;
             padding: 15px 10px;
             display: flex;
@@ -81,10 +82,21 @@
             font-size: 0.9em;
             font-weight: bold;
             margin-left: 10px;
+            font-family: 'Aboreto', cursive;
         }
 
         .icon {
             font-size: 1.5em;
+        }
+
+        /* Level / header icons (SVG) */
+        .level-icon {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
         }
 
         .score {
@@ -92,10 +104,12 @@
             font-weight: bold;
             color: #333;
             margin: 30px 0 5px 0;
+            font-family: 'Poppins', sans-serif;
         }
 
         .detail {
             font-size: 0.9em;
+            font-family: 'Poppins', sans-serif;
             color: #666;
         }
 
@@ -109,7 +123,7 @@
         }
 
         .section-title-bar {
-            background-color: #cc3333;
+            background-color: #AE2727;
             color: #fff;
             padding: 15px 20px;
             text-align: center;
@@ -121,6 +135,7 @@
         .section-title {
             font-size: 1.2em;
             letter-spacing: 1px;
+            font-family: 'Aboreto', cursive;
         }
 
         .batch-cards-container {
@@ -136,6 +151,7 @@
             padding: 20px;
             position: relative;
             transition: box-shadow 0.18s ease, transform 0.12s ease;
+            font-family: 'Poppins', sans-serif;
         }
 
         .batch-number {
@@ -167,7 +183,11 @@
         }
 
         .stat-icon {
-            font-size: 1.2em;
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            display: inline-block;
+            vertical-align: middle;
             margin-right: 10px;
         }
 
@@ -197,6 +217,7 @@
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Amiko:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -222,18 +243,19 @@
 
                 <div class="level-card international">
                     <div class="card-header">
-                        <span class="icon">👑</span>
+                        <img src="{{ asset('icons/tinternational.svg') }}" alt="Internasional" class="level-icon">
                         <h3 class="level-title">TINGKAT INTERNASIONAL</h3>
                     </div>
                     <div class="card-body">
                         <p class="score">{{ $response['data']['totalInternasional'][0] }}</p>
-                        <p class="detail">{{ number_format($response['data']['totalInternasional'][1], 1) }}% Dari total</p>
+                        <p class="detail">{{ number_format($response['data']['totalInternasional'][1], 1) }}% Dari total
+                        </p>
                     </div>
                 </div>
 
                 <div class="level-card national">
                     <div class="card-header">
-                        <span class="icon">🏆</span>
+                        <img src="{{ asset('icons/tnational.svg') }}" alt="Nasional" class="level-icon">
                         <h3 class="level-title">TINGKAT NASIONAL</h3>
                     </div>
                     <div class="card-body">
@@ -244,7 +266,7 @@
 
                 <div class="level-card province">
                     <div class="card-header">
-                        <span class="icon">🥉</span>
+                        <img src="{{ asset('icons/tprovinsi.svg') }}" alt="Provinsi" class="level-icon">
                         <h3 class="level-title">TINGKAT PROVINSI</h3>
                     </div>
                     <div class="card-body">
@@ -255,12 +277,13 @@
 
                 <div class="level-card city-regency">
                     <div class="card-header">
-                        <span class="icon">⭐</span>
+                        <img src="{{ asset('icons/tkotakabupaten.svg') }}" alt="Kota/Kabupaten" class="level-icon">
                         <h3 class="level-title">TINGKAT KOTA/KABUPATEN</h3>
                     </div>
                     <div class="card-body">
                         <p class="score">{{ $response['data']['totalKotaKabupaten'][0] }}</p>
-                        <p class="detail">{{ number_format($response['data']['totalKotaKabupaten'][1], 1) }}% Dari total</p>
+                        <p class="detail">{{ number_format($response['data']['totalKotaKabupaten'][1], 1) }}% Dari
+                            total</p>
                     </div>
                 </div>
 
@@ -273,28 +296,29 @@
             </div>
 
             <div class="batch-cards-container">
-                @if($response['data']['angkatan'] == null)
+                @if ($response['data']['angkatan'] == null)
                     <p>Tidak ada data angkatan tersedia.</p>
                 @else
-                @foreach ($response['data']['angkatan'] as $item)
-                    <div class="batch-card" onclick="location.href='{{ url('/portofolio/angkatan/' . $item['angkatan']) }}'">
-                    <h3 class="batch-number">Angkatan 
-                        {{ $item['angkatan'] }}
-                    </h3>
-                    <span class="arrow-icon">></span>
-                    <div class="batch-stats">
-                        <div class="stat-item">
-                            <span class="stat-icon">🧑‍🤝‍🧑</span>
-                            <p class="stat-label">{{$item['totalPrestasi']}} Total prestasi</p>
+                    @foreach ($response['data']['angkatan'] as $item)
+                        <div class="batch-card"
+                            onclick="location.href='{{ url('/portofolio/angkatan/' . $item['angkatan']) }}'">
+                            <h3 class="batch-number">Angkatan
+                                {{ $item['angkatan'] }}
+                            </h3>
+                            <span class="arrow-icon">></span>
+                            <div class="batch-stats">
+                                <div class="stat-item">
+                                    <img src="{{ asset('icons/tprestasi.svg') }}" alt="Prestasi" class="stat-icon">
+                                    <p class="stat-label">{{ $item['totalPrestasi'] }} Total prestasi</p>
+                                </div>
+                                <div class="stat-item">
+                                    <img src="{{ asset('icons/tjiwa.svg') }}" alt="JIWA" class="stat-icon">
+                                    <p class="stat-label">{{ $item['totalJiwa'][0] }} Total JIWA</p>
+                                </div>
+                            </div>
+                            <p class="batch-detail">{{ $item['totalJiwa'][1] }}% Dari total JIWA</p>
                         </div>
-                        <div class="stat-item">
-                            <span class="stat-icon">📈</span>
-                            <p class="stat-label">{{$item['totalJiwa'][0]}} Total JIWA</p>
-                        </div>
-                    </div>
-                    <p class="batch-detail">{{$item['totalJiwa'][1]}}% Dari total JIWA</p>
-                </div>
-                @endforeach
+                    @endforeach
                 @endif
 
                 <div class="batch-card">
@@ -302,15 +326,18 @@
                     <span class="arrow-icon">></span>
                     <div class="batch-stats">
                         <div class="stat-item">
-                            <span class="stat-icon">🧑‍🤝‍🧑</span>
-                            <p class="stat-label">{{$response['data']['angkatan'][2021]['totalPrestasi']}} Total prestasi</p>
+                            <img src="{{ asset('icons/tprestasi.svg') }}" alt="Prestasi" class="stat-icon">
+                            <p class="stat-label">{{ $response['data']['angkatan'][2021]['totalPrestasi'] }} Total
+                                prestasi</p>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-icon">📈</span>
-                            <p class="stat-label">{{$response['data']['angkatan'][2021]['totalJiwa'][0]}} Total JIWA</p>
+                            <img src="{{ asset('icons/tjiwa.svg') }}" alt="JIWA" class="stat-icon">
+                            <p class="stat-label">{{ $response['data']['angkatan'][2021]['totalJiwa'][0] }} Total JIWA
+                            </p>
                         </div>
                     </div>
-                    <p class="batch-detail">{{$response['data']['angkatan'][2021]['totalJiwa'][1]}}% Dari total JIWA</p>
+                    <p class="batch-detail">{{ $response['data']['angkatan'][2021]['totalJiwa'][1] }}% Dari total JIWA
+                    </p>
                 </div>
 
             </div>

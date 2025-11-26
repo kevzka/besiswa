@@ -24,7 +24,7 @@ body {
             rgba(255, 255, 255, 0.85),
             rgba(233, 233, 233, 0.85)
         ),
-        url("/user/img/bguniversal.png");
+        url({ assets 'img/bgporto.png' });
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

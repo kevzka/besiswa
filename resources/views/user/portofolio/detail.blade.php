@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Angkatan 25 - ADASISWA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/f6479b8b4c.js" crossorigin="anonymous"></script>
     <style>
         body {
@@ -30,10 +32,13 @@
 
         .back-link {
             text-decoration: none;
-            color: #cc3333;
+            color: #000;
             font-size: 2em;
-            font-weight: bold;
             margin-right: 15px;
+            position: absolute;
+            top: 1rem;
+            left: 0.75rem;
+            line-height: 1;
         }
 
         .batch-title-bar {
@@ -70,11 +75,9 @@
 
         /* --- DETAIL SIDEBAR (Kiri) --- */
         .detail-sidebar {
-            padding: 20px;
+            padding: 70px;
             grid-area: 1 / 1 / 2 / 2;
             box-sizing: border-box;
-            /* border: 1px solid black; */
-            /* Biasanya sidebar tidak membutuhkan background kecuali ada elemen chart */
         }
 
         /* Chart Area Styling */
@@ -173,6 +176,15 @@
             border-bottom: 1px solid #eee;
         }
 
+        /* Zebra striping untuk item daftar siswa */
+        .student-list-container .student-list-item:nth-child(odd) {
+            background-color: #FAFAFA;
+        }
+
+        .student-list-container .student-list-item:nth-child(even) {
+            background-color: #F4F4F4;
+        }
+
         .student-list-item:last-child {
             border-bottom: none;
         }
@@ -242,24 +254,35 @@
 
         /* Warna Dot (sesuaikan dengan warna chart/icon) */
         .dot.red {
-            background-color: #cc3333;
+            background-color: #A63636;
         }
 
         .dot.brown {
-            background-color: #a0522d;
+            background-color: #642626;
         }
 
-        .dot.green {
-            background-color: #5cb85c;
+        .dot.white {
+            background-color: #E2E0A5;
         }
 
         .dot.orange {
-            background-color: #f0ad4e;
+            background-color: #D3504A;
         }
 
         .icon-legend {
-            font-size: 1em;
+            display: inline-flex;
+            width: 20px;
+            height: 20px;
             margin-right: 10px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-legend img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
         }
 
         .legend-totals p {
@@ -373,9 +396,9 @@
         }
 
         .stat-number-box-wrapper .stat-number-box {
-            background-color: red;
+            background-color: #AE2727;
             border: none;
-            width: {{$response['data']['persentasePartisipan']}}%;
+            width: {{ $response['data']['persentasePartisipan'] }}%;
             height: 100%;
         }
 
@@ -397,7 +420,7 @@
         }
 
         .stat-number {
-            font-family: 'Times New Roman', serif;
+            font-family: 'Aboreto', cursive;
             /* Font yang terlihat elegan/serif di gambar */
             font-size: 2.5em;
             font-weight: 300;
@@ -408,7 +431,7 @@
         }
 
         .stat-label {
-            font-family: 'Times New Roman', serif;
+            font-family: 'Aboreto', cursive;
             font-size: 1em;
             font-weight: 500;
             color: #333;
@@ -462,7 +485,7 @@
             position: absolute;
             top: 4rem;
             left: -1rem;
-            background-color: #ff0000;
+            background-color: #AE2727;
             /* Border tipis jika diperlukan */
             border-radius: 50px;
             /* Membuat sudut sangat melengkung (pill shape) */
@@ -480,6 +503,8 @@
             margin: 0;
             color: white;
             font-size: 1rem;
+            font-family: 'Aboreto', cursive;
+            text-align: center;
         }
 
         .logo-title {
@@ -488,14 +513,33 @@
             width: 10rem;
             display: flex;
             align-items: center;
+            margin-right: 40px;
+            margin-top: 0.5rem;
         }
 
         .logo-title .logo img {
             width: 100%;
+            width: 3rem;
+            height: auto;
+            margin-left: 10px;
         }
 
-        .logo-title p{
-            color:red;
+        .logo-title p {
+            color: #9F0404;
+            font-family: 'Aboreto', cursive;
+            font-size: 1.5rem;
+        }
+
+        .student-name {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .prestasi-button {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .legend-footer {
+            font-family: 'Poppins', sans-serif;
         }
     </style>
 
@@ -503,9 +547,10 @@
 
 <body>
     <div class="container">
+        <a href="{{ url()->previous() }}" class="back-link" aria-label="Kembali">&lt;</a>
 
         <div class="angkatan-title">
-            <p>ANGKATAN {{ $id }}</p>
+            <p><b>ANGKATAN {{ $id }}</b></p>
         </div>
 
         <div class="logo-title">
@@ -544,34 +589,34 @@
             <div class="global-stats-container">
                 <div class="stat-group">
                     <div class="stat-number-box">
-                        <p class="stat-number">{{$response['data']['totalPrestasi']}}</p>
+                        <p class="stat-number">{{ $response['data']['totalPrestasi'] }}</p>
                     </div>
-                    <p class="stat-label">TOTAL PRESTASI</p>
+                    <p class="stat-label"><b>TOTAL PRESTASI</b></p>
                 </div>
 
                 <div class="stat-group">
                     <div class="stat-number-box">
-                        <p class="stat-number">{{$response['data']['totalJiwa']}}</p>
+                        <p class="stat-number">{{ $response['data']['totalJiwa'] }}</p>
                     </div>
-                    <p class="stat-label">TOTAL JIWA</p>
+                    <p class="stat-label"><b>TOTAL JIWA</b></p>
                 </div>
 
                 <div class="stat-group">
                     <div class="stat-number-box-wrapper">
                         <div class="stat-number-box">
-                            <p class="stat-number">{{$response['data']['persentasePartisipan']}}%</p>
+                            <p class="stat-number">{{ $response['data']['persentasePartisipan'] }}%</p>
                         </div>
                     </div>
-                    <p class="stat-label">Tingkat partisipasi prestasi siswa/i SMK Telkom Banjarbaru</p>
+                    <p class="stat-label"><b>Tingkat partisipasi prestasi siswa/i SMK Telkom Banjarbaru</b></p>
                 </div>
             </div>
 
             <section class="student-list-section">
                 <div class="student-list-container">
-                    @if($response['data']['siswa'] == null || count($response['data']['siswa']) == 0)
+                    @if ($response['data']['siswa'] == null || count($response['data']['siswa']) == 0)
                         <p>Tidak ada data siswa untuk angkatan ini.</p>
                     @else
-                        @foreach($response['data']['siswa'] as $siswa)
+                        @foreach ($response['data']['siswa'] as $siswa)
                             <div class="student-list-item">
                                 <div class="student-info">
                                     <i class="fa-solid fa-user"></i>
@@ -594,14 +639,20 @@
                     <div class="legend-column">
                         <p class="legend-item"><span class="dot red"></span> Tingkat Internasional</p>
                         <p class="legend-item"><span class="dot brown"></span> Tingkat Nasional</p>
-                        <p class="legend-item"><span class="dot green"></span> Tingkat Provinsi</p>
+                        <p class="legend-item"><span class="dot white"></span> Tingkat Provinsi</p>
                         <p class="legend-item"><span class="dot orange"></span> Tingkat Kota/Kabupaten</p>
                     </div>
                     <div class="legend-column">
-                        <p class="legend-item"><span class="icon-legend">👑</span> Tingkat Internasional</p>
-                        <p class="legend-item"><span class="icon-legend">🏆</span> Tingkat Nasional</p>
-                        <p class="legend-item"><span class="icon-legend">🥉</span> Tingkat Provinsi</p>
-                        <p class="legend-item"><span class="icon-legend">⭐</span> Tingkat Kota/Kabupaten</p>
+                        <p class="legend-item"><span class="icon-legend"><img
+                                    src="{{ asset('icons/international.svg') }}" alt="Internasional"></img></span>
+                            Tingkat Internasional</p>
+                        <p class="legend-item"><span class="icon-legend"><img src="{{ asset('icons/national.svg') }}"
+                                    alt="Nasional"></img></span> Tingkat Nasional</p>
+                        <p class="legend-item"><span class="icon-legend"><img src="{{ asset('icons/provinsi.svg') }}"
+                                    alt="Provinsi"></img></span> Tingkat Provinsi</p>
+                        <p class="legend-item"><span class="icon-legend"><img
+                                    src="{{ asset('icons/kotakabupaten.svg') }}" alt="Kota/Kabupaten"></img></span>
+                            Tingkat Kota/Kabupaten</p>
                     </div>
                     <div class="legend-totals">
                         <p>Total Prestasi Internasional: {{ $response['data']['prestasi']['internasional'] }}</p>
@@ -619,7 +670,10 @@
         // Data yang sesuai dengan angka-angka di sekitar chart
         const chartData = {
             // Angka-angka 147, 392, 20, 667
-            data: [{{ $response['data']['prestasi']['internasional'] }}, {{ $response['data']['prestasi']['nasional'] }}, {{ $response['data']['prestasi']['provinsi'] }}, {{ $response['data']['prestasi']['kotaKabupaten'] }}],
+            data: [{{ $response['data']['prestasi']['internasional'] }},
+                {{ $response['data']['prestasi']['nasional'] }}, {{ $response['data']['prestasi']['provinsi'] }},
+                {{ $response['data']['prestasi']['kotaKabupaten'] }}
+            ],
             // Label yang sesuai dengan tingkatan prestasi (misalnya, A, B, C, D)
             labels: [
                 'Tingkat Internasional', // 147

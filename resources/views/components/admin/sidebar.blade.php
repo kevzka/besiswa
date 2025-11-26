@@ -43,14 +43,7 @@
             <a href="{{ route('admin.profile') }}"><i class="fas fa-user-circle" style="margin-right: 10px;"></i>
                 Profil</a>
         </div>
-        <div class="nav-item " style="cursor: pointer;">
-            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                @csrf
-                <a href="#" onclick="confirmLogout()" id="logoutBtn">
-                    <i class="fas fa-sign-out-alt" style="margin-right: 10px;"></i> Logout
-                </a>
-            </form>
-        </div>
+
     </nav>
 
     {{-- Logout pinned to bottom --}}
