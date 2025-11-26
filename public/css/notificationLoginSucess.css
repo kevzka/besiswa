@@ -1,0 +1,75 @@
+body {
+    /* Background abu-abu seperti di gambar */
+    background-color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.notification-box {
+    /* ubah display:none -> tetap render agar transisi bisa bekerja */
+    display: flex;
+    position: fixed;
+    top: 15.8rem;
+    left: -3rem; /* posisi akhir ketika terlihat */
+    z-index: 9999;
+    /* Desain kotak putih dengan sudut melengkung dan bayangan */
+    background-color: #ffffff;
+    border-radius: 50px; /* Sangat melengkung di sisi kanan */
+    padding: 10px 30px;
+    padding-left: 5rem;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    /* Menyesuaikan lebar agar mirip gambar */
+    width: fit-content;
+
+    /* tambahan untuk animasi */
+    transform: translateX(-30rem); /* posisi awal tersembunyi */
+    opacity: 0;
+    transition: transform 420ms cubic-bezier(.22,.9,.35,1), opacity 300ms ease;
+    will-change: transform, opacity;
+    pointer-events: none; /* non-interactive saat tersembunyi */
+}
+
+.notification-text {
+    /* Gaya teks "Login Berhasil" */
+    color: #4caf50; /* Warna hijau */
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: 20px; /* Jarak antara teks dan ikon */
+}
+
+.icon-circle {
+    /* Lingkaran hijau di sekitar ikon */
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3.5px solid #4caf50; /* Border hijau */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-check {
+    /* Menggunakan SVG untuk ikon centang agar mudah diatur ukurannya */
+    fill: #4caf50; /* Warna centang hijau */
+    width: 30px;
+    height: 30px;
+}
+
+/* kelas untuk kondisi tersembunyi */
+.none {
+    transform: translateX(-30rem);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* kelas untuk kondisi terlihat */
+.show {
+    transform: translateX(0); /* menuju posisi left: -3rem */
+    opacity: 1;
+    pointer-events: auto;
+}

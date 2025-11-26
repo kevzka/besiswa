@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Config;
 
 class AuthController extends Controller
 {
@@ -104,7 +105,7 @@ class AuthController extends Controller
                 'id_admin' => $user->id
             ]);
             
-            $response = Http::get('http://besiswa.test/api/home', ['id_admin' => $user->id_admin]);
+            $response = Http::get('http://' . Config::get('app.API') . '/api/home', ['id_admin' => $user->id_admin]);
             
             if (!$response->successful()) {
                 Log::error('Failed to retrieve home data after registration', [
@@ -211,7 +212,8 @@ class AuthController extends Controller
                 ]);
                 
                 Log::info('Redirecting to admin dashboard after login');
-                return redirect()->intended('/admin/dashboard');
+                // set session flag, blade akan menampilkan log + delay lalu redirect
+                return redirect()->intended('/admin/dashboard')->with('success', true);
             }
             
             Log::warning('Authentication failed', [

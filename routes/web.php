@@ -48,7 +48,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
 
 Route::get('/tes', function () {
-    return view('user.portofolio.detail');
+    return view('tes');
 });
 
 Route::get('/tesbimbingan', function () {

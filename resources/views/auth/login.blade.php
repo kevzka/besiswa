@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6,10 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - ADASISWA</title>
   <link rel="stylesheet" href="{{asset('css/login.css')}}">
+  <link rel="stylesheet" href="{{asset('css/notificationLoginSucess.css')}}">
+  <script src="https://kit.fontawesome.com/f6479b8b4c.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
   <div class="container">
+    @if(session('success'))
+      <script>
+        console.log('sukses');
+        setTimeout(function(){
+          window.location.href = "{{ url('/admin/dashboard') }}";
+        }, 2000);
+      </script>
+    @endif
+    <!-- Container utama notifikasi -->
+    <div class="notification-box none">
+        <span class="notification-text">
+            Login Berhasil
+        </span>
+        <div class="icon-circle">
+            <!-- SVG Icon Checkmark -->
+            <i class="fa-solid fa-check" style="color: #4CAF50; font-size: 1.5rem;"></i>
+        </div>
+    </div>
     <!-- Panel kiri -->
     <div class="login-panel">
       

@@ -61,7 +61,7 @@ class DashboardController extends Controller
             ]);
             
             Log::info('Making API request to get profile', ['id_admin' => $user->id_admin]);
-            $response = Http::post('http://besiswa.test/api/getProfile', ['id_admin' => $user->id_admin]);
+            $response = Http::post('http://' . Config::get('app.API') . '/api/getProfile', ['id_admin' => $user->id_admin]);
             
             if (!$response->successful()) {
                 Log::error('Failed to retrieve profile data', [

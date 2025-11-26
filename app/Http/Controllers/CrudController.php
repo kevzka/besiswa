@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Config;
 
 class CrudController extends Controller
 {
@@ -53,7 +54,7 @@ class CrudController extends Controller
             Log::info('User role determined', ['role_name' => $roleName, 'role' => $role, 'id_roles' => $user->id_role]);
 
             Log::info('Making API request to home endpoint', ['id_admin' => $user->id_admin]);
-            $response = Http::get('http://besiswa.test/api/home', ['id_admin' => $user->id_admin]);
+            $response = Http::get('http://' . Config::get('app.API') . '/api/home', ['id_admin' => $user->id_admin]);
 
             if (!$response->successful()) {
                 Log::error('Failed to retrieve home dashboard data', [
@@ -116,7 +117,7 @@ class CrudController extends Controller
             Log::info('User role for create', ['role_name' => $roleName]);
 
             Log::info('Making API request to create endpoint', ['type' => $activityType]);
-            $activities = Http::post('http://besiswa.test/api/crud/create', ['type' => $activityType]);
+            $activities = Http::post('http://' . Config::get('app.API') . '/api/crud/create', ['type' => $activityType]);
 
             if (!$activities->successful()) {
                 Log::error('Failed to retrieve activities data', [
@@ -213,7 +214,7 @@ class CrudController extends Controller
             }
 
             Log::info('Making API request to store endpoint');
-            $response = $httpRequest->post('http://besiswa.test/api/crud');
+            $response = $httpRequest->post('http://' . Config::get('app.API') . '/api/crud');
 
             if ($response->successful()) {
                 Log::info('Store operation successful', [
@@ -270,7 +271,7 @@ class CrudController extends Controller
             ]);
 
             Log::info('Making API request to edit endpoint', ['id' => $id]);
-            $activityData = Http::get("http://besiswa.test/api/crud/{$id}/edit")->json()['data'];
+            $activityData = Http::get('http://' . Config::get('app.API') . '/api/crud/{$id}/edit')->json()['data'];
             Log::info('Activity data retrieved for edit', ['activity_id' => $id]);
             
             $user = Auth::user();
@@ -339,7 +340,7 @@ class CrudController extends Controller
             }
 
             Log::info('Making API request to update endpoint', ['activity_id' => $activityId]);
-            $response = $httpRequest->post("http://besiswa.test/api/crud/{$activityId}");
+            $response = $httpRequest->post('http://' . Config::get('app.API') . '/api/crud/{$activityId}');
 
             if ($response->successful()) {
                 Log::info('Update operation successful', [
@@ -378,7 +379,7 @@ class CrudController extends Controller
             Log::info('Destroy operation details', ['route_name' => $currentRouteName]);
             
             Log::info('Making API request to delete endpoint', ['id' => $id]);
-            $response = Http::delete("http://besiswa.test/api/crud/{$id}");
+            $response = Http::delete('http://' . Config::get('app.API') . '/api/crud/{$id}');
 
             if ($response->successful()) {
                 Log::info('Delete operation successful', [

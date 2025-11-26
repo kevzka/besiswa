@@ -33,7 +33,7 @@ class TbLombas extends Model
 
 	protected $casts = [
 		'id_evidence' => 'int',
-		'poin_lomba' => 'float'
+		'poin_lomba' => 'decimal'//req kk rahman
 	];
 
 	protected $fillable = [
