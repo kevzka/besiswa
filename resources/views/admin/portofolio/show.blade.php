@@ -31,8 +31,8 @@
                 <td>{{$data["tingkatJuara"]}}</td>
                 <td>{{$data["poinLomba"]}}</td>
                 <td>
-                    <a href="{{route('tes.edit', $data['idLomba'])}}">Edit</a>
-                    <form action="{{route('tes.destroy', $data['idLomba'])}}" method="POST">
+                    <a href="{{route('admin.portofolio.edit', $data['idLomba'])}}">Edit</a>
+                    <form action="{{route('admin.portofolio.destroy', $data['idLomba'])}}" method="POST">
                         @method('DELETE')
                         @csrf
                         <button type="submit">Delete</button>

@@ -17,7 +17,7 @@
     tingkat juara dropdwown 1,2,3, dan pilihan isi sendiri
     poin lomba
     --}}
-    <form action="{{ route('tes.store') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('admin.portofolio.store') }}" method="post" enctype="multipart/form-data">
         @csrf
         <label for="nis">NIS Siswa:</label>
         <input type="text" id="nis" name="nis" required><br><br>

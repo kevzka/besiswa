@@ -26,7 +26,7 @@
     tingkat juara dropdwown 1,2,3, dan pilihan isi sendiri
     poin lomba
     --}}
-    <form action="{{ route('tes.update', $data['idLomba']) }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('admin.portofolio.update', $data['idLomba']) }}" method="post" enctype="multipart/form-data">
         @method("PATCH")
         @csrf
         <label for="nis">NIS Siswa:</label>

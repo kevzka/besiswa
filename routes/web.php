@@ -37,12 +37,15 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('bimbingan', CrudController::class)->parameters(['bimbingan' => 'kegiatan'])->names('bimbingan');
     Route::resource('prestasi', CrudController::class)->parameters(['prestasi' => 'kegiatan'])->names('prestasi');
     Route::resource('ekskul', CrudController::class)->parameters(['ekskul' => 'kegiatan'])->names('ekskul');
+    Route::resource('portofolio', PerformaController::class)->names('portofolio');
     Route::get('profile', [DashboardController::class, 'profileDashboard'])->name('profile');
 });
 
 // Route::middleware('auth')->group(function () {
 // Route::resource('tes', PerformaController::class);
 // })
+
+
 
 Route::get('/tes', function () {
     return view('user.portofolio.detail');

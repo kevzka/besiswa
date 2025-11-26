@@ -16,7 +16,7 @@ class PerformaController extends Controller
     {
         $response = Http::get("http://" . Config::get('app.API') . "/api/performa");
         $datas = $response->json()['data'];
-        return view('admin.performa.index', compact('datas'));
+        return view('admin.portofolio.index', compact('datas'));
     }
 
     /**
@@ -24,7 +24,7 @@ class PerformaController extends Controller
      */
     public function create()
     {
-        return view('admin.performa.create');
+        return view('admin.portofolio.create');
     }
 
     /**
@@ -69,7 +69,7 @@ class PerformaController extends Controller
         }
         $data = $response->json()['data'][0];
 
-        return view('admin.performa.show', compact('data'));
+        return view('admin.portofolio.show', compact('data'));
     }
 
     /**
@@ -83,7 +83,7 @@ class PerformaController extends Controller
         }
         $data = $response->json()['data'][0];
 
-        return view('admin.performa.edit', compact('data'));
+        return view('admin.portofolio.edit', compact('data'));
     }
 
     /**

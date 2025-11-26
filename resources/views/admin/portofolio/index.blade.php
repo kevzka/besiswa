@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="{{route('tes.create')}}">+ new performa</a>
+    <a href="{{route('admin.portofolio.create')}}">+ new performa</a>
     <table border="1">
         <tr>
             <th>id Lomba</th>
@@ -25,9 +25,9 @@
                 <td>{{$data["deskripsiLomba"]}}</td>
                 <td>{{$data["tanggalLomba"]}}</td>
                 <td>
-                    <a href="{{route('tes.show', $data['idLomba'])}}">View</a>
-                    <a href="{{route('tes.edit', $data['idLomba'])}}">Edit</a>
-                    <form action="{{route('tes.destroy', $data['idLomba'])}}" method="POST">
+                    <a href="{{route('admin.portofolio.show', $data['idLomba'])}}">View</a>
+                    <a href="{{route('admin.portofolio.edit', $data['idLomba'])}}">Edit</a>
+                    <form action="{{route('admin.portofolio.destroy', $data['idLomba'])}}" method="POST">
                         @method('DELETE')
                         @csrf
                         <button type="submit">Delete</button>

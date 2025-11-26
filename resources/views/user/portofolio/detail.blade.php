@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Angkatan 25 - ADASISWA</title>
+    <script src="https://kit.fontawesome.com/f6479b8b4c.js" crossorigin="anonymous"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,8 +50,8 @@
 
         /* --- MAIN CONTENT DETAIL (Grid Layout) --- */
         .detail-main-content {
+            padding: 0 2rem;
             padding-top: 6rem;
-            padding-left: 2rem;
             box-sizing: border-box;
             /* max-width: 1200px; */
             width: 100%;
@@ -367,6 +368,7 @@
             height: 3rem;
             /* Lebar kotak angka */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 1px solid #ccc;
             box-sizing: border-box;
         }
 
@@ -572,10 +574,9 @@
                         @foreach($response['data']['siswa'] as $siswa)
                             <div class="student-list-item">
                                 <div class="student-info">
-                                    <span class="profile-icon">👤</span>
+                                    <i class="fa-solid fa-user"></i>
                                     <div>
                                         <p class="student-name">{{ $siswa['nama'] }}</p>
-                                        <p class="student-achievements">{{ $siswa['prestasi']['total'] }} Prestasi</p>
                                     </div>
                                 </div>
                                 <div class="student-action">
