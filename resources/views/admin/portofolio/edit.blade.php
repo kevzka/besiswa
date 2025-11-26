@@ -1,89 +1,272 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Edit - Admin Utama</title>
+    <link rel="stylesheet" href="../sidebar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 </head>
+
 <body>
-    @if($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+    <!-- Sidebar -->
+    <x-admin.sidebar role="porto" id-role="1" adminName="kevin" active-menu='bimbingan' />
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="topbar">
+            <div class="menu-icon"><img src="{{ asset('icons/bars-solid-full.svg') }}" alt=""
+                    style="width: 100%;"></div>
         </div>
-    @endif
-    {{-- ada form yang isi input nya yaitu:
-    nis siswa
-    nama lomba
-    file dokumentasi
-    deksripsi lomba
-    tanggal lomba
-    tingkat lomba dropdwown internasional, nasional, provinsi, kota
-    tingkat juara dropdwown 1,2,3, dan pilihan isi sendiri
-    poin lomba
-    --}}
-    <form action="{{ route('admin.portofolio.update', $data['idLomba']) }}" method="post" enctype="multipart/form-data">
-        @method("PATCH")
-        @csrf
-        <label for="nis">NIS Siswa:</label>
-        <input value="{{ $data['nisSiswa'] }}" type="text" id="nis" name="nis" required><br><br>
 
-        <label for="nama_lomba">Nama Lomba:</label>
-        <input value="{{ $data['namaLomba'] }}" type="text" id="nama_lomba" name="nama_lomba" required><br><br>
+        <div class="content-wrapper">
+            <div class="banner-box"></div>
 
-        <label for="file_evidence">File Dokumentasi:</label>
-        <input value="{{ $data['fileDokumentasi'] }}" type="file" id="file_evidence" name="file_evidence" accept="image/*,application/pdf"><br><br>
-        <img src="{{ asset('storage/kegiatan/' . $data['fileDokumentasi']) }}" alt="" height="100px">
-        <br>
+            <!-- Card Form Edit Berita -->
+            <div class="card-form">
+                <h2>Edit Berita</h2>
+                <form action="{{ route('admin.bimbingan.update', $activityData['id_evidence']) }}" method="POST"
+                    enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <input type="text" name="title" placeholder="Judul baru"
+                        value="{{ old('title', $activityData['title']) }}">
+                    <textarea name="description" placeholder="Deskripsi baru">{{ old('description', $activityData['description']) }}</textarea>
+                    <input type="date" name="date" value="{{ old('date', date('Y-m-d', strtotime($activityData['date']))) }}">
 
-        <label for="deskripsi_lomba">Deskripsi Lomba:</label>
-        <textarea id="deskripsi_lomba" name="deskripsi_lomba" required>{{ $data['deskripsiLomba'] }}</textarea><br><br>
-
-        <label for="tanggal_lomba">Tanggal Lomba:</label>
-        <input value="{{ $data['tanggalLomba'] }}" type="date" id="tanggal_lomba" name="tanggal_lomba" required><br><br>
-
-        <label for="tingkat_lomba">Tingkat Lomba:</label>
-        <select id="tingkat_lomba" name="tingkat_lomba" required>
-            <option value="{{ $data['tingkatLomba'] }}">{{ $data['tingkatLomba'] }}</option>
-            <option value="internasional">Internasional</option>
-            <option value="nasional">Nasional</option>
-            <option value="provinsi">Provinsi</option>
-            <option value="kota">Kota</option>
-        </select><br><br>
-
-        <label for="tingkat_juara">Tingkat Juara:</label>
-        <select id="tingkat_juara" name="tingkat_juara" required>
-            <option value="{{ $data['tingkatJuara'] }}">{{ $data['tingkatJuara'] }}</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="lainnya">Lainnya (isi sendiri)</option>
-        </select>
-        <input type="text" id="tingkat_juara_lainnya" name="tingkat_juara_lainnya" placeholder="Isi jika memilih 'Lainnya'" style="display:none;"><br><br>
-
-        <label for="poin_lomba">Poin Lomba:</label>
-        <input value="{{ $data['poinLomba']}}" type="number" id="poin_lomba" name="poin_lomba" required><br><br>
-        <button type="submit">Submit</button>
-    </form>
+                    <div class="file-upload disnone" id="fileUploadContainer">
+                        <label for="fileInput"><span style="font-size:1.2em;">
+                                <span><i class="fas fa-cloud-upload-alt"></i></span> Pilih file
+                        </label>
+                        <input type="file" name="file" id="fileInput" class="file-upload-btn"
+                            accept="image/*,video/*,application/pdf" required>
+                    </div>
+                    <div class="filePreview show" id="filePreview" style="">
+                        <div class="thumbnail" id="thumbnail" style="width: fit-content; height: 100%;"><img
+                                src="{{ asset('storage/' . $activityData['file']) }}"
+                                style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;"></div>
+                        <?php
+                        $fileNameOld = str_replace('kegiatan/', '', $activityData['file']);
+                        $fileNameOld = explode('_', $fileNameOld);
+                        unset($fileNameOld[0]);
+                        $fileNameOld = implode('_', $fileNameOld);
+                        ?>
+                        <p style="display: inline-block; margin: 0px 10px;" id="fileName">{{ $fileNameOld }}<a
+                                class="fa-solid fa-x" id="removeFile" style="padding: 0px 10px; cursor: pointer;"></a>
+                        </p>
+                    </div>
+                    <button type="submit" class="submit-btn">Terbitkan ulang</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
-        document.getElementById('tingkat_juara').addEventListener('change', function() {
-            var lainnyaInput = document.getElementById('tingkat_juara_lainnya');
-            if (this.value === 'lainnya') {
-                lainnyaInput.style.display = 'inline';
-                lainnyaInput.required = true;
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const filePreview = document.getElementById(
+                'filePreview'); // Changed from 'filePreview' to 'filepreview'
+            const fileUploadContainer = document.getElementById('fileUploadContainer');
+            const thumbnail = document.getElementById('thumbnail');
+            const fileName = document.getElementById('fileName');
+            const fileInfo = document.getElementById('fileInfo');
+            const label = document.querySelector('label[for="fileInput"]'); // Changed selector to match your HTML
+
+            if (file) {
+                console.log('ada file');
+
+                // Show preview container
+                if (filePreview) {
+                    filePreview.classList.add('show');
+                    fileUploadContainer.classList.add('disnone');
+                }
+
+                // Set file details
+                if (fileName) {
+                    fileName.innerHTML = file.name +
+                        '<a class="fa-solid fa-x" id="removeFile" style="padding: 0px 10px;"></a>';
+                }
+                if (fileInfo) {
+                    fileInfo.textContent = `${(file.size / 1024 / 1024).toFixed(2)} MB - ${file.type}`;
+                }
+
+                // Update upload button label
+                if (label) {
+                    label.innerHTML =
+                        `<span style="font-size:1.2em;"><div class="upload-icon"><img src="{{ asset('icons/cloud-arrow-up-solid-full.svg') }}" alt="ini gambar" style="height: 100%; cursor: pointer;"></div></span> File dipilih: ${file.name}`;
+                }
+
+                // Clear previous thumbnail
+                if (thumbnail) {
+                    thumbnail.innerHTML = '';
+                    thumbnail.className = 'thumbnail';
+                }
+
+                // Generate thumbnail based on file type
+                if (file.type.startsWith('image/')) {
+                    // Image thumbnail
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(file);
+                    img.style.width = '100%';
+                    img.style.height = '100%';
+                    img.style.objectFit = 'cover';
+                    img.style.borderRadius = '4px';
+                    img.onload = () => URL.revokeObjectURL(img.src);
+                    if (thumbnail) thumbnail.appendChild(img);
+
+                } else if (file.type.startsWith('video/')) {
+                    // Video thumbnail - extract first frame
+                    const video = document.createElement('video');
+                    video.src = URL.createObjectURL(file);
+                    video.muted = true;
+
+                    video.addEventListener('loadeddata', function() {
+                        video.currentTime = 0.5;
+                    });
+
+                    video.addEventListener('seeked', function() {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 200;
+                        canvas.height = 200;
+                        const ctx = canvas.getContext('2d');
+
+                        const aspectRatio = video.videoWidth / video.videoHeight;
+                        let drawWidth, drawHeight, offsetX = 0,
+                            offsetY = 0;
+
+                        if (aspectRatio > 1) {
+                            drawHeight = canvas.height;
+                            drawWidth = drawHeight * aspectRatio;
+                            offsetX = (canvas.width - drawWidth) / 2;
+                        } else {
+                            drawWidth = canvas.width;
+                            drawHeight = drawWidth / aspectRatio;
+                            offsetY = (canvas.height - drawHeight) / 2;
+                        }
+
+                        ctx.drawImage(video, offsetX, offsetY, drawWidth, drawHeight);
+
+                        const img = document.createElement('img');
+                        img.src = canvas.toDataURL('image/jpeg', 0.8);
+                        img.style.width = '100%';
+                        img.style.height = '100%';
+                        img.style.objectFit = 'cover';
+                        img.style.borderRadius = '4px';
+
+                        if (thumbnail) {
+                            thumbnail.innerHTML = '';
+                            thumbnail.appendChild(img);
+                        }
+
+                        URL.revokeObjectURL(video.src);
+                    });
+
+                } else if (file.type === 'application/pdf') {
+                    // PDF thumbnail using PDF.js
+                    const fileReader = new FileReader();
+                    fileReader.onload = function(e) {
+                        const typedarray = new Uint8Array(e.target.result);
+
+                        pdfjsLib.getDocument(typedarray).promise.then(function(pdf) {
+                            pdf.getPage(1).then(function(page) {
+                                const viewport = page.getViewport({
+                                    scale: 1
+                                });
+                                const canvas = document.createElement('canvas');
+                                const context = canvas.getContext('2d');
+
+                                const scale = Math.min(200 / viewport.width, 200 / viewport
+                                    .height);
+                                const scaledViewport = page.getViewport({
+                                    scale: scale
+                                });
+
+                                canvas.width = scaledViewport.width;
+                                canvas.height = scaledViewport.height;
+
+                                const renderContext = {
+                                    canvasContext: context,
+                                    viewport: scaledViewport
+                                };
+
+                                page.render(renderContext).promise.then(function() {
+                                    const img = document.createElement('img');
+                                    img.src = canvas.toDataURL('image/jpeg', 0.8);
+                                    img.style.width = '100%';
+                                    img.style.height = '100%';
+                                    img.style.objectFit = 'cover';
+                                    img.style.borderRadius = '4px';
+
+                                    if (thumbnail) {
+                                        thumbnail.innerHTML = '';
+                                        thumbnail.appendChild(img);
+                                    }
+                                });
+                            });
+                        }).catch(function(error) {
+                            if (thumbnail) {
+                                thumbnail.innerHTML =
+                                    '<div style="font-size: 40px; color: #dc3545;">📄</div>';
+                            }
+                        });
+                    };
+                    fileReader.readAsArrayBuffer(file);
+
+                } else {
+                    // Other file types - keep your existing icon logic
+                    if (thumbnail) {
+                        thumbnail.innerHTML = '<div style="font-size: 40px;">📁</div>';
+                    }
+                }
+
             } else {
-                lainnyaInput.style.display = 'none';
-                lainnyaInput.required = false;
-                lainnyaInput.value = '';
+                // Hide preview if no file
+                if (filePreview) {
+                    filePreview.classList.remove('show');
+                }
+                if (label) {
+                    label.innerHTML =
+                        '<span style="font-size:1.2em;"><div class="upload-icon"><img src="{{ asset('icons/cloud-arrow-up-solid-full.svg') }}" alt="ini gambar" style="height: 100%;"></div></span> Pilih file';
+                }
+            }
+        });
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.id === 'removeFile') {
+                e.preventDefault();
+
+                const fileInput = document.getElementById('fileInput');
+                const filePreview = document.getElementById(
+                    'filePreview'); // Fixed: should be 'filePreview' not 'filepreview'
+                const fileUploadContainer = document.getElementById('fileUploadContainer');
+                const label = document.querySelector('label[for="fileInput"]');
+
+                // Clear the file input
+                if (fileInput) {
+                    fileInput.value = '';
+                }
+
+                // Hide file preview
+                if (filePreview) {
+                    filePreview.classList.remove('show');
+                }
+
+                // Show file upload container again
+                if (fileUploadContainer) {
+                    fileUploadContainer.classList.remove('disnone');
+                }
+
+                // Reset the label text
+                if (label) {
+                    label.innerHTML =
+                        '<span style="font-size:1.2em;"><div class="upload-icon"><img src="{{ asset('icons/cloud-arrow-up-solid-full.svg') }}" alt="ini gambar" style="height: 100%;"></div></span> Pilih file';
+                }
+
+                console.log('File removed successfully');
             }
         });
     </script>
-    @php
-        dd($_POST, $_FILES);
-    @endphp
 </body>
+
 </html>

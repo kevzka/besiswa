@@ -78,11 +78,6 @@
                     </thead>
                     <tbody>
                         @if (empty($activities))
-                            <tr>
-                                <td colspan="5" style="text-align: center; padding: 20px 0;">
-                                    Tidak ada data kegiatan bimbingan.
-                                </td>
-                            </tr>
                         @else
                             @foreach ($activities as $item)
                                 <tr>
