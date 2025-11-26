@@ -84,11 +84,20 @@ class UserViewController extends Controller
     public function portofolio()
     {
         // return response()->json(['status' => 'success', 'message' => 'Portofolio Page under development']);
-        return view('user.portofolio.portofolio');
+        $response = Http::post('http://' . Config::get('app.API') . '/api/user/portofolio');
+        if($response->status() == 404) {
+            abort(404);
+        }
+        $response = $response->json();
+        return view('user.portofolio.portofolio', compact('response'));
     }
     public function portofolioDetail($id)
     {
-
-        // return view('user.portofolio.detail', ['id' => $id]);
+        $response = Http::get('http://' . Config::get('app.API') . '/api/user/portofolioDetail/' . $id);
+        if($response->status() == 404) {
+            abort(404);
+        }
+        $response = $response->json();
+        return view('user.portofolio.detail', ['id' => $id, 'response' => $response]);
     }
 }

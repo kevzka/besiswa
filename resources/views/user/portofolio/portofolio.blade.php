@@ -62,7 +62,7 @@
         }
 
         /* Hover: pertegas / menghitamkan box-shadow dan sedikitangkat */
-        .level-card:hover,
+        /* .level-card:hover, */
         .batch-card:hover {
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.38);
             transform: translateY(-6px);
@@ -226,8 +226,8 @@
                         <h3 class="level-title">TINGKAT INTERNASIONAL</h3>
                     </div>
                     <div class="card-body">
-                        <p class="score">0</p>
-                        <p class="detail">0.0% Dari total</p>
+                        <p class="score">{{ $response['data']['totalInternasional'][0] }}</p>
+                        <p class="detail">{{ number_format($response['data']['totalInternasional'][1], 1) }}% Dari total</p>
                     </div>
                 </div>
 
@@ -237,8 +237,8 @@
                         <h3 class="level-title">TINGKAT NASIONAL</h3>
                     </div>
                     <div class="card-body">
-                        <p class="score">0</p>
-                        <p class="detail">0.0% Dari total</p>
+                        <p class="score">{{ $response['data']['totalNasional'][0] }}</p>
+                        <p class="detail">{{ number_format($response['data']['totalNasional'][1], 1) }}% Dari total</p>
                     </div>
                 </div>
 
@@ -248,8 +248,8 @@
                         <h3 class="level-title">TINGKAT PROVINSI</h3>
                     </div>
                     <div class="card-body">
-                        <p class="score">0</p>
-                        <p class="detail">0.0% Dari total</p>
+                        <p class="score">{{ $response['data']['totalProvinsi'][0] }}</p>
+                        <p class="detail">{{ number_format($response['data']['totalProvinsi'][1], 1) }}% Dari total</p>
                     </div>
                 </div>
 
@@ -259,8 +259,8 @@
                         <h3 class="level-title">TINGKAT KOTA/KABUPATEN</h3>
                     </div>
                     <div class="card-body">
-                        <p class="score">0</p>
-                        <p class="detail">0.0% Dari total</p>
+                        <p class="score">{{ $response['data']['totalKotaKabupaten'][0] }}</p>
+                        <p class="detail">{{ number_format($response['data']['totalKotaKabupaten'][1], 1) }}% Dari total</p>
                     </div>
                 </div>
 
@@ -273,38 +273,29 @@
             </div>
 
             <div class="batch-cards-container">
-
-                <div class="batch-card">
-                    <h3 class="batch-number">Angkatan 25</h3>
+                @if($response['data']['angkatan'] == null)
+                    <p>Tidak ada data angkatan tersedia.</p>
+                @else
+                @foreach ($response['data']['angkatan'] as $item)
+                    <div class="batch-card" onclick="location.href='{{ url('/portofolio/angkatan/' . $item['angkatan']) }}'">
+                    <h3 class="batch-number">Angkatan 
+                        {{ $item['angkatan'] }}
+                    </h3>
                     <span class="arrow-icon">></span>
                     <div class="batch-stats">
                         <div class="stat-item">
                             <span class="stat-icon">🧑‍🤝‍🧑</span>
-                            <p class="stat-label">Total prestasi</p>
+                            <p class="stat-label">{{$item['totalPrestasi']}} Total prestasi</p>
                         </div>
                         <div class="stat-item">
                             <span class="stat-icon">📈</span>
-                            <p class="stat-label">Total JIWA</p>
+                            <p class="stat-label">{{$item['totalJiwa'][0]}} Total JIWA</p>
                         </div>
                     </div>
-                    <p class="batch-detail">0.0% Dari total JIWA</p>
+                    <p class="batch-detail">{{$item['totalJiwa'][1]}}% Dari total JIWA</p>
                 </div>
-
-                <div class="batch-card">
-                    <h3 class="batch-number">Angkatan 26</h3>
-                    <span class="arrow-icon">></span>
-                    <div class="batch-stats">
-                        <div class="stat-item">
-                            <span class="stat-icon">🧑‍🤝‍🧑</span>
-                            <p class="stat-label">Total prestasi</p>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-icon">📈</span>
-                            <p class="stat-label">Total JIWA</p>
-                        </div>
-                    </div>
-                    <p class="batch-detail">0.0% Dari total JIWA</p>
-                </div>
+                @endforeach
+                @endif
 
                 <div class="batch-card">
                     <h3 class="batch-number">Angkatan 27</h3>
@@ -312,14 +303,14 @@
                     <div class="batch-stats">
                         <div class="stat-item">
                             <span class="stat-icon">🧑‍🤝‍🧑</span>
-                            <p class="stat-label">Total prestasi</p>
+                            <p class="stat-label">{{$response['data']['angkatan'][2021]['totalPrestasi']}} Total prestasi</p>
                         </div>
                         <div class="stat-item">
                             <span class="stat-icon">📈</span>
-                            <p class="stat-label">Total JIWA</p>
+                            <p class="stat-label">{{$response['data']['angkatan'][2021]['totalJiwa'][0]}} Total JIWA</p>
                         </div>
                     </div>
-                    <p class="batch-detail">0.0% Dari total JIWA</p>
+                    <p class="batch-detail">{{$response['data']['angkatan'][2021]['totalJiwa'][1]}}% Dari total JIWA</p>
                 </div>
 
             </div>

@@ -155,6 +155,7 @@
 
             /* Membatasi tinggi dan mengaktifkan scroll saat overflow */
             max-height: 30rem;
+            min-height: 30rem;
             /* sesuaikan sesuai kebutuhan */
             overflow-y: auto;
         }
@@ -372,7 +373,7 @@
         .stat-number-box-wrapper .stat-number-box {
             background-color: red;
             border: none;
-            width: 30%;
+            width: {{$response['data']['persentasePartisipan']}}%;
             height: 100%;
         }
 
@@ -502,7 +503,7 @@
     <div class="container">
 
         <div class="angkatan-title">
-            <p>ANGKATAN 25</p>
+            <p>ANGKATAN {{ $id }}</p>
         </div>
 
         <div class="logo-title">
@@ -541,14 +542,14 @@
             <div class="global-stats-container">
                 <div class="stat-group">
                     <div class="stat-number-box">
-                        <p class="stat-number">0</p>
+                        <p class="stat-number">{{$response['data']['totalPrestasi']}}</p>
                     </div>
                     <p class="stat-label">TOTAL PRESTASI</p>
                 </div>
 
                 <div class="stat-group">
                     <div class="stat-number-box">
-                        <p class="stat-number">0</p>
+                        <p class="stat-number">{{$response['data']['totalJiwa']}}</p>
                     </div>
                     <p class="stat-label">TOTAL JIWA</p>
                 </div>
@@ -556,7 +557,7 @@
                 <div class="stat-group">
                     <div class="stat-number-box-wrapper">
                         <div class="stat-number-box">
-                            <p class="stat-number">0.9%</p>
+                            <p class="stat-number">{{$response['data']['persentasePartisipan']}}%</p>
                         </div>
                     </div>
                     <p class="stat-label">Tingkat partisipasi prestasi siswa/i SMK Telkom Banjarbaru</p>
@@ -565,103 +566,27 @@
 
             <section class="student-list-section">
                 <div class="student-list-container">
-
-                    <div class="student-list-item">
-                        <div class="student-info">
-                            <span class="profile-icon">👤</span>
-                            <div>
-                                <p class="student-name">Nama Siswa</p>
-                                <p class="student-achievements">0 Prestasi</p>
+                    @if($response['data']['siswa'] == null || count($response['data']['siswa']) == 0)
+                        <p>Tidak ada data siswa untuk angkatan ini.</p>
+                    @else
+                        @foreach($response['data']['siswa'] as $siswa)
+                            <div class="student-list-item">
+                                <div class="student-info">
+                                    <span class="profile-icon">👤</span>
+                                    <div>
+                                        <p class="student-name">{{ $siswa['nama'] }}</p>
+                                        <p class="student-achievements">{{ $siswa['prestasi']['total'] }} Prestasi</p>
+                                    </div>
+                                </div>
+                                <div class="student-action">
+                                    <button class="prestasi-button">
+                                        <span>{{ $siswa['prestasi']['total'] }} Prestasi</span>
+                                    </button>
+                                    <span class="achievement-count">🌟 {{ $siswa['prestasi']['total'] }}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="student-action">
-                            <button class="prestasi-button">
-                                <span>0 Prestasi</span>
-                            </button>
-                            <span class="achievement-count">🌟 10+</span>
-                        </div>
-                        <div class="student-info">
-                            <span class="profile-icon">👤</span>
-                            <div>
-                                <p class="student-name">Nama Siswa</p>
-                                <p class="student-achievements">0 Prestasi</p>
-                            </div>
-                        </div>
-                        <div class="student-action">
-                            <button class="prestasi-button">
-                                <span>0 Prestasi</span>
-                            </button>
-                            <span class="achievement-count">🌟 10+</span>
-                        </div>
-                        <div class="student-info">
-                            <span class="profile-icon">👤</span>
-                            <div>
-                                <p class="student-name">Nama Siswa</p>
-                                <p class="student-achievements">0 Prestasi</p>
-                            </div>
-                        </div>
-                        <div class="student-action">
-                            <button class="prestasi-button">
-                                <span>0 Prestasi</span>
-                            </button>
-                            <span class="achievement-count">🌟 10+</span>
-                        </div>
-                        <div class="student-info">
-                            <span class="profile-icon">👤</span>
-                            <div>
-                                <p class="student-name">Nama Siswa</p>
-                                <p class="student-achievements">0 Prestasi</p>
-                            </div>
-                        </div>
-                        <div class="student-action">
-                            <button class="prestasi-button">
-                                <span>0 Prestasi</span>
-                            </button>
-                            <span class="achievement-count">🌟 10+</span>
-                        </div>
-                        <div class="student-info">
-                            <span class="profile-icon">👤</span>
-                            <div>
-                                <p class="student-name">Nama Siswa</p>
-                                <p class="student-achievements">0 Prestasi</p>
-                            </div>
-                        </div>
-                        <div class="student-action">
-                            <button class="prestasi-button">
-                                <span>0 Prestasi</span>
-                            </button>
-                            <span class="achievement-count">🌟 10+</span>
-                        </div>
-                        <div class="student-info">
-                            <span class="profile-icon">👤</span>
-                            <div>
-                                <p class="student-name">Nama Siswa</p>
-                                <p class="student-achievements">0 Prestasi</p>
-                            </div>
-                        </div>
-                        <div class="student-action">
-                            <button class="prestasi-button">
-                                <span>0 Prestasi</span>
-                            </button>
-                            <span class="achievement-count">🌟 10+</span>
-                        </div>
-                    </div>
-
-                    <div class="student-list-item">
-                        <div class="student-info">
-                            <span class="profile-icon">👤</span>
-                            <div>
-                                <p class="student-name">Nama Siswa</p>
-                                <p class="student-achievements">0 Prestasi</p>
-                            </div>
-                        </div>
-                        <div class="student-action">
-                            <button class="prestasi-button">
-                                <span>0 Prestasi</span>
-                            </button>
-                            <span class="achievement-count">🌟 2</span>
-                        </div>
-                    </div>
+                        @endforeach
+                    @endif
                 </div>
 
                 <div class="legend-footer">
@@ -678,10 +603,10 @@
                         <p class="legend-item"><span class="icon-legend">⭐</span> Tingkat Kota/Kabupaten</p>
                     </div>
                     <div class="legend-totals">
-                        <p>Total Prestasi Internasional: 10</p>
-                        <p>Total Nasional: 10</p>
-                        <p>Total Provinsi: 10</p>
-                        <p>Total Kota/Kabupaten: 10</p>
+                        <p>Total Prestasi Internasional: {{ $response['data']['prestasi']['internasional'] }}</p>
+                        <p>Total Nasional: {{ $response['data']['prestasi']['nasional'] }}</p>
+                        <p>Total Provinsi: {{ $response['data']['prestasi']['provinsi'] }}</p>
+                        <p>Total Kota/Kabupaten: {{ $response['data']['prestasi']['kotaKabupaten'] }}</p>
                     </div>
                 </div>
 
@@ -693,7 +618,7 @@
         // Data yang sesuai dengan angka-angka di sekitar chart
         const chartData = {
             // Angka-angka 147, 392, 20, 667
-            data: [147, 392, 20, 667],
+            data: [{{ $response['data']['prestasi']['internasional'] }}, {{ $response['data']['prestasi']['nasional'] }}, {{ $response['data']['prestasi']['provinsi'] }}, {{ $response['data']['prestasi']['kotaKabupaten'] }}],
             // Label yang sesuai dengan tingkatan prestasi (misalnya, A, B, C, D)
             labels: [
                 'Tingkat Internasional', // 147

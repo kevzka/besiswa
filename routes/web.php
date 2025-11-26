@@ -29,7 +29,7 @@ Route::get('/prestasi/detail/{id}', [UserViewController::class, 'prestasiDetail'
 Route::get('/ekskul/{deg}', [UserViewController::class, 'ekskul'])->name('ekskul');
 Route::get('/ekskul/detail/{id}', [UserViewController::class, 'ekskulDetail'])->name('ekskul.detail');
 Route::get('/portofolio/{deg}', [UserViewController::class, 'portofolio'])->name('portofolio');
-Route::get('/portofolio/detail/{id}', [UserViewController::class, 'portofolioDetail'])->name('portofolio.detail');
+Route::get('/portofolio/angkatan/{id}', [UserViewController::class, 'portofolioDetail'])->name('portofolio.detail');
 
 // Admin Routes
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {

@@ -81,29 +81,30 @@ class UserDataApiController extends Controller
             $totalNasional = TbLombas::where('tingkat_lomba', 'nasional')->count();
             $totalProvinsi = TbLombas::where('tingkat_lomba', 'provinsi')->count();
             $totalKotaKabupaten = TbLombas::where('tingkat_lomba', 'kota')->count();
-            $totanPerAngkatan = [];
+            $totalPerAngkatan = [];
             $totalAngkatan = TbSiswas::pluck('angkatan')->unique();
-            $totalAngkatan->map(function($angkatan) use (&$totanPerAngkatan){
+            $totalAngkatan->map(function($angkatan) use (&$totalPerAngkatan){
                 $totalPrestasi = TbSiswasLombas::whereHas('tb_siswa', function ($query) use ($angkatan){
                     $query->where('angkatan', $angkatan);
-                })->count();
+                })->distinct()->count('id_lomba');
 
                 $totalJiwaPerAngkatan = TbSiswas::where('angkatan', $angkatan)->sum('poin_jiwa');
                 $totalJiwa = TbSiswas::all()->sum('poin_jiwa');
-                $totanPerAngkatan[$angkatan] = [
+                $totalPerAngkatan[$angkatan] = [
+                    'angkatan' => $angkatan,
                     'totalPrestasi' => $totalPrestasi,
-                    'totalJiwa' => [$totalJiwaPerAngkatan, (100/$totalJiwa)*$totalJiwaPerAngkatan]
+                    'totalJiwa' => [$totalJiwaPerAngkatan, number_format((100/$totalJiwa)*$totalJiwaPerAngkatan, 1)]
                 ];
             });
 
             return response()->json([
                 'data' => [
                     'totalPrestasi' => $totalTbLombas,
-                    'totalInternasional' => [$totalInternasional, (100/$totalTbLombas)*$totalInternasional],
-                    'totalNasional' => [$totalNasional, (100/$totalTbLombas)*$totalNasional],
-                    'totalProvinsi' => [$totalProvinsi, (100/$totalTbLombas)*$totalProvinsi],
-                    'totalKotaKabupaten' => [$totalKotaKabupaten, (100/$totalTbLombas)*$totalKotaKabupaten],
-                    'angkatan' => $totanPerAngkatan,
+                    'totalInternasional' => [$totalInternasional, number_format((100/$totalTbLombas)*$totalInternasional, 1)],
+                    'totalNasional' => [$totalNasional, number_format((100/$totalTbLombas)*$totalNasional, 1)],
+                    'totalProvinsi' => [$totalProvinsi, number_format((100/$totalTbLombas)*$totalProvinsi, 1)],
+                    'totalKotaKabupaten' => [$totalKotaKabupaten, number_format((100/$totalTbLombas)*$totalKotaKabupaten, 1)],
+                    'angkatan' => $totalPerAngkatan,
                 ],
             ]);
         } catch (\Exception $e) {
@@ -117,7 +118,7 @@ class UserDataApiController extends Controller
         // gabungkan TbLombas dengan TbSiswasLombas dan TbSiswas untuk mendapatkan detail prestasi per siswa berdasarkan angkatan
         $totalPrestasi = TbSiswasLombas::whereHas('tb_siswa', function ($query) use ($angkatan){
             $query->where('angkatan', $angkatan);
-        })->count();
+        })->distinct()->count('id_lomba');
         $prestasi = [
             'internasional' => TbSiswasLombas::whereHas('tb_siswa', function ($query) use ($angkatan){
                 $query->where('angkatan', $angkatan);
@@ -172,7 +173,6 @@ class UserDataApiController extends Controller
                 'prestasi' => $prestasiSiswa,
             ];
         });
-        /* count() / TbSiswas::where('angkatan', $angkatan)->count()) * 100 */
         
 
         return response()->json([
@@ -180,7 +180,7 @@ class UserDataApiController extends Controller
                 "totalPrestasi" => $totalPrestasi,
                 "prestasi" => $prestasi,
                 "totalJiwa" => $totalJiwa,
-                "persentasePartisipan" => $persentasePartisipan,
+                "persentasePartisipan" => number_format($persentasePartisipan, 1),
                 "siswa" => $siswa
                 ]
             ]
