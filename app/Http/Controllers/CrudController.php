@@ -271,7 +271,7 @@ class CrudController extends Controller
             ]);
 
             Log::info('Making API request to edit endpoint', ['id' => $id]);
-            $activityData = Http::get('http://' . Config::get('app.API') . '/api/crud/{$id}/edit')->json()['data'];
+            $activityData = Http::get('http://' . Config::get('app.API') . '/api/crud/' . $id . '/edit')->json()['data'];
             Log::info('Activity data retrieved for edit', ['activity_id' => $id]);
             
             $user = Auth::user();
@@ -340,7 +340,7 @@ class CrudController extends Controller
             }
 
             Log::info('Making API request to update endpoint', ['activity_id' => $activityId]);
-            $response = $httpRequest->post('http://' . Config::get('app.API') . '/api/crud/{$activityId}');
+            $response = $httpRequest->post('http://' . Config::get('app.API') . '/api/crud/' . $activityId);
 
             if ($response->successful()) {
                 Log::info('Update operation successful', [

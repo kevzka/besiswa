@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PerformaController;
 use App\Http\Controllers\UserViewController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PortofolioController;
 
 // Authentication Routes
 Route::get('register', [AuthController::class, 'showRegistrationForm'])->name('register');
@@ -37,7 +38,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('bimbingan', CrudController::class)->parameters(['bimbingan' => 'kegiatan'])->names('bimbingan');
     Route::resource('prestasi', CrudController::class)->parameters(['prestasi' => 'kegiatan'])->names('prestasi');
     Route::resource('ekskul', CrudController::class)->parameters(['ekskul' => 'kegiatan'])->names('ekskul');
-    Route::resource('portofolio', PerformaController::class)->names('portofolio');
+    Route::resource('portofolio', PortofolioController::class)->names('portofolio');
     Route::get('profile', [DashboardController::class, 'profileDashboard'])->name('profile');
 });
 
@@ -49,6 +50,11 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
 Route::get('/tes', function () {
     return view('tes');
+});
+
+//kirim kode csrf
+Route::get('/csrf-token', function () {
+    return response()->json(['csrf_token' => csrf_token()]);
 });
 
 Route::get('/tesbimbingan', function () {

@@ -52,6 +52,7 @@ class PerformaCrudController extends Controller
                         "tingkatLomba" => $lomba->tingkat_lomba,
                         "tingkatJuara" => $lomba->tingkat_juara,
                         "poinLomba" => (int)$lomba->poin_lomba,
+                        "idAdmin" => (int)$evidence->id_admin,
                     ];
 
                     $data_terformat[] = $data_lomba;
@@ -172,6 +173,7 @@ class PerformaCrudController extends Controller
         }
     }
 
+    
     /**
      * Update the specified resource in storage.
      */
