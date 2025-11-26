@@ -213,7 +213,9 @@ class AuthController extends Controller
                 
                 Log::info('Redirecting to admin dashboard after login');
                 // set session flag, blade akan menampilkan log + delay lalu redirect
-                return redirect()->intended('/admin/dashboard')->with('success', true);
+                // return redirect()->intended('/admin/login')->with('success', true);
+                // return view('auth.login')->with('ya mantap', true);
+                return response()->view('auth.login', ['success' => true]);
             }
             
             Log::warning('Authentication failed', [

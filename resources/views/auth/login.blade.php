@@ -11,13 +11,28 @@
 <body>
 
   <div class="container">
-    @if(session('success'))
+    {{-- cek jika terkirim sukses --}}
+    {{-- @dd(session('success')) --}}
+    {{-- @json(session('ya mantap')) --}}
+    @if(isset($success) && $success)
+    
       <script>
-        console.log('sukses');
-        setTimeout(function(){
-          window.location.href = "{{ url('/admin/dashboard') }}";
-        }, 2000);
-      </script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Tampilkan notifikasi
+            const notificationBox = document.querySelector(".notification-box");
+            notificationBox.classList.remove("none");
+            notificationBox.classList.add("show");
+
+
+            // Setelah 2 detik, sembunyikan notifikasi dan redirect
+            setTimeout(function() {
+              notificationBox.classList.remove("show");
+            notificationBox.classList.add("none");
+                // Redirect ke halaman dashboard admin
+                window.location.href = "/admin/dashboard";
+            }, 2000); // 2000 milidetik = 2 detik
+        });
+        </script>
     @endif
     <!-- Container utama notifikasi -->
     <div class="notification-box none">

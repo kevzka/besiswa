@@ -33,6 +33,8 @@ Route::get('/portofolio/{deg}', [UserViewController::class, 'portofolio'])->name
 Route::get('/portofolio/angkatan/{id}', [UserViewController::class, 'portofolioDetail'])->name('portofolio.detail');
 
 // Admin Routes
+// hilangkkan middleware auth
+// Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', [CrudController::class, 'home'])->name('dashboard');
     Route::resource('bimbingan', CrudController::class)->parameters(['bimbingan' => 'kegiatan'])->names('bimbingan');
@@ -41,12 +43,42 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('portofolio', PortofolioController::class)->names('portofolio');
     Route::get('profile', [DashboardController::class, 'profileDashboard'])->name('profile');
 });
+//bikinkan kode auto login
 
-// Route::middleware('auth')->group(function () {
-// Route::resource('tes', PerformaController::class);
-// })
+if (app()->environment('local')) {
+    /**
+     * Dev-only auto login for Postman.
+     * Usage: GET /dev-login/{id}?token=SECRET_TOKEN
+     * Response sets session cookie and XSRF-TOKEN cookie and returns csrf_token + user.
+     */
+    Route::get('/dev-login/{id}', function ($id) {
+        if (env('AUTO_LOGIN_TOKEN') && request()->query('token') !== env('AUTO_LOGIN_TOKEN')) {
+            abort(403, 'Forbidden');
+        }
 
+        $userModel = config('auth.providers.users.model');
+        $user = $userModel::findOrFail($id);
 
+        \Illuminate\Support\Facades\Auth::login($user);
+
+        // regenerate session id
+        session()->regenerate();
+
+        $lifetime = config('session.lifetime'); // minutes
+
+        return response()->json([
+            'message' => 'dev login ok',
+            'user' => $user,
+            'csrf_token' => csrf_token(),
+            'session_name' => session()->getName(),
+            'session_id' => session()->getId(),
+        ])
+        // set Laravel session cookie so Postman receives it
+        ->withCookie(cookie(session()->getName(), session()->getId(), $lifetime))
+        // set XSRF-TOKEN cookie so frontends can read it
+        ->withCookie(cookie('XSRF-TOKEN', csrf_token(), $lifetime));
+    })->name('dev.login');
+}
 
 Route::get('/tes', function () {
     return view('tes');
