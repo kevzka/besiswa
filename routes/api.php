@@ -16,6 +16,7 @@ Route::apiResource('performa', PerformaCrudController::class);
 Route::post('/user', [UserDataApiController::class, 'userData']);
 Route::get('/user/detailData/{id}', [UserDataApiController::class, 'detailData']);
 Route::post('/user/portofolio', [UserDataApiController::class, 'portofolioData']);
+Route::get('/user/portofolioDetail/{angkatan}', [UserDataApiController::class, 'portofolioDetailData']);
 
 Route::get('/test', [CrudApiController::class, 'test']);
 Route::get('/home', [CrudApiController::class, 'home']);

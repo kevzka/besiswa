@@ -112,4 +112,78 @@ class UserDataApiController extends Controller
             ], 500);
         }
     }
+
+    public function portofolioDetailData($angkatan){
+        // gabungkan TbLombas dengan TbSiswasLombas dan TbSiswas untuk mendapatkan detail prestasi per siswa berdasarkan angkatan
+        $totalPrestasi = TbSiswasLombas::whereHas('tb_siswa', function ($query) use ($angkatan){
+            $query->where('angkatan', $angkatan);
+        })->count();
+        $prestasi = [
+            'internasional' => TbSiswasLombas::whereHas('tb_siswa', function ($query) use ($angkatan){
+                $query->where('angkatan', $angkatan);
+            })->whereHas('tb_lomba', function ($query){
+                $query->where('tingkat_lomba', 'internasional');
+            })->count(),
+            'nasional' => TbSiswasLombas::whereHas('tb_siswa', function ($query) use ($angkatan){
+                $query->where('angkatan', $angkatan);
+            })->whereHas('tb_lomba', function ($query){
+                $query->where('tingkat_lomba', 'nasional');
+            })->count(),
+            'provinsi' => TbSiswasLombas::whereHas('tb_siswa', function ($query) use ($angkatan){
+                $query->where('angkatan', $angkatan);
+            })->whereHas('tb_lomba', function ($query){
+                $query->where('tingkat_lomba', 'provinsi');
+            })->count(),
+            'kotaKabupaten' => TbSiswasLombas::whereHas('tb_siswa', function ($query) use ($angkatan){
+                $query->where('angkatan', $angkatan);
+            })->whereHas('tb_lomba', function ($query){
+                $query->where('tingkat_lomba', 'kota');
+            })->count(),
+        ];
+        $totalJiwa = TbSiswas::where('angkatan', $angkatan)->sum('poin_jiwa');
+        $totalJiwaTbSiswaLomba = TbSiswasLombas::whereHas('tb_siswa', function ($query) use ($angkatan){
+            $query->where('angkatan', $angkatan);
+        })->with('tb_lomba')->get()->map(function($item){
+            return $item->tb_lomba->poin_lomba;
+        })->sum();
+        $totalJiwa = ($totalJiwa + $totalJiwaTbSiswaLomba);
+        $persentasePartisipan = ((100 / TbSiswas::where('angkatan', $angkatan)->count())*TbSiswasLombas::whereHas('tb_siswa', function ($query) use ($angkatan){
+            $query->where('angkatan', $angkatan);
+        })->distinct()->count('nis_siswa'));
+        $siswa = [];
+        TbSiswas::where('angkatan', $angkatan)->get()->map(function($query) use (&$siswa){
+            $prestasiSiswa = [
+                'total' => TbSiswasLombas::where('nis_siswa', $query->nis)->count(),
+                'internasional' => TbSiswasLombas::where('nis_siswa', $query->nis)->whereHas('tb_lomba', function ($q){
+                    $q->where('tingkat_lomba', 'internasional');
+                })->count(),
+                'nasional' => TbSiswasLombas::where('nis_siswa', $query->nis)->whereHas('tb_lomba', function ($q){
+                    $q->where('tingkat_lomba', 'nasional');
+                })->count(),
+                'provinsi' => TbSiswasLombas::where('nis_siswa', $query->nis)->whereHas('tb_lomba', function ($q){
+                    $q->where('tingkat_lomba', 'provinsi');
+                })->count(),
+                'kotaKabupaten' => TbSiswasLombas::where('nis_siswa', $query->nis)->whereHas('tb_lomba', function ($q){
+                    $q->where('tingkat_lomba', 'kota');
+                })->count(),
+            ];
+            $siswa[] = [
+                'nama' => $query->nama,
+                'prestasi' => $prestasiSiswa,
+            ];
+        });
+        /* count() / TbSiswas::where('angkatan', $angkatan)->count()) * 100 */
+        
+
+        return response()->json([
+            'data' => [
+                "totalPrestasi" => $totalPrestasi,
+                "prestasi" => $prestasi,
+                "totalJiwa" => $totalJiwa,
+                "persentasePartisipan" => $persentasePartisipan,
+                "siswa" => $siswa
+                ]
+            ]
+        );
+    }
 }

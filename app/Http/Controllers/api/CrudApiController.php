@@ -260,7 +260,7 @@ class CrudApiController extends Controller
                     $mime = $uploadedFile->getClientMimeType();
                     $ext = strtolower($uploadedFile->getClientOriginalExtension());
                     $storageFullPath = storage_path('app/public/' . $storedFilePath);
-                    $thumbFileName = time() . '_' . $sanitizedTitle . '_thumb.jpg';
+                    $thumbFileName = time() .'_thumb.jpg';
                     $thumbRelative = 'thumbnail/' . $thumbFileName;
                     $thumbFullPath = storage_path('app/public/' . $thumbRelative);
 
@@ -287,7 +287,7 @@ class CrudApiController extends Controller
                         if (!file_exists($tmpDir)) {
                             mkdir($tmpDir, 0755, true);
                         }
-                        $tmpPdf = $tmpDir . '/' . $sanitizedTitle . '_' . time() . '.pdf';
+                        $tmpPdf = $tmpDir . '/'  . time() . '.pdf';
                         $sofficeCmd = 'soffice --headless --convert-to pdf --outdir ' . escapeshellarg($tmpDir) . ' ' . escapeshellarg($storageFullPath);
                         exec($sofficeCmd, $out, $ret);
                         $convertedPdf = $tmpDir . '/' . pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME) . '.pdf';

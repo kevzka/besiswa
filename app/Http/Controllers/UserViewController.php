@@ -8,54 +8,86 @@ use Illuminate\Support\Facades\Config;
 
 class UserViewController extends Controller
 {
-    public $posArrStart = [210,100,"400px"];
-    public $posArrIdle = [20,50,"80px"];
+    public $posArrStart = [210, 100, "400px"];
+    public $posArrIdle = [20, 50, "80px"];
 
-    public function bimbingan($deg){
+    public function bimbingan($deg)
+    {
         $response = Http::post('http://' . Config::get('app.API') . '/api/user', [
             'function' => 'dataIndex',
             'type' => 1,
-        ])->json();
-        $response = array_merge($response, ['logoRotation' => 45, 'startLogoRotation' => ($deg == 0) ? 0 : (($deg-1)*90)+45, 'posArrStart' => $deg == 0 ? $this->posArrStart : $this->posArrIdle]);
+        ]);
+        if($response->status() == 404) {
+            abort(404);
+        }
+        $response = $response->json();
+        $response = array_merge($response, ['logoRotation' => 45, 'startLogoRotation' => ($deg == 0) ? 0 : (($deg - 1) * 90) + 45, 'posArrStart' => $deg == 0 ? $this->posArrStart : $this->posArrIdle]);
         return view('user.bimbingan.bimbingan', compact('response'));
     }
-    public function bimbinganDetail($id){
-        $response = Http::get('http://' . Config::get('app.API') . '/api/user/detailData/' . $id)->json();
+    public function bimbinganDetail($id)
+    {
+        $response = Http::get('http://' . Config::get('app.API') . '/api/user/detailData/' . $id);
+        if ($response->status() == 404) {
+            abort(404);
+        }
+        $response = $response->json();
         return view('user.bimbingan.show', compact('response'));
     }
-    
-    public function prestasi($deg){
+
+    public function prestasi($deg)
+    {
         $response = Http::post('http://' . Config::get('app.API') . '/api/user', [
             'function' => 'dataIndex',
             'type' => 2,
-        ])->json();
-        $response = array_merge($response, ['logoRotation' => 135, 'startLogoRotation' => ($deg == 0) ? 0 : (($deg-1)*90)+45, 'posArrStart' => $deg == 0 ? $this->posArrStart : $this->posArrIdle]);
+        ]);
+        if($response->status() == 404) {
+            abort(404);
+        }
+        $response = $response->json();
+        $response = array_merge($response, ['logoRotation' => 135, 'startLogoRotation' => ($deg == 0) ? 0 : (($deg - 1) * 90) + 45, 'posArrStart' => $deg == 0 ? $this->posArrStart : $this->posArrIdle]);
         return view('user.prestasi.prestasi', compact('response'));
     }
-    public function prestasiDetail($id){
-        $response = Http::get('http://' . Config::get('app.API') . '/api/user/detailData/' . $id)->json();
+    public function prestasiDetail($id)
+    {
+        $response = Http::get('http://' . Config::get('app.API') . '/api/user/detailData/' . $id);
+        if($response->status() == 404) {
+            abort(404);
+        }
+        $response = $response->json();
         return view('user.prestasi.show', compact('response'));
     }
 
-    public function ekskul($deg){
+    public function ekskul($deg)
+    {
         $response = Http::post('http://' . Config::get('app.API') . '/api/user', [
             'function' => 'dataIndex',
             'type' => 3,
-        ])->json();
-        
-        $response = array_merge($response, ['logoRotation' => 225, 'startLogoRotation' => ($deg == 0) ? 0 : (($deg-1)*90)+45, 'posArrStart' => $deg == 0 ? $this->posArrStart : $this->posArrIdle]);
+        ]);
+        if($response->status() == 404) {
+            abort(404);
+        }
+        $response = $response->json();
+
+        $response = array_merge($response, ['logoRotation' => 225, 'startLogoRotation' => ($deg == 0) ? 0 : (($deg - 1) * 90) + 45, 'posArrStart' => $deg == 0 ? $this->posArrStart : $this->posArrIdle]);
         return view('user.ekskul.ekskul', compact('response'));
     }
-    public function ekskulDetail($id){
-        $response = Http::get('http://' . Config::get('app.API') . '/api/user/detailData/' . $id)->json();
+    public function ekskulDetail($id)
+    {
+        $response = Http::get('http://' . Config::get('app.API') . '/api/user/detailData/' . $id);
+        if($response->status() == 404) {
+            abort(404);
+        }
+        $response = $response->json();
         return view('user.ekskul.show', compact('response'));
     }
 
-    public function portofolio(){
+    public function portofolio()
+    {
         // return response()->json(['status' => 'success', 'message' => 'Portofolio Page under development']);
         return view('user.portofolio.portofolio');
     }
-    public function portofolioDetail($id){
+    public function portofolioDetail($id)
+    {
 
         // return view('user.portofolio.detail', ['id' => $id]);
     }
