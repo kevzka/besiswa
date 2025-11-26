@@ -39,6 +39,11 @@
                         style="margin-right: 10px;"></i> Ekskul</a>
             </div>
         @endif
+        @if ($id_role == 5 || $id_role == 4)
+            <div class="nav-item {{ $activeMenu == 'portofolio' ? 'active' : '' }}">
+                <a href="{{ route('admin.portofolio.create') }}"><img src="{{asset('icons/Portofolio.svg')}}" alt="" style="height: 1rem;"> Portofolio</a>
+            </div>
+        @endif
         <div class="nav-item {{ $activeMenu == 'profil' ? 'active' : '' }}">
             <a href="{{ route('admin.profile') }}"><i class="fas fa-user-circle" style="margin-right: 10px;"></i>
                 Profil</a>

@@ -12,7 +12,7 @@
 
 <body>
     <!-- Sidebar -->
-    <x-admin.sidebar role="porto" id-role="1" adminName="kevin" active-menu='bimbingan' />
+    <x-admin.sidebar role="porto" id-role="4" adminName="kevin" active-menu='portofolio' />
 
     <!-- Main Content -->
     <div class="main-content">
@@ -21,34 +21,43 @@
                     style="width: 100%;"></div>
         </div>
 
+        {{-- @dd($data) --}}
         <div class="content-wrapper">
             <div class="banner-box"></div>
 
             <!-- Card Form Edit Berita -->
             <div class="card-form">
                 <h2>Edit Berita</h2>
-                <form action="{{ route('admin.bimbingan.update', $activityData['id_evidence']) }}" method="POST"
+                <form action="{{ route('admin.portofolio.update', $data['idLomba']) }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    <input type="text" name="title" placeholder="Judul baru"
-                        value="{{ old('title', $activityData['title']) }}">
-                    <textarea name="description" placeholder="Deskripsi baru">{{ old('description', $activityData['description']) }}</textarea>
-                    <input type="date" name="date" value="{{ old('date', date('Y-m-d', strtotime($activityData['date']))) }}">
+                    <input type="hidden" name="username" value="kevin">
+                    <input type="hidden" name="id_admin" value="2">
+                    <input type="hidden" name="id_lomba" value="{{ $data['idLomba'] }}">
+                    <input type="hidden" name="nis" value="{{ $data['nisSiswa'] }}">
+                    {{-- <input type="hidden" name="fileDokumentasi" value="{{ $data['fileDokumentasi'] }}"> --}}
+                    <input type="hidden" name="tingkat_lomba" value="{{ $data['tingkatLomba'] }}">
+                    <input type="hidden" name="tingkat_juara" value="{{ $data['tingkatJuara'] }}">
+                    <input type="hidden" name="poin_lomba" value="{{ $data['poinLomba'] }}">
+                    <input type="text" name="nama_lomba" placeholder="Judul baru"
+                        value="{{ old('title', $data['namaLomba']) }}">
+                    <textarea name="deskripsi_lomba" placeholder="Deskripsi baru">{{ old('description', $data['deskripsiLomba']) }}</textarea>
+                    <input type="date" name="tanggal_lomba" value="{{ old('date', date('Y-m-d', strtotime($data['tanggalLomba']))) }}">
 
                     <div class="file-upload disnone" id="fileUploadContainer">
                         <label for="fileInput"><span style="font-size:1.2em;">
                                 <span><i class="fas fa-cloud-upload-alt"></i></span> Pilih file
                         </label>
-                        <input type="file" name="file" id="fileInput" class="file-upload-btn"
+                        <input type="file" name="file_evidence" id="fileInput" class="file-upload-btn"
                             accept="image/*,video/*,application/pdf" required>
                     </div>
                     <div class="filePreview show" id="filePreview" style="">
                         <div class="thumbnail" id="thumbnail" style="width: fit-content; height: 100%;"><img
-                                src="{{ asset('storage/' . $activityData['file']) }}"
+                                src="{{ asset('storage/kegiatan/' . $data['fileDokumentasi']) }}"
                                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;"></div>
                         <?php
-                        $fileNameOld = str_replace('kegiatan/', '', $activityData['file']);
+                        $fileNameOld = str_replace('kegiatan/', '', $data['fileDokumentasi']);
                         $fileNameOld = explode('_', $fileNameOld);
                         unset($fileNameOld[0]);
                         $fileNameOld = implode('_', $fileNameOld);

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Config;
 
-class PerformaController extends Controller
+class PortofolioController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,8 +23,9 @@ class PerformaController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        return view('admin.portofolio.create');
+    {   $response = Http::get("http://" . Config::get('app.API') . "/api/performa");
+        $datas = $response->json()['data'];
+        return view('admin.portofolio.create', compact('datas'), ['adminId' => Auth::user()->id_admin]);
     }
 
     /**
@@ -32,6 +33,7 @@ class PerformaController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         try {
             $user = Auth::user();
             // dd($request->all());
@@ -51,8 +53,7 @@ class PerformaController extends Controller
                 'poin_lomba' => $request->poin_lomba,
             ]);
             
-            dd($response->json());
-            // return redirect()->route('tes.index')->with('success', 'Data berhasil ditambahkan');
+            return redirect()->route('admin.portofolio.create')->with('success', 'Data berhasil ditambahkan');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
         }
@@ -65,7 +66,7 @@ class PerformaController extends Controller
     {
         $response = Http::get("http://" . Config::get('app.API') . "/api/performa/" . $id);
         if (isset($response->json()['error'])) {
-            return redirect()->route('tes.index')->with('error', 'Data tidak ditemukan');
+            return redirect()->route('admin.portofolio.create')->with('error', 'Data tidak ditemukan');
         }
         $data = $response->json()['data'][0];
 
@@ -79,7 +80,7 @@ class PerformaController extends Controller
     {
         $response = Http::get("http://" . Config::get('app.API') . "/api/performa/" . $id);
         if (isset($response->json()['error'])) {
-            return redirect()->route('tes.index')->with('error', 'Data tidak ditemukan');
+            return redirect()->route('admin.portofolio.create')->with('error', 'Data tidak ditemukan');
         }
         $data = $response->json()['data'][0];
 
@@ -124,7 +125,7 @@ class PerformaController extends Controller
             }
 
             if ($response->successful()) {
-                return redirect()->route('tes.index')->with('success', 'Data berhasil diperbarui');
+                return redirect()->route('admin.portofolio.create')->with('success', 'Data berhasil diperbarui');
             }
 
             return response()->json($response->json());
@@ -140,6 +141,6 @@ class PerformaController extends Controller
     public function destroy(string $id)
     {
         $response = Http::delete("http://" . Config::get('app.API') . "/api/performa/" . $id);
-        return redirect()->route('tes.index')->with('success', 'Data berhasil dihapus');
+        return redirect()->route('admin.portofolio.create')->with('success', 'Data berhasil dihapus');
     }
 }
