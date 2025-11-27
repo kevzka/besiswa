@@ -97,7 +97,7 @@
                                                 <i title="Edit" class="fa-solid fa-pencil" style="opacity: {{($item['id_admin'] == $adminId) ? 1 : 0.5}}"></i>
                                             </a>
                                     </form>
-                                    <i style="opacity: {{($item['id_admin'] == $adminId) ? 1 : 0.5}}">||</i>
+                                    
                                     <form action="{{ route('admin.ekskul.destroy', ['kegiatan' => $item['id_evidence']]) }}"
                                         method="POST" style="display: inline;">
                                         @csrf

@@ -379,7 +379,7 @@ class CrudController extends Controller
             Log::info('Destroy operation details', ['route_name' => $currentRouteName]);
             
             Log::info('Making API request to delete endpoint', ['id' => $id]);
-            $response = Http::delete('http://' . Config::get('app.API') . '/api/crud/{$id}');
+            $response = Http::delete('http://' . Config::get('app.API') . '/api/crud/'.$id);
 
             if ($response->successful()) {
                 Log::info('Delete operation successful', [

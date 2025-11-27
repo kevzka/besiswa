@@ -40,7 +40,7 @@ class PerformaCrudController extends Controller
 
                 if ($evidence) {
                     $nama_file = basename($evidence->file);
-                    $tanggal_lomba_format = Carbon::parse($evidence->date)->format('d/m/Y');
+                    $tanggal_lomba_format = Carbon::parse($evidence->date)->format('Y-m-d');
 
                     $data_lomba = [
                         "idLomba" => (int)$lomba->id_lomba,

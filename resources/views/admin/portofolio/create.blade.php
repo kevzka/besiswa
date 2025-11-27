@@ -255,7 +255,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item['namaLomba'] }}</td>
-                                    <td>{{ date('Y-m-d', strtotime($item['tanggalLomba'])) }}</td>
+                                    <td>{{ $item['tanggalLomba'] }}</td>
                                     <td class="table-actions">
                                         <form
                                             action="{{ route('admin.portofolio.edit', ['portofolio' => $item['idLomba']]) }}"
@@ -267,7 +267,6 @@
                                                     style="opacity: {{ $item['idAdmin'] == $adminId ? 1 : 0.5 }}"></i>
                                             </a>
                                         </form>
-                                        <i style="opacity: {{ $item['idAdmin'] == $adminId ? 1 : 0.5 }}">||</i>
                                         <form
                                             action="{{ route('admin.portofolio.destroy', ['portofolio' => $item['idLomba']]) }}"
                                             method="POST" style="display: inline;">

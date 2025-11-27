@@ -303,7 +303,7 @@
                         <div class="batch-card"
                             onclick="location.href='{{ url('/portofolio/angkatan/' . $item['angkatan']) }}'">
                             <h3 class="batch-number">Angkatan
-                                {{ $item['angkatan'] }}
+                                {{ $item['angkatan']-1999 }}
                             </h3>
                             <span class="arrow-icon">></span>
                             <div class="batch-stats">
