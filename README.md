@@ -1,10 +1,10 @@
 # 🎓 ADASISWA - Sistem Informasi Kesiswaan SMK Telkom Banjarbaru
 
-> **💡 Catatan**: Untuk saran judul repository yang lebih baik dan deskriptif, silakan lihat [REPOSITORY_TITLE_SUGGESTIONS.md](REPOSITORY_TITLE_SUGGESTIONS.md)
-
 <p align="center">
-  <img src="public/img/logo.png" alt="ADASISWA Logo" width="200">
+  <img src="https://github.com/user-attachments/assets/360874d0-1f3f-4c8d-a2f6-283ebe41078f" alt="ADASISWA Logo" width="250">
 </p>
+
+> **💡 Catatan**: Untuk saran judul repository yang lebih baik dan deskriptif, silakan lihat [REPOSITORY_TITLE_SUGGESTIONS.md](REPOSITORY_TITLE_SUGGESTIONS.md)
 
 <p align="center">
   <strong>Sarana digital untuk menghimpun informasi, menyalurkan kreativitas, dan mempererat hubungan antar siswa dan guru demi terciptanya sekolah yang aktif, inovatif, dan berprestasi.</strong>
@@ -19,11 +19,50 @@
 
 ---
 
-## 📸 Screenshot
+## 📸 Preview Aplikasi
 
-> **Note**: Screenshot tampilan aplikasi akan ditambahkan segera. Sementara itu, Anda dapat melihat panduan lengkap untuk mengambil screenshot di file [SCREENSHOT_GUIDE.md](SCREENSHOT_GUIDE.md).
+> **📝 Note**: Screenshot tampilan aplikasi akan ditambahkan segera. Untuk panduan lengkap cara mengambil screenshot, lihat [SCREENSHOT_GUIDE.md](SCREENSHOT_GUIDE.md).
 
-**Untuk melihat tampilan aplikasi:**
+### Halaman yang Tersedia:
+
+#### 🏠 **Landing Page** (`/dashboard`)
+Halaman utama dengan:
+- Hero section dengan tagline "ADASISWA UNTUKMU: Kesiswaan SMK Telkom Banjarbaru"
+- Navigasi ke 4 modul utama (Bimbingan, Prestasi, Ekskul, Portofolio)
+- Link ke media sosial sekolah (Instagram & YouTube)
+- Design modern dengan Tailwind CSS
+
+#### 📊 **Dashboard Admin** (`/admin/dashboard`)
+Dashboard untuk pengelola dengan:
+- Statistik kegiatan kesiswaan
+- Quick access ke setiap modul
+- Role-based access control (BK, Prestasi, Ekskul, Utama)
+
+#### 🏆 **Modul Prestasi** (`/prestasi/{deg}`)
+- Daftar prestasi siswa berdasarkan tingkat (Sekolah sampai Internasional)
+- Filter berdasarkan angkatan, kelas, jurusan
+- Sistem poin prestasi otomatis
+- Upload sertifikat dan dokumentasi
+
+#### 📚 **Modul Bimbingan & Konseling** (`/bimbingan/{deg}`)
+- Catatan bimbingan siswa
+- Riwayat konseling
+- Dokumentasi kegiatan BK
+- Dashboard monitoring guru BK
+
+#### 🎨 **Modul Ekstrakurikuler** (`/ekskul/{deg}`)
+- Daftar kegiatan ekstrakurikuler
+- Dokumentasi kegiatan
+- Partisipasi siswa
+- Laporan kegiatan
+
+#### 📁 **Modul Portofolio** (`/portofolio/{deg}`)
+- Portofolio digital per angkatan
+- Galeri karya siswa
+- Filter berdasarkan angkatan
+- Upload dan preview PDF/gambar
+
+**Untuk melihat tampilan aplikasi secara langsung:**
 1. Clone repository ini
 2. Ikuti langkah instalasi di bawah
 3. Jalankan aplikasi di `http://localhost:8000`
